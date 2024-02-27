@@ -46,6 +46,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
 
   protected  async onInit(): Promise<void> {
     this.strings = SelectLanguage(this.properties.prefLang);
+   
     return super.onInit();
   }
 
@@ -78,8 +79,10 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
   }
 
 
-
-
+  
+  // private openPropertyPane = (): void => {
+  //   this.context.propertyPane.open();
+  // }
 
   
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -89,31 +92,55 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         key: "Grid",
         text: this.strings.gridIcon,
         iconProps: { officeFabricIconFontName: "GridViewSmall"},
-        checked: this.properties.targetAudience === "1",
-        disabled: this.properties.targetAudience === "1" ? false : true
+ 
+        disabled: this.properties.targetAudience === "2"
       },
       {
         key: "Compact",
         text: this.strings.compactIcon,
         iconProps: { officeFabricIconFontName: "BulletedList2"},
-        disabled: this.properties.targetAudience === "1" ? true : false
+        disabled: this.properties.targetAudience === "1"  
       },
       {
         key: "List",
         text: this.strings.ListIcon,
         iconProps: { officeFabricIconFontName: "ViewList"},
-        checked: this.properties.targetAudience === "2",
-        disabled: this.properties.targetAudience === "1" ? true : false
+        disabled: this.properties.targetAudience === "1"  
       }
     ];
-    
+
+    const layoutOptionsDisabled = [
+      {
+        key: "Grid",
+        text: this.strings.gridIcon,
+        iconProps: { officeFabricIconFontName: "GridViewSmall"},
+        disabled: this.properties.targetAudience === undefined
+      },
+      {
+        key: "Compact",
+        text: this.strings.compactIcon,
+        iconProps: { officeFabricIconFontName: "BulletedList2"},
+        disabled: this.properties.targetAudience === undefined 
+      },
+      {
+        key: "List",
+        text: this.strings.ListIcon,
+        iconProps: { officeFabricIconFontName: "ViewList"},
+        disabled: this.properties.targetAudience === undefined 
+      }
+    ];
+
+    const updateLayoutOptions = () => {
+      this.context.propertyPane.refresh();
+  };
+  
+
     const choiceGroupLayout = {
-      label: this.strings.setLayoutOpt,
-      options: layoutOptions
+        label: this.strings.setLayoutOpt,
+        options: this.properties.targetAudience !== undefined ? layoutOptions : layoutOptionsDisabled,
+        onPropertyChange: updateLayoutOptions
     };
-
-
-
+ 
 
     // let viewAll: any;
     // if(this.properties.targetAudience === '2') {
@@ -122,9 +149,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
     //   })
     // }
     
-  
-    
-    
+    console.log("Select", this.properties.targetAudience);
 
     return {
       pages: [
@@ -162,7 +187,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
                    { key: '1', text: 'All_Communities' },
                    { key: '2', text: 'User_Communities'},
                  ],
-                selectedKey: this.properties.targetAudience
+
                }),
 
                 PropertyPaneChoiceGroup("layout", choiceGroupLayout),

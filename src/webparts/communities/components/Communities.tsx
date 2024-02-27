@@ -8,9 +8,12 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     targetAudience
   } = props;
 
+// React.useEffect(() => {
+
+// }, [props])
 
   return (
-    <div>Hello {targetAudience}</div>
+    <div> Picked NEW: {targetAudience}</div>
   )
 
 
