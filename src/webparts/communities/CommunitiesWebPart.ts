@@ -14,6 +14,7 @@ import * as strings from 'CommunitiesWebPartStrings';
 import Communities from './components/Communities';
 import { ICommunitiesProps } from './components/ICommunitiesProps';
 import { SelectLanguage } from './components/SelectLanguage';
+import GraphService from '../../services/GraphService';
 
 export interface ICommunitiesWebPartProps {
   description: string;
@@ -47,7 +48,9 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
   protected  async onInit(): Promise<void> {
     this.strings = SelectLanguage(this.properties.prefLang);
    
-    return super.onInit();
+    return super.onInit().then(() => {
+      GraphService.setup(this.context);
+    });
   }
 
 
