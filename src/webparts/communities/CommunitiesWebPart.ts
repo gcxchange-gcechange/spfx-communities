@@ -20,12 +20,14 @@ export interface ICommunitiesWebPartProps {
   description: string;
   prefLang: string;
   targetAudience: string;
+  hidingGroups: string;
 }
 
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
 
   private _isDarkTheme: boolean = false;
   private strings: ICommunitiesWebPartStrings;
+  
 
  
 
@@ -37,7 +39,8 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         isDarkTheme: this._isDarkTheme,
         prefLang: this.properties.prefLang,
         context: this.context,
-        targetAudience: this.properties.targetAudience
+        targetAudience: this.properties.targetAudience,
+        hidingGroups: this.properties.hidingGroups,
        
       }
     );
@@ -48,9 +51,9 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
   protected  async onInit(): Promise<void> {
     this.strings = SelectLanguage(this.properties.prefLang);
    
-    return super.onInit().then(() => {
-      GraphService.setup(this.context);
-    });
+    await super.onInit()
+    await  GraphService.setup(this.context);
+    
   }
 
 
@@ -133,7 +136,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
       }
     ];
 
-    const updateLayoutOptions = () => {
+    const updateLayoutOptions = (): void => {
       this.context.propertyPane.refresh();
   };
   
@@ -195,6 +198,13 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
 
                 PropertyPaneChoiceGroup("layout", choiceGroupLayout),
 
+                PropertyPaneTextField( 'hidingGroups', {
+                  label: 'Groups not in search, seperate items by pressing the Enter key.',
+                  placeholder: 'Seperate items by pressing the Enter key.',
+                  description: 'Enter group id of groups that are not to be rendered',
+                  multiline: true,
+                  rows: 10,
+                }),
                  
                 PropertyPaneChoiceGroup("sort", {
                   label: this.strings.setSortOpt,

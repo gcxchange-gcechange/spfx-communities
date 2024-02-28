@@ -6,5 +6,6 @@ export interface ICommunitiesProps {
   context: WebPartContext;
   prefLang: string;
   targetAudience: string;
+  hidingGroups: string;
 
 }
