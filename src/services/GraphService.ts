@@ -56,9 +56,9 @@ export class GraphService {
 
         if (selectedLetter === "#") {
             apiTxt =
-              "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=5";
+              "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=10";
           } else {
-            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=5`;
+            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=10`;
           }
         
         const requestBody = {
@@ -80,17 +80,12 @@ export class GraphService {
                         client
                             .api(`/$batch`)
                             .post(requestBody, (error: any, responseObject: any) => {
-                                console.log("R0",responseObject);
                                 const responseResults: any[] = [];
                                 responseResults.push(...responseObject.responses[0].body.value);
  
                                 const link = responseObject.responses[0].body["@odata.nextLink"];
 
-                                if (error) {
-                                    reject(error);
-
-                                }
-                                else if (link) {
+                                if (link) {
                                     const handleNextPage = (url: string ):any => {
                                         client.api(url).get((error:any, response2: any) => {
                                             const nextLink = response2["@odata.nextLink"];
@@ -105,6 +100,8 @@ export class GraphService {
                                         });
                                     }
                                     handleNextPage(link);
+                                } else {
+                                  resolve(responseResults);
                                 }
 
                             });
@@ -112,30 +109,31 @@ export class GraphService {
             }
             catch(error){
                 console.log(error)
+                reject(error);
             }
         });
 
     }
 
-    public static async getGroupDetailsBatch(group: any): Promise<any> {
-        console.log("Group", group)
+    public static async getGroupDetailsBatch(groupId: any): Promise<any> {
+        console.log("Group", groupId)
         const requestBody = {
           requests: [
             {
               id: "1",
               method: "GET",
-              url: `/groups/${group.id}/sites/root/`,
+              url: `/groups/${groupId}/sites/root/`,
             },
             {
               id: "2",
               method: "GET",
-              url: `/groups/${group.id}/members/$count?ConsistencyLevel=eventual`
+              url: `/groups/${groupId}/members/$count?ConsistencyLevel=eventual`
             },
-            {
-              id: "3",
-              method: "GET",
-              url: `/groups/${group.id}/photos/48x48/$value`
-            },
+            // {
+            //   id: "3",
+            //   method: "GET",
+            //   url: `/groups/${groupId}/photos/48x48/$value`
+            // },
     
           ],
         };
@@ -147,9 +145,7 @@ export class GraphService {
                 client
                   .api(`/$batch`)
                   .post(requestBody, (error: any, responseObject: any) => {
-                    if (error) {
-                      Promise.reject(error);
-                    }
+                    
                     const responseContent = [{}];
     
                     responseObject.responses.forEach((response: any) => {
@@ -171,12 +167,6 @@ export class GraphService {
         });
       }
     
-
-    
-
-
-
-
 
 }
 
