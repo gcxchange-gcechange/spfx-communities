@@ -1,3 +1,5 @@
+ 
+
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
@@ -28,7 +30,10 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
   private _isDarkTheme: boolean = false;
   private strings: ICommunitiesWebPartStrings;
   
-
+  public updateWebPart= async ():Promise<void> => {
+    this.context.propertyPane.refresh();
+    this.render();
+  }
  
 
   public render(): void {
@@ -41,6 +46,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         context: this.context,
         targetAudience: this.properties.targetAudience,
         hidingGroups: this.properties.hidingGroups,
+        updateWebPart:this.updateWebPart
        
       }
     );
@@ -50,10 +56,8 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
 
   protected  async onInit(): Promise<void> {
     this.strings = SelectLanguage(this.properties.prefLang);
-   
-    await super.onInit()
-    await  GraphService.setup(this.context);
-    
+    await  super.onInit() 
+    await   GraphService.setup(this.context);
   }
 
 
