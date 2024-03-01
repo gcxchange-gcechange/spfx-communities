@@ -116,7 +116,6 @@ export class GraphService {
     }
 
     public static async getGroupDetailsBatch(groupId: any): Promise<any> {
-        console.log("Group", groupId)
         const requestBody = {
           requests: [
             {
@@ -129,11 +128,11 @@ export class GraphService {
               method: "GET",
               url: `/groups/${groupId}/members/$count?ConsistencyLevel=eventual`
             },
-            // {
-            //   id: "3",
-            //   method: "GET",
-            //   url: `/groups/${groupId}/photos/48x48/$value`
-            // },
+            {
+              id: "3",
+              method: "GET",
+              url: `/groups/${groupId}/photos/48x48/$value`
+            },
     
           ],
         };
@@ -165,8 +164,40 @@ export class GraphService {
             console.error(error);
           }
         });
-      }
-    
+    }
+
+    public static async pageViewsBatch(siteID: any): Promise<any> {
+        const requestBody = {
+            requests: [
+            {
+                id: "1",
+                method: "GET",
+                url: `/sites/${siteID}/analytics/lastsevendays/access/actionCount`,
+            },
+
+            ],
+        };
+        return new Promise<any>(( resolve, reject ) => {
+            try {
+                this._context.msGraphClientFactory
+                    .getClient('3')
+                    .then((client: MSGraphClientV3) => {
+                        client
+                        .api(`/$batch`)
+                        .post(requestBody, (error: any, responseObject: any) => {
+                            let responseContent = {};
+                            responseContent = responseObject.responses[0].body.value;
+
+                            resolve(responseContent);
+                        });
+                    });
+            } catch (error) {
+                    reject(error);
+                    console.error(error);
+            }
+
+        });
+    }
 
 }
 

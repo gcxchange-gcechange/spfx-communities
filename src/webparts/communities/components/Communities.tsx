@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
@@ -15,15 +16,38 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   } = props;
 
  
-  //const [myGroups, setMyGroups] = useState<any[]>([]);
-  //const [allGroups, setAllGroups] = useState<any[]>([]);
-  const [groups, setGroups] = useState<any[]>([]);
+  const [_groups, setGroups] = useState<any[]>([]);
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
 
-  console.log(setSelectedLetter)
+  console.log(setSelectedLetter);
 
-  const getGroupDetailsData = (groups: any): void => {
+  const _getPageViews = (filteredGroups:any):void => {
+    filteredGroups.map((group: any) => {
+      console.log("g", group)
+      GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
+       // console.log(siteViews);
+        const updatedGroups = [...filteredGroups]; // Copy the array
+        const index = updatedGroups.findIndex(item => item.siteId === group.siteId); // Find index of the group with the same siteId
+        
+        if (index !== -1) { // If found
+          updatedGroups[index] = { ...updatedGroups[index], views: siteViews }; // Update the views
+          setFilteredGroups(updatedGroups); // Update the state
+        }
+      })
+    })
+  }
+
+  const removeGroupsWithoutURL = (updatedGroups: any):void => {
+    console.log("updatedGroups",updatedGroups)
+    const filterGroup = updatedGroups.filter((group:any ) => group.url);
+    setFilteredGroups(filterGroup);
+    _getPageViews(filterGroup);
+    return filterGroup
+
+  }
+
+  const _getGroupDetailsData = (groups: any): void => {
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
@@ -46,7 +70,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
             return updatedGroups;
             });
-          }
+          } 
         } catch (error) {
           console.log("ERROR", error);
         }
@@ -54,16 +78,12 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     });
   }
 
-  const removeGroupsWithoutURL = (updatedGroups: any):void => {
-    const filterGroup = updatedGroups.filter((group:any ) => group.url);
-    setFilteredGroups(filterGroup);
-    return filterGroup
-  }
+  
 
-  const getUserGroups = ():void => {
+  const _getUserGroups = ():void => {
     GraphService.getUserGroups().then(data => {
       setGroups(data);
-      getGroupDetailsData(data);
+      _getGroupDetailsData(data);
     })
   
   }
@@ -71,7 +91,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const _getAllGroups = (selectedLetter: string):void => {
     GraphService.getAllGroups(selectedLetter).then(allGroupData => {
       setGroups(allGroupData);
-      getGroupDetailsData(allGroupData);
+      _getGroupDetailsData(allGroupData);
     });  
 
    
@@ -88,7 +108,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       _getAllGroups(selectedLetter);
     }
     else if (targetAudience === '2') {
-      getUserGroups();
+      _getUserGroups();
     }
   }, [props]);
 
@@ -107,15 +127,16 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       <>    
       <h3>User Groups</h3>
       <ul>
-        {groups.map(item => (
+        {filteredGroups.map(item => (
           <li key={item.id}>
             {item.id}, {item.displayName}
             <ul>
-              <li>{item.url}</li>
-              <li>{item.members}</li>
+              <li>URL: {item.url}</li>
+              <li>MEMBERS: {item.members}</li>
+              <li>VIEWS: {item.views}</li>
             </ul>
           </li>
-        ))};
+        ))}
       </ul>
       </>
       )}
@@ -133,7 +154,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
           <li key={item.id}>{item.id} NAME: {item.displayName}</li>
           <ul>
             <li>URL: {item.url}</li>
-          
+            <li>MEMBERS: {item.members}</li>
+            <li>VIEWS: {item.views}</li>
           </ul>
           </>
         ))}
@@ -143,8 +165,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       )}
      
     </div>
-      
-   
     </>
   )
 
