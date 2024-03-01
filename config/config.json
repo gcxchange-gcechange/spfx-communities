@@ -13,6 +13,7 @@
   },
   "externals": {},
   "localizedResources": {
-    "CommunitiesWebPartStrings": "lib/webparts/communities/loc/{locale}.js"
+    "CommunitiesWebPartStrings": "lib/webparts/communities/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
   }
 }
