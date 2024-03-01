@@ -5,6 +5,7 @@ import  styles from './Communities.module.scss'
 
 interface IAlphabeticalFilterProps {
     selectedLetter: string;
+    onSelectLetter: (letter: string) => void;
  
 }
 
@@ -25,7 +26,9 @@ const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
     const combinedIndex = arrayAtoZ();
 
     const _handleSelectedLetter = (item: PivotItem):void => {
-        console.log("item", item);
+        const letter: string = item.props.headerText || "A";
+
+        props.onSelectLetter(letter);
     }
 
     const pivotStyles: Partial<IPivotStyles> = {

@@ -20,7 +20,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
 
-  console.log(setSelectedLetter);
 
   const _getPageViews = (filteredGroups:any):void => {
     filteredGroups.map((group: any) => {
@@ -97,9 +96,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
    
   }
 
-  // const getSelectedLetter = ():void => {
-
-  // }
+  const getSelectedLetter = (letter: string):void => {
+    setSelectedLetter(letter);
+  }
 
 
 
@@ -146,7 +145,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
         <>      
       <h3>All Groups</h3>
       <div>
-        <AlphabeticalFilter selectedLetter={selectedLetter}  />
+        <AlphabeticalFilter selectedLetter={selectedLetter} onSelectLetter={getSelectedLetter} />
       </div>
        <ul>
         {filteredGroups.map(item => (
