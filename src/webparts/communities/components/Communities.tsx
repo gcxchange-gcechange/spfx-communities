@@ -8,11 +8,18 @@ import type { ICommunitiesProps } from './ICommunitiesProps';
 import GraphService from '../../../services/GraphService';
 import { useEffect, useState } from 'react';
 import AlphabeticalFilter from './AlphabeticalFilter';
+// import { Icon } from '@fluentui/react';
+import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
+import GridLayoutStyle from './GridLayoutStyle';
+import styles from './Communities.module.scss';
+import { Stack } from '@fluentui/react';
+
 
 
 const Communities: React.FC<ICommunitiesProps> = (props) => {
   const {
     targetAudience,
+
   } = props;
 
  
@@ -23,26 +30,30 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getPageViews = (filteredGroups:any):void => {
     filteredGroups.map((group: any) => {
-      console.log("g", group)
       GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
-       // console.log(siteViews);
-        const updatedGroups = [...filteredGroups]; // Copy the array
-        const index = updatedGroups.findIndex(item => item.siteId === group.siteId); // Find index of the group with the same siteId
-        
-        if (index !== -1) { // If found
-          updatedGroups[index] = { ...updatedGroups[index], views: siteViews }; // Update the views
-          setFilteredGroups(updatedGroups); // Update the state
-        }
+         setFilteredGroups(prevFilteredGroups => {
+          const updatedFiltered = prevFilteredGroups.map( groupItems => 
+            groupItems.id === group.id ?
+            {
+             ...groupItems,
+             views: siteViews
+            }
+            :
+            groupItems
+            );
+
+            return updatedFiltered;
+         });    
       })
     })
   }
 
   const removeGroupsWithoutURL = (updatedGroups: any):void => {
-    console.log("updatedGroups",updatedGroups)
+
     const filterGroup = updatedGroups.filter((group:any ) => group.url);
     setFilteredGroups(filterGroup);
     _getPageViews(filterGroup);
-    return filterGroup
+    return filterGroup;
 
   }
 
@@ -100,6 +111,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     setSelectedLetter(letter);
   }
 
+  const openPropertyPane = ():void => {
+    props.context.propertyPane.open();
+  }
 
 
   useEffect(() => {
@@ -117,10 +131,23 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       _getAllGroups(selectedLetter);
     }
   }, [selectedLetter]);
-
+  
+  
   return (
     <>
-    <div> Picked NEW: {targetAudience}</div>
+    <div>
+      {( !props.targetAudience && (
+ 
+      <Placeholder iconName='Edit'
+             iconText='Configure your web part'
+             description='Please configure the web part.'
+             buttonLabel='Configure'
+             onConfigure={openPropertyPane}
+
+      />
+        )
+      )}
+    </div>
     <div>
     {props.targetAudience === '2' && (
       <>    
@@ -147,19 +174,34 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       <div>
         <AlphabeticalFilter selectedLetter={selectedLetter} onSelectLetter={getSelectedLetter} />
       </div>
-       <ul>
+      <GridLayoutStyle items={filteredGroups}/>
+      <Stack horizontal horizontalAlign="space-evenly" wrap={true}>
         {filteredGroups.map(item => (
           <>
-          <li key={item.id}>{item.id} NAME: {item.displayName}</li>
-          <ul>
-            <li>URL: {item.url}</li>
-            <li>MEMBERS: {item.members}</li>
-            <li>VIEWS: {item.views}</li>
-          </ul>
+          <div className={styles.cardContainer } >
+              <div className={styles.cardBanner}>
+                <img className={styles.cardImg} src={item.thumbnail}/>
+              </div>
+              <div className={styles.cardBody}>
+                <h3 className={styles.cardTitle}>{item.displayName}</h3>
+                <p className={styles.cardDescription}>{item.description}</p>
+              </div>
+              <div className ={styles.cardFooter}>
+                  <Stack horizontal horizontalAlign='space-between'>
+                    <div>
+                      <p style={{margin:'0'}}><strong>Members:</strong>{item.members}</p>
+                      <p>2</p>
+                    </div>
+                    <div>
+                      <p>3</p>
+                      <p>4</p>
+                    </div>
+                  </Stack>
+              </div>
+          </div>
           </>
         ))}
-        
-      </ul>
+      </Stack>
       </>
       )}
      

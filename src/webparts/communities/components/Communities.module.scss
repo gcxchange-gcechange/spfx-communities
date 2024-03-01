@@ -1,5 +1,11 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
+:global {
+  #workbenchPageContent, .CanvasComponent.LCS .CanvasZone {
+    max-width: 100% !important;
+  }
+}
+
 .communities {
   overflow: hidden;
   padding: 1em;
@@ -41,4 +47,64 @@
     color: #fff;
 
   }
+}
+
+.cardContainer {
+  height: 250px;
+  width:376px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  outline: transparent;
+  position: relative;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.133) 0px 1.6px 3.6px 0px, rgba(0, 0, 0, 0.11) 0px 0.3px 0.9px 0px;
+  border-width: 1px;
+  border-style: solid;
+  border-image: initial;
+  border-radius: 2px;
+  overflow: hidden;
+  border-color: rgb(237, 235, 233);
+}
+
+.cardBanner {
+  height: 40px;
+  width: 100%;
+  background-color: $ms-color-themePrimary;
+}
+
+.cardImg {
+  position: relative;
+  height: 48px;
+  width: 48px;
+  top: 12px;
+  left: 10px;
+}
+
+.cardBody {
+  padding:20px;
+  height:30px;
+  color: black;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  line-height:20px;
+  padding:12 0px;
+}
+
+.cardDescription{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 60px;
+  -webkit-line-clamp: 3;
+}
+
+.cardFooter {
+  font-size:12px;
+  border-top: 2px solid #e5e3e2;
+  margin-top: 80px;
+  padding: 0, 20px;
+  
 }
