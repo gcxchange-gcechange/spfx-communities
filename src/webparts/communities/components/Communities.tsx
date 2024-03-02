@@ -69,7 +69,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       ...groupItems,
                       url: groupDetails[1].webUrl,
                       siteId: groupDetails[1].id,
-                      modified: groupDetails[1].lastModifiedDateTime,
+                      modified:  new Date(groupDetails[1].lastModifiedDateTime).toLocaleDateString("en-CA"),
                       members: groupDetails[2],
                       thumbnail: "data:image/jpeg;base64," + groupDetails[3]
                     }
@@ -179,6 +179,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
         {filteredGroups.map(item => (
           <>
           <div className={styles.cardContainer } >
+            <a href={item.url}>
               <div className={styles.cardBanner}>
                 <img className={styles.cardImg} src={item.thumbnail}/>
               </div>
@@ -189,15 +190,16 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
               <div className ={styles.cardFooter}>
                   <Stack horizontal horizontalAlign='space-between'>
                     <div>
-                      <p style={{margin:'0'}}><strong>Members:</strong>{item.members}</p>
-                      <p>2</p>
+                      <p style={{margin:'0'}}><strong>Members </strong>{item.members}</p>
+                      <p ><strong>Views</strong> {item.views}</p>
                     </div>
                     <div>
-                      <p>3</p>
-                      <p>4</p>
+                      <p style={{margin:'0'}}><strong>Created</strong> {new Date(item.createdDateTime).toLocaleDateString("en-CA")}</p>
+                      <p><strong>Last modified</strong> {item.modified}</p>
                     </div>
                   </Stack>
               </div>
+              </a>
           </div>
           </>
         ))}

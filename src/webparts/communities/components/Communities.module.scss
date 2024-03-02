@@ -64,6 +64,13 @@
   border-radius: 2px;
   overflow: hidden;
   border-color: rgb(237, 235, 233);
+   a {
+    color: black;
+    text-decoration: none;
+   }
+}
+.cardContainer:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .cardBanner {
@@ -81,6 +88,7 @@
 }
 
 .cardBody {
+  font-size: small;
   padding:20px;
   height:30px;
   color: black;
@@ -99,12 +107,12 @@
   white-space: nowrap;
   height: 60px;
   -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .cardFooter {
   font-size:12px;
   border-top: 2px solid #e5e3e2;
   margin-top: 80px;
-  padding: 0, 20px;
-  
+  padding: 8px 20px;
 }
