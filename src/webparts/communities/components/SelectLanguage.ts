@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 import * as strings from 'CommunitiesWebPartStrings';
 const english = require("../loc/en-us.js");

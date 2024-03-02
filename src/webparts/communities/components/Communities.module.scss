@@ -116,3 +116,39 @@
   margin-top: 80px;
   padding: 8px 20px;
 }
+
+.listCardContainer {
+  width:400px;
+  height: 77px;
+  a {
+    color: black;
+    text-decoration: none;
+   }
+  box-shadow: rgba(0, 0, 0, 0.133) 0px 1.6px 3.6px 0px, rgba(0, 0, 0, 0.11) 0px 0.3px 0.9px 0px;
+  border-width: 1px;
+  border-style: solid;
+
+}
+
+.listCardContainer:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.listCardContainerImg {
+  width:60px;
+}
+.listCardImg {
+  width:fit-content;
+}
+
+.listCardTitle {
+  margin:0px;
+}
+
+.listCardDescription{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width:300px;
+  margin:0px;
+}

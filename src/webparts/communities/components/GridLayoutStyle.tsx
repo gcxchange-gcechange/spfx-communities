@@ -19,8 +19,8 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({items}) => 
 
         const { width, height } = finalSize; 
 
-        const itemWidth = width / 1;
-        const itemHeight = height / 1;
+        const itemWidth = width / 2;
+        const itemHeight = height / 2;
 
         return (
             <>

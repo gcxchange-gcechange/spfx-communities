@@ -12,14 +12,14 @@ import AlphabeticalFilter from './AlphabeticalFilter';
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from './GridLayoutStyle';
 import styles from './Communities.module.scss';
-import { Stack } from '@fluentui/react';
+import { IStackTokens, Stack } from '@fluentui/react';
 
 
 
 const Communities: React.FC<ICommunitiesProps> = (props) => {
   const {
     targetAudience,
-
+    
   } = props;
 
  
@@ -131,8 +131,15 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       _getAllGroups(selectedLetter);
     }
   }, [selectedLetter]);
-  
-  
+
+
+  const themedSmallStackTokens: IStackTokens = {
+    childrenGap: 's1',
+    padding: 's1',
+  };
+
+  const stackTokens: IStackTokens = { childrenGap: 20 };
+
   return (
     <>
     <div>
@@ -152,18 +159,27 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     {props.targetAudience === '2' && (
       <>    
       <h3>User Groups</h3>
-      <ul>
-        {filteredGroups.map(item => (
-          <li key={item.id}>
-            {item.id}, {item.displayName}
-            <ul>
-              <li>URL: {item.url}</li>
-              <li>MEMBERS: {item.members}</li>
-              <li>VIEWS: {item.views}</li>
-            </ul>
-          </li>
+      <Stack tokens={themedSmallStackTokens}>
+      {filteredGroups.map(item => (
+          <>
+          <div className={styles.listCardContainer } >
+            <a href={item.url}>
+              <div >
+                  <Stack horizontal verticalAlign='stretch' tokens={stackTokens}>
+                    <div className={styles.listCardContainerImg}>
+                      <img className={styles.listCardImg} src={item.thumbnail}/>
+                    </div>
+                    <div>
+                      <h3 className={styles.listCardTitle}>{item.displayName}</h3>
+                       <p className={styles.listCardDescription}>{item.description}</p>
+                    </div>
+                  </Stack>
+              </div>
+              </a>
+          </div>
+          </>
         ))}
-      </ul>
+      </Stack>
       </>
       )}
     </div>
