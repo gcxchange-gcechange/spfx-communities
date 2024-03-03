@@ -172,6 +172,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     <div>
                       <h3 className={styles.listCardTitle}>{item.displayName}</h3>
                        <p className={styles.listCardDescription}>{item.description}</p>
+                       <p className = {styles.listCardFooter}>Members {item.members}</p>
                     </div>
                   </Stack>
               </div>
