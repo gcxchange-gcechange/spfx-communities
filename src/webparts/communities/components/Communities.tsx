@@ -19,7 +19,7 @@ import { IStackTokens, Stack } from '@fluentui/react';
 const Communities: React.FC<ICommunitiesProps> = (props) => {
   const {
     targetAudience,
-    
+    layout
   } = props;
 
  
@@ -143,6 +143,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   return (
     <>
     <div>
+      <div>I picked which layout = {layout}</div>
       {( !props.targetAudience && (
  
       <Placeholder iconName='Edit'
@@ -156,7 +157,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       )}
     </div>
     <div>
-    {props.targetAudience === '2' && (
+    {props.targetAudience === '2' && layout === 'List' && (
       <>    
       <h3>User Groups</h3>
       <Stack tokens={themedSmallStackTokens}>
@@ -173,6 +174,33 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       <h3 className={styles.listCardTitle}>{item.displayName}</h3>
                        <p className={styles.listCardDescription}>{item.description}</p>
                        <p className = {styles.listCardFooter}>Members {item.members}</p>
+                    </div>
+                  </Stack>
+              </div>
+              </a>
+          </div>
+          </>
+        ))}
+      </Stack>
+      </>
+      )}
+    </div>
+    <div>
+    {props.targetAudience === '2' && layout === 'Compact' && (
+      <>    
+      <h3>User Groups</h3>
+      <Stack tokens={themedSmallStackTokens}>
+      {filteredGroups.map(item => (
+          <>
+          <div className={styles.compactCardContainer } >
+            <a href={item.url}>
+              <div >
+                  <Stack horizontal verticalAlign='stretch' tokens={stackTokens}>
+                    <div >
+                      <img className={styles.compactCardImg} src={item.thumbnail}/>
+                    </div>
+                    <div>
+                      <h3 className={styles.compactCardTitle}>{item.displayName}</h3>
                     </div>
                   </Stack>
               </div>

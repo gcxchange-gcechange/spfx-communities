@@ -132,7 +132,7 @@
 
 }
 
-.listCardContainer:hover {
+.listCardContainer:hover .compactCardContainer:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
@@ -166,4 +166,30 @@
   font-size: small;
   height: 20%;
   padding-top:8px;
+}
+
+.compactCardContainer {
+  padding-top: 5px;
+  padding-bottom: 12px;
+  padding-left: 10px;
+  padding-right:10px;
+  width:400px;
+  height: 40px;
+  a {
+    color: black;
+    text-decoration: none;
+   }
+  box-shadow: rgba(0, 0, 0, 0.133) 0px 1.6px 3.6px 0px, rgba(0, 0, 0, 0.11) 0px 0.3px 0.9px 0px;
+  border-width: 1px;
+  border-style: solid;
+
+}
+
+.compactCardImg {
+  width: auto;
+}
+.compactCardTitle {
+  font-size: 14px;
+  margin-top:0px;
+  overflow: hidden;
 }

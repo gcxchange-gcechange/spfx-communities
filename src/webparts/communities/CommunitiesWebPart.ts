@@ -23,6 +23,7 @@ export interface ICommunitiesWebPartProps {
   prefLang: string;
   targetAudience: string;
   hidingGroups: string;
+  layout: string;
 }
 
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
@@ -46,7 +47,8 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         context: this.context,
         targetAudience: this.properties.targetAudience,
         hidingGroups: this.properties.hidingGroups,
-        updateWebPart:this.updateWebPart
+        updateWebPart:this.updateWebPart,
+        layout: this.properties.layout
        
       }
     );

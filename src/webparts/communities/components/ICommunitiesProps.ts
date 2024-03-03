@@ -8,5 +8,6 @@ export interface ICommunitiesProps {
   targetAudience: string;
   hidingGroups: string;
   updateWebPart: () => void;
+  layout: string;
 
 }
