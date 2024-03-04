@@ -9,5 +9,8 @@ export interface ICommunitiesProps {
   hidingGroups: string;
   updateWebPart: () => void;
   layout: string;
+  titleEn: string;
+  titleFr: string;
+  numberPerPage: number;
 
 }

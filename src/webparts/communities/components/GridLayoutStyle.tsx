@@ -11,9 +11,7 @@ interface IGridLayoutProps {
 
 
 const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({items}) => {
-
-   
-
+  
 
     const onRenderGridItem = (item: any, finalSize: ISize, isCompact: boolean): JSX.Element => {
 
@@ -21,6 +19,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({items}) => 
 
         const itemWidth = width / 2;
         const itemHeight = height / 2;
+ 
 
         return (
             <>

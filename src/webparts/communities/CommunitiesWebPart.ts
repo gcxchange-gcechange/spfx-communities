@@ -8,6 +8,7 @@ import {
   PropertyPaneTextField,
   PropertyPaneDropdown,
   PropertyPaneChoiceGroup,
+  PropertyPaneSlider,
   
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
@@ -24,6 +25,9 @@ export interface ICommunitiesWebPartProps {
   targetAudience: string;
   hidingGroups: string;
   layout: string;
+  titleEn: string;
+  titleFR: string;
+  numberPerPage: number;
 }
 
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
@@ -48,7 +52,10 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         targetAudience: this.properties.targetAudience,
         hidingGroups: this.properties.hidingGroups,
         updateWebPart:this.updateWebPart,
-        layout: this.properties.layout
+        layout: this.properties.layout,
+        titleEn: this.properties.titleEn,
+        titleFr: this.properties.titleFR,
+        numberPerPage : this.properties.numberPerPage
        
       }
     );
@@ -210,6 +217,16 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
                   description: 'Enter group id of groups that are not to be rendered',
                   multiline: true,
                   rows: 10,
+                }),
+
+                
+                PropertyPaneSlider('numberPerPage', {
+                  label: 'items per page',
+                  min: 4,
+                  max: 50,
+                  step: 1,
+                  showValue: true,
+                  value: 4
                 }),
                  
                 PropertyPaneChoiceGroup("sort", {

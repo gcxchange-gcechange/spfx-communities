@@ -10,9 +10,9 @@ import { useEffect, useState } from 'react';
 import AlphabeticalFilter from './AlphabeticalFilter';
 // import { Icon } from '@fluentui/react';
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
-import GridLayoutStyle from './GridLayoutStyle';
+//import GridLayoutStyle from './GridLayoutStyle';
 import styles from './Communities.module.scss';
-import { IStackTokens, Stack } from '@fluentui/react';
+import { IStackTokens, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 
 
 
@@ -26,6 +26,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [_groups, setGroups] = useState<any[]>([]);
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
   const _getPageViews = (filteredGroups:any):void => {
@@ -44,6 +45,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
             return updatedFiltered;
          });    
+         setIsLoading(false);
       })
     })
   }
@@ -117,6 +119,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
 
   useEffect(() => {
+    setIsLoading(true);
     if (targetAudience === '1') {
       _getAllGroups(selectedLetter);
     }
@@ -144,6 +147,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     <>
     <div>
       <div>I picked which layout = {layout}</div>
+      <div>Number per Page= {props.numberPerPage} and filtered Groups:{filteredGroups.length}</div>
       {( !props.targetAudience && (
  
       <Placeholder iconName='Edit'
@@ -155,8 +159,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       />
         )
       )}
-    </div>
+    
     <div>
+    {isLoading &&  (<Spinner size={SpinnerSize.large}/>) } 
+
     {props.targetAudience === '2' && layout === 'List' && (
       <>    
       <h3>User Groups</h3>
@@ -188,6 +194,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     <div>
     {props.targetAudience === '2' && layout === 'Compact' && (
       <>    
+      <h3>{props.titleEn}</h3>
       <h3>User Groups</h3>
       <Stack tokens={themedSmallStackTokens}>
       {filteredGroups.map(item => (
@@ -216,10 +223,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       {props.targetAudience === '1' && (
         <>      
       <h3>All Groups</h3>
-      <div>
+      <div style={{display:'flex', justifyContent:'center'}}>
         <AlphabeticalFilter selectedLetter={selectedLetter} onSelectLetter={getSelectedLetter} />
       </div>
-      <GridLayoutStyle items={filteredGroups}/>
+     {/* <GridLayoutStyle items={filteredGroups}/> */}
       <Stack horizontal horizontalAlign="space-evenly" wrap={true}>
         {filteredGroups.map(item => (
           <>
@@ -253,7 +260,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       )}
      
     </div>
+    </div>
     </>
+
   )
 
 
