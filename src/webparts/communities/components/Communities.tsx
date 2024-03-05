@@ -8,11 +8,12 @@ import type { ICommunitiesProps } from './ICommunitiesProps';
 import GraphService from '../../../services/GraphService';
 import { useEffect, useState } from 'react';
 import AlphabeticalFilter from './AlphabeticalFilter';
-// import { Icon } from '@fluentui/react';
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
-//import GridLayoutStyle from './GridLayoutStyle';
-import styles from './Communities.module.scss';
-import { IStackTokens, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import GridLayoutStyle from './GridLayoutStyle';
+import { Spinner, SpinnerSize} from '@fluentui/react';
+import Paging from './Paging';
+import ListLayoutStyle from './ListLayoutStyle';
+import CompactLayoutStyle from './CompactLayoutStyle';
 
 
 
@@ -90,7 +91,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     });
   }
 
-  
+
 
   const _getUserGroups = ():void => {
     GraphService.getUserGroups().then(data => {
@@ -135,131 +136,48 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     }
   }, [selectedLetter]);
 
-
-  const themedSmallStackTokens: IStackTokens = {
-    childrenGap: 's1',
-    padding: 's1',
-  };
-
-  const stackTokens: IStackTokens = { childrenGap: 20 };
-
   return (
     <>
-    <div>
-      <div>I picked which layout = {layout}</div>
-      <div>Number per Page= {props.numberPerPage} and filtered Groups:{filteredGroups.length}</div>
-      {( !props.targetAudience && (
- 
-      <Placeholder iconName='Edit'
-             iconText='Configure your web part'
-             description='Please configure the web part.'
-             buttonLabel='Configure'
-             onConfigure={openPropertyPane}
+      <div>
+        {( !props.targetAudience && !props.layout && (
+  
+          <Placeholder iconName='Edit'
+                iconText='Configure your web part'
+                description='Please configure the web part.'
+                buttonLabel='Configure'
+                onConfigure={openPropertyPane}
 
-      />
-        )
-      )}
+          />
+          )
+        )}
+      <div>
+      {isLoading &&  (
+      
+      <Spinner size={SpinnerSize.large}/>
+      
+      ) } 
+
+      { layout === "Compact" ?  (
+          <CompactLayoutStyle groups={filteredGroups}/>
+        ): layout === "List" ? (
+          <ListLayoutStyle groups= {filteredGroups}/>
+        ) : layout === "Grid" ? (
+          <div>
+            {targetAudience === '1' &&(<AlphabeticalFilter selectedLetter={selectedLetter} onSelectLetter={getSelectedLetter} />)}
+            <GridLayoutStyle  groups={filteredGroups}/>
+            <Paging items={filteredGroups.length} itemsPerPage={props.numberPerPage}/>
+
+          </div>
+
+        ) : null
+      }
+
+
+
+      
+    </div>
     
-    <div>
-    {isLoading &&  (<Spinner size={SpinnerSize.large}/>) } 
-
-    {props.targetAudience === '2' && layout === 'List' && (
-      <>    
-      <h3>User Groups</h3>
-      <Stack tokens={themedSmallStackTokens}>
-      {filteredGroups.map(item => (
-          <>
-          <div className={styles.listCardContainer } >
-            <a href={item.url}>
-              <div >
-                  <Stack horizontal verticalAlign='stretch' tokens={stackTokens}>
-                    <div className={styles.listCardContainerImg}>
-                      <img className={styles.listCardImg} src={item.thumbnail}/>
-                    </div>
-                    <div>
-                      <h3 className={styles.listCardTitle}>{item.displayName}</h3>
-                       <p className={styles.listCardDescription}>{item.description}</p>
-                       <p className = {styles.listCardFooter}>Members {item.members}</p>
-                    </div>
-                  </Stack>
-              </div>
-              </a>
-          </div>
-          </>
-        ))}
-      </Stack>
-      </>
-      )}
-    </div>
-    <div>
-    {props.targetAudience === '2' && layout === 'Compact' && (
-      <>    
-      <h3>{props.titleEn}</h3>
-      <h3>User Groups</h3>
-      <Stack tokens={themedSmallStackTokens}>
-      {filteredGroups.map(item => (
-          <>
-          <div className={styles.compactCardContainer } >
-            <a href={item.url}>
-              <div >
-                  <Stack horizontal verticalAlign='stretch' tokens={stackTokens}>
-                    <div >
-                      <img className={styles.compactCardImg} src={item.thumbnail}/>
-                    </div>
-                    <div>
-                      <h3 className={styles.compactCardTitle}>{item.displayName}</h3>
-                    </div>
-                  </Stack>
-              </div>
-              </a>
-          </div>
-          </>
-        ))}
-      </Stack>
-      </>
-      )}
-    </div>
-    <div>
-      {props.targetAudience === '1' && (
-        <>      
-      <h3>All Groups</h3>
-      <div style={{display:'flex', justifyContent:'center'}}>
-        <AlphabeticalFilter selectedLetter={selectedLetter} onSelectLetter={getSelectedLetter} />
-      </div>
-     {/* <GridLayoutStyle items={filteredGroups}/> */}
-      <Stack horizontal horizontalAlign="space-evenly" wrap={true}>
-        {filteredGroups.map(item => (
-          <>
-          <div className={styles.cardContainer } >
-            <a href={item.url}>
-              <div className={styles.cardBanner}>
-                <img className={styles.cardImg} src={item.thumbnail}/>
-              </div>
-              <div className={styles.cardBody}>
-                <h3 className={styles.cardTitle}>{item.displayName}</h3>
-                <p className={styles.cardDescription}>{item.description}</p>
-              </div>
-              <div className ={styles.cardFooter}>
-                  <Stack horizontal horizontalAlign='space-between'>
-                    <div>
-                      <p style={{margin:'0'}}><strong>Members </strong>{item.members}</p>
-                      <p ><strong>Views</strong> {item.views}</p>
-                    </div>
-                    <div>
-                      <p style={{margin:'0'}}><strong>Created</strong> {new Date(item.createdDateTime).toLocaleDateString("en-CA")}</p>
-                      <p><strong>Last modified</strong> {item.modified}</p>
-                    </div>
-                  </Stack>
-              </div>
-              </a>
-          </div>
-          </>
-        ))}
-      </Stack>
-      </>
-      )}
-     
-    </div>
+   
     </div>
     </>
 

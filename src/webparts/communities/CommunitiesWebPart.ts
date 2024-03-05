@@ -112,19 +112,19 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         text: this.strings.gridIcon,
         iconProps: { officeFabricIconFontName: "GridViewSmall"},
  
-        disabled: this.properties.targetAudience === "2"
+        //disabled: this.properties.targetAudience === "2"
       },
       {
         key: "Compact",
         text: this.strings.compactIcon,
         iconProps: { officeFabricIconFontName: "BulletedList2"},
-        disabled: this.properties.targetAudience === "1"  
+        //disabled: this.properties.targetAudience === "1"  
       },
       {
         key: "List",
         text: this.strings.ListIcon,
         iconProps: { officeFabricIconFontName: "ViewList"},
-        disabled: this.properties.targetAudience === "1"  
+       // disabled: this.properties.targetAudience === "1"  
       }
     ];
 
