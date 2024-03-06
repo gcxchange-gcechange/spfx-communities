@@ -122,7 +122,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
       },
       {
         key: "List",
-        text: this.strings.ListIcon,
+        text: this.strings.listIcon,
         iconProps: { officeFabricIconFontName: "ViewList"},
        // disabled: this.properties.targetAudience === "1"  
       }
@@ -143,7 +143,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
       },
       {
         key: "List",
-        text: this.strings.ListIcon,
+        text: this.strings.listIcon,
         iconProps: { officeFabricIconFontName: "ViewList"},
         disabled: this.properties.targetAudience === undefined 
       }
