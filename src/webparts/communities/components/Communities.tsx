@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import AlphabeticalFilter from "./AlphabeticalFilter";
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from "./GridLayoutStyle";
-import { Spinner, SpinnerSize } from "@fluentui/react";
+import { Spinner, SpinnerSize, Stack } from "@fluentui/react";
 import Paging from "./Paging";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
@@ -22,6 +22,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const _getPageViews = (filteredGroups: any): void => {
     filteredGroups.map((group: any) => {
@@ -46,6 +47,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const removeGroupsWithoutURL = (updatedGroups: any): void => {
     const filterGroup = updatedGroups.filter((group: any) => group.url);
     setFilteredGroups(filterGroup);
+    setIsLoading(true);
     _getPageViews(filterGroup);
     return filterGroup;
   };
@@ -54,6 +56,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
+          setIsLoading(true);
           if (
             groupDetails[1] &&
             (groupDetails[1].webUrl !== null ||
@@ -90,6 +93,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const _getUserGroups = (): void => {
     GraphService.getUserGroups().then((data) => {
       setGroups(data);
+      setIsLoading(true);
       _getGroupDetailsData(data);
     });
   };
@@ -103,17 +107,25 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const getSelectedLetter = (letter: string): void => {
     setSelectedLetter(letter);
+    setIsLoading(true);
   };
 
   const openPropertyPane = (): void => {
     props.context.propertyPane.open();
   };
 
+  const onPageUpdate = (pageNumber: number): void => {
+    setCurrentPage( pageNumber);
+  }
+
+
   useEffect(() => {
-    setIsLoading(true);
+    
     if (targetAudience === "1") {
+      setIsLoading(true);
       _getAllGroups(selectedLetter);
     } else if (targetAudience === "2") {
+      setIsLoading(true);
       _getUserGroups();
     }
   }, [props.targetAudience]);
@@ -123,6 +135,15 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       _getAllGroups(selectedLetter);
     }
   }, [selectedLetter]);
+
+
+  //calculate the item index to render per page
+
+  const startIndex:number = (currentPage - 1) * props.numberPerPage;
+  const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
+
+  const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
+
 
   return (
     <>
@@ -148,19 +169,29 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                 <ListLayoutStyle groups={filteredGroups} />
               )}
               {layout === "Grid" && (
-                <div>
+                <Stack horizontalAlign="center" style={{width:'80%'}}>
                   {targetAudience === "1" && (
-                    <AlphabeticalFilter
-                      selectedLetter={selectedLetter}
-                      onSelectLetter={getSelectedLetter}
-                    />
+                      <AlphabeticalFilter
+                        selectedLetter={selectedLetter}
+                        onSelectLetter={getSelectedLetter}
+                      />
                   )}
-                  <GridLayoutStyle groups={filteredGroups} />
-                  <Paging
+                   <Paging
+                    prefLang={props.prefLang}
                     items={filteredGroups.length}
                     itemsPerPage={props.numberPerPage}
+                    currentPage={currentPage}
+                    onPageUpdate={onPageUpdate}
                   />
-                </div>
+                  <GridLayoutStyle groups={displayItemsPerPage} prefLang={props.prefLang}/>
+                  <Paging
+                    prefLang={props.prefLang}
+                    items={filteredGroups.length}
+                    itemsPerPage={props.numberPerPage}
+                    currentPage={currentPage}
+                    onPageUpdate={onPageUpdate}
+                  />
+                </Stack>
               )}
             </>
           )}

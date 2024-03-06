@@ -195,3 +195,22 @@
   margin-top:0px;
   overflow: hidden;
 }
+
+//Paging Styles
+.currentPage {
+  background-color:"[theme:themePrimary]";
+  border-radius: 50%;
+  color:white;
+  padding: 1px 5px;
+}
+
+//Grid No Results
+
+.noResultsText {
+  text-align: center;
+  padding: 20px;
+}
+
+.margin0 {
+  margin: 0px;
+}
