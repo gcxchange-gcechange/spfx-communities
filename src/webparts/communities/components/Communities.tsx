@@ -24,6 +24,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
+  const clearState = ():void => {
+    setFilteredGroups([]);
+  };
+
   const _getPageViews = (filteredGroups: any): void => {
     filteredGroups.map((group: any) => {
       GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
@@ -45,6 +49,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const removeGroupsWithoutURL = (updatedGroups: any): void => {
+    console.log("updated", updatedGroups);
     const filterGroup = updatedGroups.filter((group: any) => group.url);
     setFilteredGroups(filterGroup);
     setIsLoading(true);
@@ -107,7 +112,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const getSelectedLetter = (letter: string): void => {
     setSelectedLetter(letter);
-    setIsLoading(true);
+    //setIsLoading(true);
   };
 
   const openPropertyPane = (): void => {
@@ -132,17 +137,23 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   useEffect(() => {
     if (targetAudience === "1") {
+      clearState();
       _getAllGroups(selectedLetter);
     }
   }, [selectedLetter]);
+  
+
+ 
 
 
   //calculate the item index to render per page
 
-  const startIndex:number = (currentPage - 1) * props.numberPerPage;
-  const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
 
-  const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
+    const startIndex:number = (currentPage - 1) * props.numberPerPage;
+    const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
+  
+    const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
+
 
 
   return (
@@ -176,21 +187,29 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                         onSelectLetter={getSelectedLetter}
                       />
                   )}
-                   <Paging
-                    prefLang={props.prefLang}
-                    items={filteredGroups.length}
-                    itemsPerPage={props.numberPerPage}
-                    currentPage={currentPage}
-                    onPageUpdate={onPageUpdate}
-                  />
-                  <GridLayoutStyle groups={displayItemsPerPage} prefLang={props.prefLang}/>
-                  <Paging
-                    prefLang={props.prefLang}
-                    items={filteredGroups.length}
-                    itemsPerPage={props.numberPerPage}
-                    currentPage={currentPage}
-                    onPageUpdate={onPageUpdate}
-                  />
+                  { filteredGroups.length  !== 0 && 
+                    (
+                      <Paging
+                        prefLang={props.prefLang}
+                        items={filteredGroups.length}
+                        itemsPerPage={props.numberPerPage}
+                        currentPage={currentPage}
+                        onPageUpdate={onPageUpdate}
+                      />
+                    )
+                  } 
+                  <GridLayoutStyle groups={displayItemsPerPage} prefLang={props.prefLang} />
+                  { filteredGroups.length  !== 0 && 
+                    (
+                      <Paging
+                        prefLang={props.prefLang}
+                        items={filteredGroups.length}
+                        itemsPerPage={props.numberPerPage}
+                        currentPage={currentPage}
+                        onPageUpdate={onPageUpdate}
+                      />
+                    )
+                  } 
                 </Stack>
               )}
             </>

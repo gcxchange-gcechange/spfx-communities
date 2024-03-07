@@ -77,7 +77,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
         ) }
         
         {groups.length === 0 && (
-          <Stack>
+          <Stack horizontal verticalAlign="center">
             <div
               className={styles.noResultsText}
               aria-label={strings.noResults}
