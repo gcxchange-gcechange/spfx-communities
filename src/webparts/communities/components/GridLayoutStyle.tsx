@@ -84,15 +84,14 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
               tabIndex={0}
             >
               <h4 className={styles.margin0}>
-                Sorry.
+                {strings.sorry}
                 <br />
-                We couldn&apos;t find the community you were looking for.
+                {strings.We_couldnt_find}
               </h4>
               <p className={styles.margin0}>
-                Either the community does not exist or it has a different name.
+                {strings.Does_not_exist}
                 <br />
-                Try searching for the community by another letter in the title or
-                start your own community.
+                {strings.Try_searching}
               </p>
             </div>
 
