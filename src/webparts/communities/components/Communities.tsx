@@ -18,6 +18,7 @@ import CompactLayoutStyle from "./CompactLayoutStyle";
 const Communities: React.FC<ICommunitiesProps> = (props) => {
   const { targetAudience, layout } = props;
 
+
   const [_groups, setGroups] = useState<any[]>([]);
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
@@ -26,6 +27,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const clearState = ():void => {
     setFilteredGroups([]);
+    setCurrentPage(1);
   };
 
   const _getPageViews = (filteredGroups: any): void => {
@@ -173,6 +175,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             <Spinner size={SpinnerSize.large} />
           ) : (
             <>
+            {
+
+
+            }
+              <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
               {layout === "Compact" && (
                 <CompactLayoutStyle groups={filteredGroups} />
               )}
