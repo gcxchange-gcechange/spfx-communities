@@ -37,5 +37,10 @@ define([], function() {
       "goToPage": "Aller à la page",
       "setTitleEn": "Titre en anglais",
       "setTitleFr": "Titre en français",
+      "sorry": "Désolés.",
+      "We_couldnt_find": "Nous ne pouvons trouver la collectivité que vous cherchez.",
+      "Does_not_exist": "Soit elle n’existe pas ou elle porte un autre nom que celui que vous avez entré.",
+      "Try_searching":"Essayez de trouver cette collectivité en utilisant un autre caractère qui fait partie du titre ou créez votre propre collectivité.",
+  
     }
   });

@@ -31,6 +31,11 @@ declare interface ICommunitiesWebPartStrings {
   seeAllLabel:string;
   setTitleEn: string;
   setTitleFr: string;
+  sorry: string;
+  We_couldnt_find: string;
+  Does_not_exist: string;
+  Try_searching: string;
+
 }
 
 declare module 'CommunitiesWebPartStrings' {

@@ -33,6 +33,11 @@ define([], function() {
     "hidingYeti": "Hiding yeti",
     "setTitleEn": "Title in english",
     "setTitleFr": "Title in french",
+    "sorry": "Sorry.",
+    "We_couldnt_find": "We couldn't find the community you were looking for.",
+    "Does_not_exist": " Either the community does not exist or it has a different name.",
+    "Try_searching":"Try searching for the community by another letter in the title or start your own community.",
+
     
   }
 });
