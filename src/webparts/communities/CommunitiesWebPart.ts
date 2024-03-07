@@ -222,11 +222,11 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
                 
                 PropertyPaneSlider('numberPerPage', {
                   label: 'items per page',
-                  min: 4,
+                  min: 1,
                   max: 50,
-                  step: 1,
+                  step: 3,
                   showValue: true,
-                  value: 4
+                  value: 1
                 }),
                  
                 PropertyPaneChoiceGroup("sort", {
