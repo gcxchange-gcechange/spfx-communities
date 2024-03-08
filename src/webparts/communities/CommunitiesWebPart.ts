@@ -55,7 +55,8 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         layout: this.properties.layout,
         titleEn: this.properties.titleEn,
         titleFr: this.properties.titleFR,
-        numberPerPage : this.properties.numberPerPage
+        numberPerPage : this.properties.numberPerPage,
+
        
       }
     );
@@ -97,11 +98,6 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
     return Version.parse('1.0');
   }
 
-
-  
-  // private openPropertyPane = (): void => {
-  //   this.context.propertyPane.open();
-  // }
 
   
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -224,7 +220,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
                   label: 'items per page',
                   min: 1,
                   max: 50,
-                  step: 3,
+                  step: 1,
                   showValue: true,
                   value: 1
                 }),
