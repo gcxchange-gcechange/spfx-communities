@@ -20,7 +20,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
      height: 300,
    };
   const strings = SelectLanguage(prefLang);
-  const sectionStackTokens: IStackTokens = { childrenGap: 10 };
+  const sectionStackTokens: IStackTokens = { childrenGap: 20 };
 
   return (
     <>
