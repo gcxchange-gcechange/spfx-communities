@@ -80,6 +80,7 @@ export class GraphService {
                         client
                             .api(`/$batch`)
                             .post(requestBody, (error: any, responseObject: any) => {
+                                console.log("batch", responseObject);
                                 const responseResults: any[] = [];
                                 responseResults.push(...responseObject.responses[0].body.value);
  
@@ -121,7 +122,7 @@ export class GraphService {
             {
               id: "1",
               method: "GET",
-              url: `/groups/${groupId}/sites/root/`,
+              url: `/groups/${groupId}/sites/root?$select=id,lastModifiedDateTime,webUrl`,
             },
             {
               id: "2",
