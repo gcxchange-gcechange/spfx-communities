@@ -51,7 +51,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const removeGroupsWithoutURL = (updatedGroups: any): void => {
-    console.log("updated", updatedGroups);
     const filterGroup = updatedGroups.filter((group: any) => group.url);
     setFilteredGroups(filterGroup);
     setIsLoading(true);
@@ -62,13 +61,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const _getGroupDetailsData = (groups: any): void => {
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
+        console.log("GD", groupDetails)
         try {
           setIsLoading(true);
-          if (
-            groupDetails[1] &&
-            (groupDetails[1].webUrl !== null ||
-              groupDetails[1].webUrl !== undefined)
-          ) {
+          if ( groupDetails[1] && (groupDetails[1].webUrl !== null || groupDetails[1].webUrl !== undefined) ) 
+          {
             setGroups((prevGroups) => {
               const updatedGroups = prevGroups.map((groupItems) =>
                 groupItems.id === groupData.id
@@ -76,9 +73,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       ...groupItems,
                       url: groupDetails[1].webUrl,
                       siteId: groupDetails[1].id,
-                      modified: new Date(
-                        groupDetails[1].lastModifiedDateTime
-                      ).toLocaleDateString("en-CA"),
+                      modified: new Date( groupDetails[1].lastModifiedDateTime ).toLocaleDateString("en-CA"),
                       members: groupDetails[2],
                       thumbnail: "data:image/jpeg;base64," + groupDetails[3],
                     }
@@ -89,6 +84,13 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
               return updatedGroups;
             });
+          } else if (!groupDetails[1]){
+            console.log("url does not exist")
+            
+            setGroups((prevGroups) =>  
+              prevGroups.filter((groupItem) => groupItem.id !== groupData.id)
+
+          );
           }
         } catch (error) {
           console.log("ERROR", error);
@@ -156,8 +158,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   
     const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
 
-
-
   return (
     <>
       <div>
@@ -170,8 +170,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             onConfigure={openPropertyPane}
           />
         )}
+      </div>
         <div>
-          {isLoading ? (
+          { isLoading ? (
             <Spinner size={SpinnerSize.large} />
           ) : (
             <>
@@ -222,7 +223,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             </>
           )}
         </div>
-      </div>
+      
     </>
   );
 };
