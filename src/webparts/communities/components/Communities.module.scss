@@ -49,6 +49,8 @@
   }
 }
 
+//Grid Layout
+
 .cardContainer {
   height: 250px;
   width:376px;
@@ -117,6 +119,8 @@
   padding: 8px 20px;
 }
 
+//List Layout
+
 .listCardContainer {
   padding:10px;
   width:400px;
@@ -128,6 +132,8 @@
   box-shadow: rgba(0, 0, 0, 0.133) 0px 1.6px 3.6px 0px, rgba(0, 0, 0, 0.11) 0px 0.3px 0.9px 0px;
   border-width: 1px;
   border-style: solid;
+  border-color: #edebe9;
+  border-radius: 2px;
 
 }
 
@@ -170,6 +176,8 @@
   height: 20%;
 }
 
+//compact Layout
+
 .compactCardContainer {
   padding-top: 5px;
   padding-bottom: 12px;
@@ -184,7 +192,8 @@
   box-shadow: rgba(0, 0, 0, 0.133) 0px 1.6px 3.6px 0px, rgba(0, 0, 0, 0.11) 0px 0.3px 0.9px 0px;
   border-width: 1px;
   border-style: solid;
-
+  border-color: #edebe9;
+  border-radius: 2px;
 }
 
 .compactCardImg {
