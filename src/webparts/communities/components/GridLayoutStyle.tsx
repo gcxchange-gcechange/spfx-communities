@@ -28,7 +28,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
         {groups.length >= 1 && (
           <Stack
             horizontal
-            horizontalAlign="space-between"
+            horizontalAlign="start"
             wrap={true}
             tokens={sectionStackTokens}
           >
