@@ -61,11 +61,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const _getGroupDetailsData = (groups: any): void => {
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
-        console.log("GD", groupDetails)
+        console.log("GD", groupDetails[1])
         try {
-          setIsLoading(true);
-          if ( groupDetails[1] && (groupDetails[1].webUrl !== null || groupDetails[1].webUrl !== undefined) ) 
+          if ( groupDetails[1] !== undefined) 
           {
+            setIsLoading(true);
             setGroups((prevGroups) => {
               const updatedGroups = prevGroups.map((groupItems) =>
                 groupItems.id === groupData.id
@@ -81,16 +81,12 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
               );
 
               removeGroupsWithoutURL(updatedGroups);
-
               return updatedGroups;
-            });
-          } else if (!groupDetails[1]){
-            console.log("url does not exist")
-            
-            setGroups((prevGroups) =>  
-              prevGroups.filter((groupItem) => groupItem.id !== groupData.id)
 
-          );
+            });
+          } else {
+            console.log(`Group details not found for ${groupData.id}`);
+            return null;
           }
         } catch (error) {
           console.log("ERROR", error);
