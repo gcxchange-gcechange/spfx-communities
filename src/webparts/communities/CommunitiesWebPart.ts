@@ -28,6 +28,7 @@ export interface ICommunitiesWebPartProps {
   titleEn: string;
   titleFR: string;
   numberPerPage: number;
+  sort: string;
 }
 
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
@@ -56,6 +57,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         titleEn: this.properties.titleEn,
         titleFr: this.properties.titleFR,
         numberPerPage : this.properties.numberPerPage,
+        sort: this.properties.sort,
 
        
       }

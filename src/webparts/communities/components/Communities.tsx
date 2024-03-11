@@ -61,7 +61,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const _getGroupDetailsData = (groups: any): void => {
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
-        console.log("GD", groupDetails[1])
         try {
           if ( groupDetails[1] !== undefined) 
           {
@@ -154,9 +153,29 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   
     const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
 
+    const pagedSortedItems =  props.sort === "Alphabetical" 
+    ? displayItemsPerPage.sort((a,b) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
+    : props.sort === "DateCreation" 
+      ? displayItemsPerPage.sort((a, b) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
+      : displayItemsPerPage
+
+
+  //sorting for user groups
+
+  const userGroupsSorted = props.sort === "Alphabetical" 
+  ? filteredGroups.sort((a,b) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
+  : props.sort === "DateCreation" 
+    ? filteredGroups.sort((a, b) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
+    : filteredGroups
+
+
+  
+
+
   return (
     <>
       <div>
+        <h3>Sort: {props.sort}</h3>
         {!props.targetAudience && !props.layout && (
           <Placeholder
             iconName="Edit"
@@ -178,10 +197,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             }
               <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
               {layout === "Compact" && (
-                <CompactLayoutStyle groups={filteredGroups} />
+                <CompactLayoutStyle groups={userGroupsSorted} />
               )}
               {layout === "List" && (
-                <ListLayoutStyle groups={filteredGroups} />
+                <ListLayoutStyle groups={userGroupsSorted} />
               )}
               {layout === "Grid" && (
                 <Stack horizontalAlign="center" style={{width:'80%'}}>
@@ -202,7 +221,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       />
                     )
                   } 
-                  <GridLayoutStyle groups={displayItemsPerPage} prefLang={props.prefLang} />
+                  <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} />
                   { filteredGroups.length  !== 0 && 
                     (
                       <Paging
