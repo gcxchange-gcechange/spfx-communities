@@ -203,7 +203,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                 <ListLayoutStyle groups={userGroupsSorted} />
               )}
               {layout === "Grid" && (
-                <Stack horizontalAlign="center" style={{width:'80%'}}>
+                <Stack horizontalAlign="center">
                   {targetAudience === "1" && (
                       <AlphabeticalFilter
                         selectedLetter={selectedLetter}
