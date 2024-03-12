@@ -24,6 +24,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [nextPageLink, setNextPageLink] = useState<string>("");
+  const [itemPages, setItemPages] = useState<number>(0);
 
   const clearState = ():void => {
     setFilteredGroups([]);
@@ -59,6 +61,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const _getGroupDetailsData = (groups: any): void => {
+    console.log("G", groups);
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
@@ -104,9 +107,16 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
-      setGroups(allGroupData);
-      _getGroupDetailsData(allGroupData);
+      console.log("GroupData", allGroupData);
+      const link = allGroupData[0].link;
+      const totalPages = allGroupData[0].totalPages;
+      setNextPageLink(link);
+      setItemPages(totalPages)
+      setGroups(allGroupData[0].groupResponse);
+      _getGroupDetailsData(allGroupData[0].groupResponse);
     });
+    console.log('nextLink', nextPageLink);
+    console.log('toalPage', itemPages);
   };
 
   const getSelectedLetter = (letter: string): void => {
@@ -142,14 +152,12 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   }, [selectedLetter]);
   
 
- 
-
 
   //calculate the item index to render per page
 
 
-    const startIndex:number = (currentPage - 1) * props.numberPerPage;
-    const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
+    const startIndex:number = (currentPage - 1) * itemPages;
+    const endIndex: number = Math.min(startIndex + itemPages, filteredGroups.length);
   
     const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
 
@@ -168,9 +176,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     ? filteredGroups.sort((a, b) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
     : filteredGroups
 
-
+  const displayUserGroups = userGroupsSorted.slice(0, props.numberPerPage);
   
-
+ 
 
   return (
     <>
@@ -197,10 +205,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             }
               <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
               {layout === "Compact" && (
-                <CompactLayoutStyle groups={userGroupsSorted} />
+                <CompactLayoutStyle groups={displayUserGroups} />
               )}
               {layout === "List" && (
-                <ListLayoutStyle groups={userGroupsSorted} />
+                <ListLayoutStyle groups={displayUserGroups} />
               )}
               {layout === "Grid" && (
                 <Stack horizontalAlign="center">
