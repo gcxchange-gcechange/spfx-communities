@@ -25,7 +25,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [nextPageLink, setNextPageLink] = useState<string>("");
-  const [itemPages, setItemPages] = useState<any>([]);
+  const [ totalPages, setTotalPages] = useState<any>([]);
 
   const clearState = ():void => {
     setFilteredGroups([]);
@@ -107,17 +107,23 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
-      console.log("GroupData", allGroupData[0]);
+      console.log("GroupData", allGroupData[0].totalPages);
       console.log("PageNumber", currentPage)
       const link = allGroupData[0].link;
       const totalPages = allGroupData[0].totalPages;
-      setNextPageLink(link);
-      setItemPages(totalPages)
+      
       setGroups(allGroupData[0].groupResponse);
+      setNextPageLink(link);
+      
+      if (totalPages !== undefined) {
+        setTotalPages(totalPages)
+      }
+     
+     
       _getGroupDetailsData(allGroupData[0].groupResponse);
     });
     console.log('nextLink', nextPageLink);
-    console.log('toalPage', itemPages);
+    console.log('totalPage',  totalPages);
   };
 
   const getSelectedLetter = (letter: string): void => {
@@ -221,11 +227,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                         onSelectLetter={getSelectedLetter}
                       />
                   )}
-                  { itemPages.length  !== 0 && 
+                  {  filteredGroups.length !== 0 && 
                     (
                       <Paging
                         prefLang={props.prefLang}
-                        items={itemPages.length}
+                        items={totalPages.length}
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}
@@ -237,7 +243,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     (
                       <Paging
                         prefLang={props.prefLang}
-                        items={itemPages.length}
+                        items={totalPages.length}
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}

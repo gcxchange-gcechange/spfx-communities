@@ -169,9 +169,12 @@ export class GraphService {
 
                                 const responseResults: any[]= [];
                                 let  link: string | undefined = "";
+                                let groupResponse: any[] = [];
 
                                 link = response2["@odata.nextLink"];
-                                responseResults.push(response2.value, link)
+                                groupResponse = response2.value
+
+                                responseResults.push({groupResponse, link})
 
                                 resolve(responseResults)
                             })
