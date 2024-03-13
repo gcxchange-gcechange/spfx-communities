@@ -25,7 +25,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [nextPageLink, setNextPageLink] = useState<string>("");
-  const [itemPages, setItemPages] = useState<number>(0);
+  const [itemPages, setItemPages] = useState<any>([]);
 
   const clearState = ():void => {
     setFilteredGroups([]);
@@ -107,7 +107,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
-      console.log("GroupData", allGroupData);
+      console.log("GroupData", allGroupData[0]);
+      console.log("PageNumber", currentPage)
       const link = allGroupData[0].link;
       const totalPages = allGroupData[0].totalPages;
       setNextPageLink(link);
@@ -129,7 +130,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const onPageUpdate = (pageNumber: number): void => {
+    console.log("page#",pageNumber)
     setCurrentPage( pageNumber);
+    _getAllGroups(nextPageLink);
   }
 
 
@@ -156,16 +159,16 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   //calculate the item index to render per page
 
 
-    const startIndex:number = (currentPage - 1) * itemPages;
-    const endIndex: number = Math.min(startIndex + itemPages, filteredGroups.length);
+    //const startIndex:number = (currentPage - 1) * props.numberPerPage;
+    //const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
   
-    const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
+    //const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
 
     const pagedSortedItems =  props.sort === "Alphabetical" 
-    ? displayItemsPerPage.sort((a,b) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
+    ? filteredGroups.sort((a:any, b:any) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
     : props.sort === "DateCreation" 
-      ? displayItemsPerPage.sort((a, b) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
-      : displayItemsPerPage
+      ? filteredGroups.sort((a:any , b:any) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
+      : filteredGroups
 
 
   //sorting for user groups
@@ -218,11 +221,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                         onSelectLetter={getSelectedLetter}
                       />
                   )}
-                  { filteredGroups.length  !== 0 && 
+                  { itemPages.length  !== 0 && 
                     (
                       <Paging
                         prefLang={props.prefLang}
-                        items={filteredGroups.length}
+                        items={itemPages.length}
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}
@@ -234,7 +237,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     (
                       <Paging
                         prefLang={props.prefLang}
-                        items={filteredGroups.length}
+                        items={itemPages.length}
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}

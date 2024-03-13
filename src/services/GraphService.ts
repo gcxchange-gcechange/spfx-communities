@@ -125,22 +125,28 @@ export class GraphService {
 
     public static async getAllGroups(selectedLetter: string ):Promise<any> {
 
+        console.log("link", selectedLetter)
+        const link = /^https/.test(selectedLetter);
+        console.log("link", link);
+
         let apiTxt: string;
 
         if (selectedLetter === "#") {
             apiTxt =
               "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=10";
-          } else {
+          } 
+          else  {
             apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=5`;
-          }
+          } 
         
         const requestBody = {
             requests: [
                 {
-                id: "1",
-                method: "GET",
-                url: `${apiTxt}`
+                    id: "1",
+                    method: "GET",
+                    url: `${apiTxt}`
                 },
+
                 {
                     id: "2",
                     method: "GET",
@@ -149,9 +155,30 @@ export class GraphService {
             ]
         };
 
+
         return  new Promise((resolve, reject) => {
 
             try {
+                if(link ) {
+                    this._context.msGraphClientFactory
+                    .getClient('3')
+                    .then((client: MSGraphClientV3) => {
+                        client
+                            .api(`${selectedLetter}`)
+                            .get((error: any, response2: any) => {
+
+                                const responseResults: any[]= [];
+                                let  link: string | undefined = "";
+
+                                link = response2["@odata.nextLink"];
+                                responseResults.push(response2.value, link)
+
+                                resolve(responseResults)
+                            })
+                           
+                    })
+                    
+                } else {
                 this._context.msGraphClientFactory
                     .getClient('3')
                     .then((client: MSGraphClientV3) => {
@@ -166,27 +193,21 @@ export class GraphService {
                                 let totalPages: number | undefined;
 
                                 responseObject.responses.forEach((response: any) => {
-                                   console.log("response", response.id)
                                    if(response.id === "1") {
                                     link = response.body["@odata.nextLink"];
                                     groupResponse = response.body.value;
                                    }
 
                                    if(response.id === "2" ) {
-                                    totalPages= response.body.value.length;
+                                    totalPages= response.body.value;
                                    }
 
                                 });
 
-                                
-
                                 responseResults.push({groupResponse, link, totalPages});
-                                // const responseResults: any[] = [];
-                                // responseResults.push(...responseObject.responses[0].body.value);
- 
-                                //const link = responseObject.responses[0].body["@odata.nextLink"];
-                                //const totalPages = responseObject.responses[1].body.value.length;
 
+                               
+                                
                                 resolve(responseResults);
 
                                 // if (link) {
@@ -216,7 +237,7 @@ export class GraphService {
 
                             });
                     });
-            }
+            }}
             catch(error){
                 console.log(error)
                 reject(error);
