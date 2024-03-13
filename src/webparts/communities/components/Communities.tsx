@@ -25,6 +25,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [nextPageLink, setNextPageLink] = useState<string>("");
+  const [previousLinkValue, setPreviousLinkValue] = useState<any[]>([]);
   const [ totalPages, setTotalPages] = useState<any>([]);
 
   const clearState = ():void => {
@@ -113,7 +114,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       const totalPages = allGroupData[0].totalPages;
       
       setGroups(allGroupData[0].groupResponse);
-      setNextPageLink(link);
+      setNextPageLink(previous => {
+        setPreviousLinkValue(prev => [...prev, link]);
+        return link;
+      })
       
       if (totalPages !== undefined) {
         setTotalPages(totalPages)
@@ -137,8 +141,13 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const onPageUpdate = (pageNumber: number): void => {
     console.log("page#",pageNumber)
+    console.log("current page",currentPage)
     setCurrentPage( pageNumber);
-    _getAllGroups(nextPageLink);
+    console.log("array", previousLinkValue)
+    if(pageNumber > currentPage){
+      _getAllGroups(nextPageLink);
+    } 
+
   }
 
 
@@ -192,7 +201,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   return (
     <>
       <div>
-        <h3>Sort: {props.sort}</h3>
         {!props.targetAudience && !props.layout && (
           <Placeholder
             iconName="Edit"
@@ -235,6 +243,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}
+ 
                       />
                     )
                   } 
@@ -247,6 +256,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}
+                     
                       />
                     )
                   } 
