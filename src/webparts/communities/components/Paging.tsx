@@ -13,7 +13,7 @@ interface IPagingProps {
 }
 
 const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, prefLang, currentPage, onPageUpdate}) => {
-    
+
     const strings = SelectLanguage(prefLang);
 
     const getNumberOfPages = (): Array<number> => {

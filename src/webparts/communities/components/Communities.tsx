@@ -24,9 +24,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [nextPageLink, setNextPageLink] = useState<string>("");
-  const [previousLinkValue, setPreviousLinkValue] = useState<any[]>([]);
-  const [ totalPages, setTotalPages] = useState<any>([]);
+ 
 
   const clearState = ():void => {
     setFilteredGroups([]);
@@ -108,26 +106,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
-      console.log("GroupData", allGroupData[0].totalPages);
-      console.log("PageNumber", currentPage)
-      const link = allGroupData[0].link;
-      const totalPages = allGroupData[0].totalPages;
-      
-      setGroups(allGroupData[0].groupResponse);
-      setNextPageLink(previous => {
-        setPreviousLinkValue(prev => [...prev, link]);
-        return link;
-      })
-      
-      if (totalPages !== undefined) {
-        setTotalPages(totalPages)
-      }
-     
-     
-      _getGroupDetailsData(allGroupData[0].groupResponse);
+      setGroups(allGroupData);
+      _getGroupDetailsData(allGroupData);
     });
-    console.log('nextLink', nextPageLink);
-    console.log('totalPage',  totalPages);
   };
 
   const getSelectedLetter = (letter: string): void => {
@@ -141,12 +122,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const onPageUpdate = (pageNumber: number): void => {
     console.log("page#",pageNumber)
-    console.log("current page",currentPage)
     setCurrentPage( pageNumber);
-    console.log("array", previousLinkValue)
-    if(pageNumber > currentPage){
-      _getAllGroups(nextPageLink);
-    } 
+    console.log("current page",currentPage)
 
   }
 
@@ -174,16 +151,16 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   //calculate the item index to render per page
 
 
-    //const startIndex:number = (currentPage - 1) * props.numberPerPage;
-    //const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
+    const startIndex:number = (currentPage - 1) * props.numberPerPage;
+    const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
   
-    //const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
+    const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
 
     const pagedSortedItems =  props.sort === "Alphabetical" 
-    ? filteredGroups.sort((a:any, b:any) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
+    ? displayItemsPerPage.sort((a:any, b:any) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
     : props.sort === "DateCreation" 
-      ? filteredGroups.sort((a:any , b:any) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
-      : filteredGroups
+      ?  displayItemsPerPage.sort((a:any , b:any) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
+      :  displayItemsPerPage
 
 
   //sorting for user groups
@@ -239,7 +216,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     (
                       <Paging
                         prefLang={props.prefLang}
-                        items={totalPages.length}
+                        items={filteredGroups.length}
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}
@@ -252,7 +229,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     (
                       <Paging
                         prefLang={props.prefLang}
-                        items={totalPages.length}
+                        items={filteredGroups.length}
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}
