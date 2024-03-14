@@ -11,7 +11,6 @@ interface IGridLayoutProps {
 }
 
 const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang }) => {
-  console.log("Group length:", groups.length);
 
   const imageProps: Partial<IImageProps> = {
     src: (require("../assets/YetiHiding.png")),

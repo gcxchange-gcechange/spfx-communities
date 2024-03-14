@@ -62,7 +62,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const _getGroupDetailsData = (groups: any): void => {
-    console.log("G", groups);
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
@@ -108,17 +107,17 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
-      console.log("GroupData", allGroupData[0].totalPages);
-      console.log("PageNumber", currentPage)
       const link = allGroupData[0].link;
       const totalPages = allGroupData[0].totalPages;
       
       setGroups(allGroupData[0].groupResponse);
+      
       setNextPageLink(previous => {
         setPreviousLinkValue(prev => [...prev, link]);
         return link;
       })
       
+
       if (totalPages !== undefined) {
         setTotalPages(totalPages)
       }
@@ -126,8 +125,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
      
       _getGroupDetailsData(allGroupData[0].groupResponse);
     });
-    console.log('nextLink', nextPageLink);
-    console.log('totalPage',  totalPages);
   };
 
   const getSelectedLetter = (letter: string): void => {
@@ -140,13 +137,23 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const onPageUpdate = (pageNumber: number): void => {
-    console.log("page#",pageNumber)
-    console.log("current page",currentPage)
+    console.log("page#",pageNumber);
+
+    if (pageNumber > currentPage) {
+      _getAllGroups(nextPageLink);
+    }
+    else if (pageNumber < currentPage) {
+      _getAllGroups(previousLinkValue[0]);
+    }
+
+    else if (pageNumber === 1) {
+      _getAllGroups(selectedLetter);
+    }
+ 
+
     setCurrentPage( pageNumber);
     console.log("array", previousLinkValue)
-    if(pageNumber > currentPage){
-      _getAllGroups(nextPageLink);
-    } 
+    
 
   }
 
