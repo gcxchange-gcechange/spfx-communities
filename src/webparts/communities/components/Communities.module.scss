@@ -207,9 +207,9 @@
 
 //Paging Styles
 .currentPage {
-  background-color:"[theme:themePrimary]";
+  border-color:"[theme:themePrimary]";
   border-radius: 50%;
-  color:white;
+  color:"[theme:themePrimary]";
   padding: 1px 5px;
 }
 

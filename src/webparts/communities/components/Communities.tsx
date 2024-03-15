@@ -138,22 +138,22 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const onPageUpdate = (pageNumber: number): void => {
     console.log("page#",pageNumber);
-
     if (pageNumber > currentPage) {
+     console.log("PageNumber is greater than currentPage")
       _getAllGroups(nextPageLink);
     }
-    else if (pageNumber < currentPage) {
-      _getAllGroups(previousLinkValue[0]);
-    }
+    else if (pageNumber < currentPage ) {
+      console.log("PageNumber is LESS than currentPage")
+      if (pageNumber === 1) {
+        console.log("PageNumber is 1")
+        _getAllGroups(selectedLetter);
+      } else {
+        _getAllGroups(previousLinkValue[1]);
 
-    else if (pageNumber === 1) {
-      _getAllGroups(selectedLetter);
+      }
     }
- 
 
     setCurrentPage( pageNumber);
-    console.log("array", previousLinkValue)
-    
 
   }
 
@@ -174,6 +174,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       clearState();
       _getAllGroups(selectedLetter);
     }
+    
   }, [selectedLetter]);
   
 

@@ -68,22 +68,34 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
     
     const buttonStyles: IButtonStyles = {
         root:{
-          padding: '0px',
-          minWidth: '30px',
-          borderRadius: '50%',
-          borderColor: 'transparent'
-
+            padding: '0px',
+            minWidth: '30px',
+            borderRadius: '50%',
+            borderColor: 'transparent',
+            cursor: "none"
         },
 
         rootHovered: {
-          backgroundColor: "white"
+            backgroundColor: "white"
         }
 
-      };
+    };
+
+    const bstyles: IButtonStyles = {
+        root: {
+            backgroundColor:'#0078d4',
+            color: 'white',
+            height: '30px',
+        },
+        rootHovered: {
+            color: "white"
+        }
+    }
     
     
     return (
-        <Stack horizontal  horizontalAlign="center" verticalAlign="center">
+        <div style={{marginTop: '10px', marginBottom: '10px'}}>
+        <Stack horizontal  horizontalAlign="center" verticalAlign="center" >
 
         {/* <ActionButton
           onRenderIcon={(_props: IButtonProps) => {
@@ -107,6 +119,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
               disabled={prevDisabled}
               onClick={prevPage}
               ariaLabel={strings.pagPrev}
+              styles={bstyles}         
             >
               {strings.pagPrev}
           </ActionButton>
@@ -115,7 +128,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
 
 
            {getNumberOfPages().map( itemNumber =>
-            <div key={itemNumber.toString()}  tabIndex={0}  >{
+            <div key={itemNumber.toString()}  tabIndex={0} style={{margin:'5px'}} >{
               itemNumber === currentPage
                  ? <DefaultButton styles={buttonStyles} className={styles.currentPage} aria-label={`${strings.currentPage}, ${currentPage}`} aria-current={true}>
                   {currentPage}
@@ -135,6 +148,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
               }}
               onClick={nextPage}
               ariaLabel={strings.pagNext}
+              styles={bstyles}
           >
               {strings.pagNext}
           </ActionButton>
@@ -151,6 +165,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
                 ariaLabel={strings.lastPage} 
             /> */}
       </Stack>
+      </div>
     );
 }
 
