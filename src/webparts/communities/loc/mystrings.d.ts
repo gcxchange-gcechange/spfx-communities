@@ -35,6 +35,7 @@ declare interface ICommunitiesWebPartStrings {
   We_couldnt_find: string;
   Does_not_exist: string;
   Try_searching: string;
+  seeAll: string;
 
 }
 

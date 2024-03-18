@@ -5,6 +5,7 @@ define([], function() {
     "BasicGroupName": "Group Name",
     "DescriptionFieldLabel": "Description Field",
     "altImgLogo":"Logo of",
+    "seeAll":"See all",
     "seeAllLabel": "See all of my communities",
     "seeAllToggle": "This webpart is for the see all page",
     "seeAllOn" :"Yes",

@@ -29,6 +29,7 @@ export interface ICommunitiesWebPartProps {
   titleFR: string;
   numberPerPage: number;
   sort: string;
+  seeAllLink: string;
 }
 
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
@@ -58,6 +59,8 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         titleFr: this.properties.titleFR,
         numberPerPage : this.properties.numberPerPage,
         sort: this.properties.sort,
+        seeAllLink: this.properties.seeAllLink
+
 
        
       }
@@ -99,6 +102,22 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
   protected get dataVersion(): Version {
     return Version.parse('1.0');
   }
+
+  private validateURL(value:string):string {
+    const urlregex = new RegExp(
+      // eslint-disable-next-line no-useless-escape
+      "^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+      
+    if (value === null ||
+      value.trim().length === 0) {
+      return '';
+    }    
+    else if(!urlregex.test(value))
+    {
+      return 'Please type a valid URL';
+    }
+    return '';
+}
 
 
   
@@ -225,6 +244,11 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
                   step: 1,
                   showValue: true,
                   value: 1
+                }),
+
+                PropertyPaneTextField('seeAllLink', {
+                  label: this.strings.seeAllLabel,
+                  onGetErrorMessage: this.validateURL.bind(this),
                 }),
                  
                 PropertyPaneChoiceGroup("sort", {

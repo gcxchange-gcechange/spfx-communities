@@ -13,5 +13,6 @@ export interface ICommunitiesProps {
   titleFr: string;
   numberPerPage: number;
   sort: string;
+  seeAllLink: string;
 
 }

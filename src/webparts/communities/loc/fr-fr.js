@@ -22,6 +22,7 @@ define([], function() {
       "dateCreation": "Date de création",
       "alphabetical": "Alphabétique",
       "groups": "collectivités",
+      "seeAll":"Afficher tout",
       "seeAllLabel": "Afficher toutes mes collectivités",
       "listIcon": "Liste",
       "seeAllToggle": "Ce webpart est pour la page Afficher tout",

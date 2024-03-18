@@ -14,10 +14,13 @@ import { Spinner, SpinnerSize, Stack } from "@fluentui/react";
 import Paging from "./Paging";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
+import { SelectLanguage } from "./SelectLanguage";
 
 const Communities: React.FC<ICommunitiesProps> = (props) => {
+
   const { targetAudience, layout } = props;
 
+  const strings = SelectLanguage(props.prefLang);
 
   const [_groups, setGroups] = useState<any[]>([]);
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
@@ -228,7 +231,15 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
 
             }
-              <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
+              <Stack horizontal>
+                <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
+                { (layout === "Compact" || layout === "List" ) && displayUserGroups.length < filteredGroups.length && 
+                  (
+                    <a href={props.seeAllLink}>{strings.seeAll}</a>
+                  )
+                }
+              </Stack>
+              
               {layout === "Compact" && (
                 <CompactLayoutStyle groups={displayUserGroups} />
               )}
