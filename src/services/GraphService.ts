@@ -133,10 +133,10 @@ export class GraphService {
 
         if (selectedLetter === "#") {
             apiTxt =
-              "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=10";
+              "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName,createdDateTime,description,assignedLabels&$top=5";
           } 
           else  {
-            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=5`;
+            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description,assignedLabels&$top=5`;
           } 
         
         const requestBody = {
@@ -150,7 +150,7 @@ export class GraphService {
                 {
                     id: "2",
                     method: "GET",
-                    url: `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id&$count?ConsistencyLevel=eventual`
+                    url: `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,assignedLabels&$count?ConsistencyLevel=eventual`
                 }
             ]
         };

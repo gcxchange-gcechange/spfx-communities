@@ -10,11 +10,12 @@ import { useEffect, useState } from "react";
 import AlphabeticalFilter from "./AlphabeticalFilter";
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from "./GridLayoutStyle";
-import { Spinner, SpinnerSize, Stack } from "@fluentui/react";
+import { Spinner, SpinnerSize, Stack, StackItem } from "@fluentui/react";
 import Paging from "./Paging";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
 import { SelectLanguage } from "./SelectLanguage";
+import styles from "./Communities.module.scss";
 
 const Communities: React.FC<ICommunitiesProps> = (props) => {
 
@@ -67,6 +68,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const _getGroupDetailsData = (groups: any): void => {
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
+        console.log("groupDetails", groupDetails);
         try {
           if ( groupDetails[1] !== undefined) 
           {
@@ -110,9 +112,38 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
+      console.log("ALLGROUPDATA", allGroupData);
+    
       const link = allGroupData[0].link;
       const totalPages = allGroupData[0].totalPages;
-      
+
+      const getlabels = allGroupData[0].totalPages.map((group:any) => {
+        return group.assignedLabels.map((label: any) => label.labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83");
+      }).flat();
+
+      // const getUnclassifiedGroups = allGroupData[0].groupResponse.map((group:any) => {
+      //   return group.assignedLabels.length > 0 && group.assignedLabels.some((label:any) => label.labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83")
+      // })
+
+      const getUnclassifiedGroups: any[] = [];
+
+      allGroupData[0].groupResponse.forEach((group: any) => {
+        
+
+        if (group.assignedLabels.length !== 0 ) {
+          console.log(group)
+          const unclassifiedLabel = group.assignedLabel[0].labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83";
+          getUnclassifiedGroups.push(unclassifiedLabel)
+        }
+
+      });
+
+     
+    
+
+      console.log("UN",getUnclassifiedGroups)
+
+
       setGroups(allGroupData[0].groupResponse);
       
       setNextPageLink(previous => {
@@ -122,7 +153,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       
 
       if (totalPages !== undefined) {
-        setTotalPages(totalPages)
+        setTotalPages(getlabels)
       }
      
      
@@ -231,13 +262,19 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
 
             }
-              <Stack horizontal>
-                <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
-                { (layout === "Compact" || layout === "List" ) && displayUserGroups.length < filteredGroups.length && 
-                  (
-                    <a href={props.seeAllLink}>{strings.seeAll}</a>
-                  )
-                }
+              <Stack horizontal verticalAlign="center">
+                <StackItem grow={1}>
+                  <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
+                </StackItem>
+                <StackItem >
+                  { (layout === "Compact" || layout === "List" ) && displayUserGroups.length < filteredGroups.length && 
+                    (
+                    <div>
+                      <a className={styles.links} href={props.seeAllLink}>{strings.seeAll}</a>
+                    </div> 
+                    )
+                  }
+                </StackItem>
               </Stack>
               
               {layout === "Compact" && (
