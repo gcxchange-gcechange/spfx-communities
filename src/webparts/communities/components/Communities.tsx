@@ -121,24 +121,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
         return group.assignedLabels.map((label: any) => label.labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83");
       }).flat();
 
-      // const getUnclassifiedGroups = allGroupData[0].groupResponse.map((group:any) => {
-      //   return group.assignedLabels.length > 0 && group.assignedLabels.some((label:any) => label.labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83")
-      // })
-
-      const getUnclassifiedGroups: any[] = [];
-
-      allGroupData[0].groupResponse.forEach((group: any) => {
-        
-
-        if (group.assignedLabels.length !== 0 ) {
-          console.log(group)
-          const unclassifiedLabel = group.assignedLabel[0].labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83";
-          getUnclassifiedGroups.push(unclassifiedLabel)
-        }
-
-      });
-
-     
+      const getUnclassifiedGroups = allGroupData[0].groupResponse.filter((group:any) => {
+        return group.assignedLabels.length > 0 && group.assignedLabels.some((label:any) => label.labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83")
+      })
     
 
       console.log("UN",getUnclassifiedGroups)
@@ -157,7 +142,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       }
      
      
-      _getGroupDetailsData(allGroupData[0].groupResponse);
+      _getGroupDetailsData(getUnclassifiedGroups);
     });
   };
 
