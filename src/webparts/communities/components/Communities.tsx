@@ -125,11 +125,13 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
         return group.assignedLabels.length > 0 && group.assignedLabels.some((label:any) => label.labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83")
       })
     
-
+      if (!getUnclassifiedGroups) {
+        return null
+      }
       console.log("UN",getUnclassifiedGroups)
 
 
-      setGroups(allGroupData[0].groupResponse);
+      setGroups(getUnclassifiedGroups);
       
       setNextPageLink(previous => {
         setPreviousLinkValue(prev => [...prev, link]);
