@@ -128,13 +128,15 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       const getUnclassifiedGroups: any[] = [];
 
       allGroupData[0].groupResponse.forEach((group: any) => {
-        
 
-        if (group.assignedLabels.length !== 0 ) {
-          console.log(group)
-          const unclassifiedLabel = group.assignedLabel[0].labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83";
-          getUnclassifiedGroups.push(unclassifiedLabel)
-        }
+        console.log("f", group.assignedLabels)
+        
+        // if (group.assignedLabels.length !== 0 ) {     
+        //   console.log("HELLO")
+        //   const unclassifiedLabel = group.assignedLabel[0].labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83";
+        //   console.log("unc", unclassifiedLabel)
+        //   getUnclassifiedGroups.push(unclassifiedLabel)
+        // }
 
       });
 
