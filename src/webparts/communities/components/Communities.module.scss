@@ -101,6 +101,11 @@
   font-weight: 600;
   line-height:20px;
   padding:12 0px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cardDescription{
