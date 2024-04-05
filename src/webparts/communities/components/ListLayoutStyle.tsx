@@ -2,13 +2,16 @@
 
 import * as React from "react";
 import styles from "./Communities.module.scss";
-import { IStackTokens, Stack } from "@fluentui/react";
+import { IStackTokens, Stack, StackItem } from "@fluentui/react";
 
 interface IListLayoutStyleProps {
   groups: any[];
+  seeAllLink: string;
+  groupsPerPage: number;
+  totalGroups: any[];
 }
 
-const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups}) => {
+const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups, seeAllLink, groupsPerPage, totalGroups}) => {
 
 
   const themedSmallStackTokens: IStackTokens = {
@@ -20,6 +23,11 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
 
   return (
     <>
+      <Stack>
+        <StackItem align="end" >
+          {totalGroups.length > groupsPerPage && (<a href={seeAllLink}></a> ) }
+        </StackItem>
+      </Stack>
       <Stack tokens={themedSmallStackTokens}> 
         {groups.map((group: any) => (
           <>

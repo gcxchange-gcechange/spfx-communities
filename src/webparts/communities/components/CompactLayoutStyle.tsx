@@ -2,14 +2,17 @@
 
 import * as React from 'react';
 import styles from './Communities.module.scss';
-import { IStackTokens, Stack } from '@fluentui/react';
+import { IStackTokens, Stack, StackItem } from '@fluentui/react';
 
 interface IGridLayoutProps {
     groups: any;
+    seeAllLink: string;
+    groupsPerPage: number;
+    totalGroups: any[];
 }
 
 
-const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups}) => {
+const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, seeAllLink, groupsPerPage, totalGroups}) => {
 
     const themedSmallStackTokens: IStackTokens = {
         childrenGap: "s1",
@@ -21,6 +24,11 @@ const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups})
 
     return (
     <>
+    <Stack>
+      <StackItem align="end" >
+        {totalGroups.length > groupsPerPage && (<a href={seeAllLink}></a> ) }
+      </StackItem>
+    </Stack>
     <Stack tokens={themedSmallStackTokens}>
       {groups.map((item:any) => (
           <>

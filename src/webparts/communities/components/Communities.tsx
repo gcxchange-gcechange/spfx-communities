@@ -179,7 +179,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const displayUserGroups = userGroupsSorted.slice(0, props.numberPerPage);
   
  
-
+  
   return (
     <>
       <div>
@@ -204,11 +204,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             }
               <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
               {layout === "Compact" && (
-                <CompactLayoutStyle groups={displayUserGroups} />
+                <CompactLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups}/>
               )}
-              {layout === "List" && (
-                <ListLayoutStyle groups={displayUserGroups} />
-              )}
+              {layout === "List" && ( 
+                <ListLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups}/>
+              )} 
               {layout === "Grid" && (
                 <Stack horizontalAlign="center">
                   {targetAudience === "1" && (
