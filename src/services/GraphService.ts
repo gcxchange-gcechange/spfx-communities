@@ -50,138 +50,30 @@ export class GraphService {
         })
     }
 
-    // public static async getAllGroups(selectedLetter: string ):Promise<any> {
-
-    //     let apiTxt: string;
-
-    //     if (selectedLetter === "#") {
-    //         apiTxt =
-    //           "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=10";
-    //       } else {
-    //         apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=5`;
-    //       }
-        
-    //     const requestBody = {
-    //         requests: [
-    //             {
-    //             id: "1",
-    //             method: "GET",
-    //             url: `${apiTxt}`
-    //             }
-    //         ]
-    //     };
-
-    //     return  new Promise((resolve, reject) => {
-
-    //         try {
-    //             this._context.msGraphClientFactory
-    //                 .getClient('3')
-    //                 .then((client: MSGraphClientV3) => {
-    //                     client
-    //                         .api(`/$batch`)
-    //                         .post(requestBody, (error: any, responseObject: any) => {
-    //                             console.log("batch", responseObject);
-    //                             const responseResults: any[] = [];
-    //                             responseResults.push(...responseObject.responses[0].body.value);
- 
-    //                             const link = responseObject.responses[0].body["@odata.nextLink"];
-    //                             let totalPages = 0;
-
-    //                             if (link) {
-    //                                 const handleNextPage = (url: string ):any => {
-    //                                     client.api(url).get((error:any, response2: any) => {
-    //                                         const nextLink = response2["@odata.nextLink"];
-    //                                         totalPages++;
-    //                                         responseResults.push(...response2.value);
-
-    //                                         if (nextLink) {
-    //                                             handleNextPage(nextLink);
-    //                                         }
-    //                                         else {
-    //                                             resolve({responseResults, totalPages});
-    //                                             console.log("TP1",totalPages);
-    //                                         }
-    //                                     });
-                                        
-    //                                 }
-    //                                 handleNextPage(link);
-                                 
-    //                             } else {
-    //                               resolve(responseResults);
-    //                               console.log("TP2",totalPages);
-    //                             }
-                                
-
-    //                         });
-    //                 });
-    //         }
-    //         catch(error){
-    //             console.log(error)
-    //             reject(error);
-    //         }
-    //     });
-
-    // }
-
-    public static async getAllGroups(selectedLetter: string ):Promise<any> {
-
-        console.log("link", selectedLetter)
-        const link = /^https/.test(selectedLetter);
-        console.log("link", link);
+      public static async getAllGroups(selectedLetter: string ):Promise<any> {
 
         let apiTxt: string;
 
         if (selectedLetter === "#") {
             apiTxt =
-              "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName,createdDateTime,description,assignedLabels&$top=5";
-          } 
-          else  {
-            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description,assignedLabels&$top=5`;
-          } 
+              "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=10";
+          } else {
+            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=5`;
+          }
         
         const requestBody = {
             requests: [
                 {
-                    id: "1",
-                    method: "GET",
-                    url: `${apiTxt}`
-                },
-
-                {
-                    id: "2",
-                    method: "GET",
-                    url: `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,assignedLabels&$count?ConsistencyLevel=eventual`
+                id: "1",
+                method: "GET",
+                url: `${apiTxt}`
                 }
             ]
         };
 
-
         return  new Promise((resolve, reject) => {
 
             try {
-                if(link ) {
-                    this._context.msGraphClientFactory
-                    .getClient('3')
-                    .then((client: MSGraphClientV3) => {
-                        client
-                            .api(`${selectedLetter}`)
-                            .get((error: any, response2: any) => {
-
-                                const responseResults: any[]= [];
-                                let  link: string | undefined = "";
-                                let groupResponse: any[] = [];
-
-                                link = response2["@odata.nextLink"];
-                                groupResponse = response2.value
-
-                                responseResults.push({groupResponse, link})
-
-                                resolve(responseResults)
-                            })
-                           
-                    })
-                    
-                } else {
                 this._context.msGraphClientFactory
                     .getClient('3')
                     .then((client: MSGraphClientV3) => {
@@ -189,58 +81,40 @@ export class GraphService {
                             .api(`/$batch`)
                             .post(requestBody, (error: any, responseObject: any) => {
                                 console.log("batch", responseObject);
+                                const responseResults: any[] = [];
+                                responseResults.push(...responseObject.responses[0].body.value);
+ 
+                                const link = responseObject.responses[0].body["@odata.nextLink"];
+                                let totalPages = 0;
 
-                                const responseResults: any[]= [];
-                                let link: string | undefined;
-                                let groupResponse: any[] = [];
-                                let totalPages: number | undefined;
+                                if (link) {
+                                    const handleNextPage = (url: string ):any => {
+                                        client.api(url).get((error:any, response2: any) => {
+                                            const nextLink = response2["@odata.nextLink"];
+                                            totalPages++;
+                                            responseResults.push(...response2.value);
 
-                                responseObject.responses.forEach((response: any) => {
-                                   if(response.id === "1") {
-                                    link = response.body["@odata.nextLink"];
-                                    groupResponse = response.body.value;
-                                   }
-
-                                   if(response.id === "2" ) {
-                                    totalPages= response.body.value;
-                                   }
-
-                                });
-
-                                responseResults.push({groupResponse, link, totalPages});
-
-                               
-                                
-                                resolve(responseResults);
-
-                                // if (link) {
-                                //     const handleNextPage = (url: string ):any => {
-                                //         client.api(url).get((error:any, response2: any) => {
-                                //             const nextLink = response2["@odata.nextLink"];
-                                //             totalPages++;
-                                //             responseResults.push(...response2.value);
-
-                                //             if (nextLink) {
-                                //                 handleNextPage(nextLink);
-                                //             }
-                                //             else {
-                                //                 resolve({responseResults, totalPages});
-                                //                 console.log("TP1",totalPages);
-                                //             }
-                                //         });
+                                            if (nextLink) {
+                                                handleNextPage(nextLink);
+                                            }
+                                            else {
+                                                resolve({responseResults, totalPages});
+                                                console.log("TP1",totalPages);
+                                            }
+                                        });
                                         
-                                //     }
-                                //     handleNextPage(link);
+                                    }
+                                    handleNextPage(link);
                                  
-                                // } else {
-                                //   resolve(responseResults);
-                                //   console.log("TP2",totalPages);
-                                // }
+                                } else {
+                                  resolve(responseResults);
+                                  console.log("TP2",totalPages);
+                                }
                                 
 
                             });
                     });
-            }}
+            }
             catch(error){
                 console.log(error)
                 reject(error);
@@ -248,6 +122,8 @@ export class GraphService {
         });
 
     }
+
+
 
     public static async getGroupDetailsBatch(groupId: any): Promise<any> {
         const requestBody = {

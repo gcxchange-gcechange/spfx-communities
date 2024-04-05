@@ -13,7 +13,7 @@ interface IPagingProps {
 }
 
 const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, prefLang, currentPage, onPageUpdate}) => {
-
+    
     const strings = SelectLanguage(prefLang);
 
     const getNumberOfPages = (): Array<number> => {
@@ -44,60 +44,48 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
         }
     };
 
-    // const goToPage = (itemNumber: number):void => {
-    //     const pageNumber: number[]  = getNumberOfPages();
-    //     const selected = pageNumber.indexOf(itemNumber);
-    //      onPageUpdate(pageNumber[selected]);
-    // }
+    const goToPage = (itemNumber: number):void => {
+        const pageNumber: number[]  = getNumberOfPages();
+        const selected = pageNumber.indexOf(itemNumber);
+         onPageUpdate(pageNumber[selected]);
+    }
 
-//    const goToFirstPage = (): void => {
-//         const number: number = getNumberOfPages().length;
-//         if( number !== 1) {
-//           onPageUpdate(1);
-//         }
-//     }
+   const goToFirstPage = (): void => {
+        const number: number = getNumberOfPages().length;
+        if( number !== 1) {
+          onPageUpdate(1);
+        }
+    }
 
-//     const goToLastPage = (): void => {
-//         const number: number =  currentPage;
-//         const lastItem = getNumberOfPages()[getNumberOfPages().length - 1];
+    const goToLastPage = (): void => {
+        const number: number =  currentPage;
+        const lastItem = getNumberOfPages()[getNumberOfPages().length - 1];
   
-//         if(number !== lastItem) {
-//           onPageUpdate(lastItem);
-//         }
-//       }
+        if(number !== lastItem) {
+          onPageUpdate(lastItem);
+        }
+      }
     
     const buttonStyles: IButtonStyles = {
         root:{
-            padding: '0px',
-            minWidth: '30px',
-            borderRadius: '50%',
-            borderColor: 'transparent',
-            cursor: "none"
+          padding: '0px',
+          minWidth: '30px',
+          borderRadius: '50%',
+          borderColor: 'transparent'
+
         },
 
         rootHovered: {
-            backgroundColor: "white"
+          backgroundColor: "lightgray"
         }
 
-    };
-
-    const bstyles: IButtonStyles = {
-        root: {
-            backgroundColor:'#0078d4',
-            color: 'white',
-            height: '30px',
-        },
-        rootHovered: {
-            color: "white"
-        }
-    }
+      };
     
     
     return (
-        <div style={{marginTop: '10px', marginBottom: '10px'}}>
-        <Stack horizontal  horizontalAlign="center" verticalAlign="center" >
+        <Stack horizontal  horizontalAlign="center" verticalAlign="center">
 
-        {/* <ActionButton
+        <ActionButton
           onRenderIcon={(_props: IButtonProps) => {
                   // we use the render custom icon method to render the icon consistently with the right icon
                   return (
@@ -106,8 +94,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
               }}
               disabled={prevDisabled}
               onClick={goToFirstPage}
-              ariaLabel={strings.firstPage}
-        /> */}
+              ariaLabel={strings.firstPage}/>
 
           <ActionButton
               onRenderIcon={(_props: IButtonProps) => {
@@ -119,8 +106,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
               disabled={prevDisabled}
               onClick={prevPage}
               ariaLabel={strings.pagPrev}
-              styles={bstyles}         
-            >
+          >
               {strings.pagPrev}
           </ActionButton>
 
@@ -128,7 +114,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
 
 
            {getNumberOfPages().map( itemNumber =>
-            <div key={itemNumber.toString()}  tabIndex={0} style={{margin:'5px'}} >{
+            <div key={itemNumber.toString()}  tabIndex={0}   onClick={() => goToPage(itemNumber) }>{
               itemNumber === currentPage
                  ? <DefaultButton styles={buttonStyles} className={styles.currentPage} aria-label={`${strings.currentPage}, ${currentPage}`} aria-current={true}>
                   {currentPage}
@@ -148,24 +134,21 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
               }}
               onClick={nextPage}
               ariaLabel={strings.pagNext}
-              styles={bstyles}
           >
               {strings.pagNext}
           </ActionButton>
 
-            {/* <ActionButton
-                onRenderIcon={(_props: IButtonProps) => {
-                    // we use the render custom icon method to render the icon consistently with the right icon
-                    return (
-                        <Icon iconName="DoubleChevronRight" />
-                    );
-                }}
-                disabled={nextDisabled}
-                onClick={goToLastPage}
-                ariaLabel={strings.lastPage} 
-            /> */}
+          <ActionButton
+          onRenderIcon={(_props: IButtonProps) => {
+                  // we use the render custom icon method to render the icon consistently with the right icon
+                  return (
+                      <Icon iconName="DoubleChevronRight" />
+                  );
+              }}
+              disabled={nextDisabled}
+              onClick={goToLastPage}
+              ariaLabel={strings.lastPage} />
       </Stack>
-      </div>
     );
 }
 

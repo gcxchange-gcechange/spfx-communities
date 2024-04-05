@@ -10,27 +10,21 @@ import { useEffect, useState } from "react";
 import AlphabeticalFilter from "./AlphabeticalFilter";
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from "./GridLayoutStyle";
-import { Spinner, SpinnerSize, Stack, StackItem } from "@fluentui/react";
+import { Spinner, SpinnerSize, Stack } from "@fluentui/react";
 import Paging from "./Paging";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
-import { SelectLanguage } from "./SelectLanguage";
-import styles from "./Communities.module.scss";
 
 const Communities: React.FC<ICommunitiesProps> = (props) => {
-
   const { targetAudience, layout } = props;
 
-  const strings = SelectLanguage(props.prefLang);
 
   const [_groups, setGroups] = useState<any[]>([]);
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [nextPageLink, setNextPageLink] = useState<string>("");
-  const [previousLinkValue, setPreviousLinkValue] = useState<any[]>([]);
-  const [ totalPages, setTotalPages] = useState<any>([]);
+ 
 
   const clearState = ():void => {
     setFilteredGroups([]);
@@ -66,9 +60,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const _getGroupDetailsData = (groups: any): void => {
+    console.log("G", groups);
     groups.map((groupData: any) => {
       GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
-        console.log("groupDetails", groupDetails);
         try {
           if ( groupDetails[1] !== undefined) 
           {
@@ -112,52 +106,13 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
-      console.log("ALLGROUPDATA", allGroupData);
-    
-      const link = allGroupData[0].link;
-      const totalPages = allGroupData[0].totalPages;
-
-      const getlabels = allGroupData[0].totalPages.map((group:any) => {
-        return group.assignedLabels.map((label: any) => label.labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83");
-      }).flat();
-
-      // const getUnclassifiedGroups = allGroupData[0].groupResponse.map((group:any) => {
-      //   return group.assignedLabels.length > 0 && group.assignedLabels.some((label:any) => label.labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83")
-      // })
-
-      const getUnclassifiedGroups: any[] = [];
-
-      allGroupData[0].groupResponse.forEach((group: any) => {
-        
-
-        if (group.assignedLabels.length !== 0 ) {
-          console.log(group)
-          const unclassifiedLabel = group.assignedLabel[0].labelId === "d64b0091-505a-4a12-b8e5-9f04b9078a83";
-          getUnclassifiedGroups.push(unclassifiedLabel)
-        }
-
-      });
-
-     
-    
-
-      console.log("UN",getUnclassifiedGroups)
-
-
-      setGroups(allGroupData[0].groupResponse);
-      
-      setNextPageLink(previous => {
-        setPreviousLinkValue(prev => [...prev, link]);
-        return link;
-      })
-      
-
-      if (totalPages !== undefined) {
-        setTotalPages(getlabels)
+      if (allGroupData.responseResults !== undefined) {
+        setGroups(allGroupData.responseResults);
+        _getGroupDetailsData(allGroupData.responseResults);
+      } else {
+        return null;
       }
-     
-     
-      _getGroupDetailsData(allGroupData[0].groupResponse);
+
     });
   };
 
@@ -171,23 +126,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const onPageUpdate = (pageNumber: number): void => {
-    console.log("page#",pageNumber);
-    if (pageNumber > currentPage) {
-     console.log("PageNumber is greater than currentPage")
-      _getAllGroups(nextPageLink);
-    }
-    else if (pageNumber < currentPage ) {
-      console.log("PageNumber is LESS than currentPage")
-      if (pageNumber === 1) {
-        console.log("PageNumber is 1")
-        _getAllGroups(selectedLetter);
-      } else {
-        _getAllGroups(previousLinkValue[1]);
-
-      }
-    }
-
+    console.log("page#",pageNumber)
     setCurrentPage( pageNumber);
+    console.log("current page",currentPage)
 
   }
 
@@ -208,7 +149,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       clearState();
       _getAllGroups(selectedLetter);
     }
-    
   }, [selectedLetter]);
   
 
@@ -216,16 +156,16 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   //calculate the item index to render per page
 
 
-    //const startIndex:number = (currentPage - 1) * props.numberPerPage;
-    //const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
+    const startIndex:number = (currentPage - 1) * props.numberPerPage;
+    const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
   
-    //const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
+    const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
 
     const pagedSortedItems =  props.sort === "Alphabetical" 
-    ? filteredGroups.sort((a:any, b:any) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
+    ? displayItemsPerPage.sort((a:any, b:any) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
     : props.sort === "DateCreation" 
-      ? filteredGroups.sort((a:any , b:any) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
-      : filteredGroups
+      ?  displayItemsPerPage.sort((a:any , b:any) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
+      :  displayItemsPerPage
 
 
   //sorting for user groups
@@ -262,21 +202,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
 
             }
-              <Stack horizontal verticalAlign="center">
-                <StackItem grow={1}>
-                  <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
-                </StackItem>
-                <StackItem >
-                  { (layout === "Compact" || layout === "List" ) && displayUserGroups.length < filteredGroups.length && 
-                    (
-                    <div>
-                      <a className={styles.links} href={props.seeAllLink}>{strings.seeAll}</a>
-                    </div> 
-                    )
-                  }
-                </StackItem>
-              </Stack>
-              
+              <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
               {layout === "Compact" && (
                 <CompactLayoutStyle groups={displayUserGroups} />
               )}
@@ -295,7 +221,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     (
                       <Paging
                         prefLang={props.prefLang}
-                        items={totalPages.length}
+                        items={filteredGroups.length}
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}
@@ -308,7 +234,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     (
                       <Paging
                         prefLang={props.prefLang}
-                        items={totalPages.length}
+                        items={filteredGroups.length}
                         itemsPerPage={props.numberPerPage}
                         currentPage={currentPage}
                         onPageUpdate={onPageUpdate}
