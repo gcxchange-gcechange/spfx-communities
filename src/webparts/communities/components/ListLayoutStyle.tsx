@@ -23,12 +23,12 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
 
   return (
     <>
+      <Stack tokens={themedSmallStackTokens}> 
       <Stack>
         <StackItem align="end" >
-          {totalGroups.length > groupsPerPage && (<a href={seeAllLink}></a> ) }
+          <div>{totalGroups.length > groupsPerPage && (<a href={seeAllLink}>see All</a> ) }</div>
         </StackItem>
       </Stack>
-      <Stack tokens={themedSmallStackTokens}> 
         {groups.map((group: any) => (
           <>
             <div className={styles.listCardContainer}>
