@@ -26,11 +26,13 @@ const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, 
     <>
     
     <Stack tokens={themedSmallStackTokens}>
-    <Stack>
-      <StackItem align="end" >
-        {totalGroups.length > groupsPerPage && (<a href={seeAllLink}>see All</a> ) }
-      </StackItem>
-    </Stack>
+      <Stack>
+        <StackItem align="end" >
+          { seeAllLink !== undefined && (
+          <div>{totalGroups.length > groupsPerPage && (<a href={seeAllLink}>see All</a> ) }</div>
+          )}
+        </StackItem>
+      </Stack>
       {groups.map((item:any) => (
           <>
           <div className={styles.compactCardContainer } >

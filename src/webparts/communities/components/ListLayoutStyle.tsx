@@ -20,13 +20,16 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
   };
 
   const stackTokens: IStackTokens = { childrenGap: 20 };
+  console.log("SeeAll", seeAllLink);
 
   return (
     <>
       <Stack tokens={themedSmallStackTokens}> 
       <Stack>
         <StackItem align="end" >
+          { seeAllLink !== undefined && (
           <div>{totalGroups.length > groupsPerPage && (<a href={seeAllLink}>see All</a> ) }</div>
+          )}
         </StackItem>
       </Stack>
         {groups.map((group: any) => (
