@@ -3,16 +3,20 @@
 import * as React from "react";
 import styles from "./Communities.module.scss";
 import { IStackTokens, Stack, StackItem } from "@fluentui/react";
+import { SelectLanguage } from "./SelectLanguage";
 
 interface IListLayoutStyleProps {
   groups: any[];
   seeAllLink: string;
   groupsPerPage: number;
   totalGroups: any[];
+  prefLang: string;
+
 }
 
-const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups, seeAllLink, groupsPerPage, totalGroups}) => {
+const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups, seeAllLink, groupsPerPage, totalGroups, prefLang}) => {
 
+  const strings = SelectLanguage(prefLang);
 
   const themedSmallStackTokens: IStackTokens = {
     childrenGap: "s1",
@@ -28,7 +32,7 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
       <Stack>
         <StackItem align="end" >
           { seeAllLink !== undefined && (
-          <div>{totalGroups.length > groupsPerPage && (<a href={seeAllLink}>see All</a> ) }</div>
+          <div>{totalGroups.length > groupsPerPage && (<a aria-label={strings.seeAllLabel} href={seeAllLink}>{strings.seeAll}</a> ) }</div>
           )}
         </StackItem>
       </Stack>
