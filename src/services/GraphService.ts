@@ -106,8 +106,8 @@ export class GraphService {
                                     }
                                     handleNextPage(link);
                                  
-                                } else {
-                                  resolve(responseResults);
+                                } else  {
+                                  resolve({responseResults});
                                   console.log("TP2",totalPages);
                                 }
                                 

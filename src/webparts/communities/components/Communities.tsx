@@ -29,72 +29,135 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const clearState = ():void => {
     setFilteredGroups([]);
     setCurrentPage(1);
+    setIsLoading(false);
   };
 
-  const _getPageViews = (filteredGroups: any): void => {
-    filteredGroups.map((group: any) => {
-      GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
-        setFilteredGroups((prevFilteredGroups) => {
-          const updatedFiltered = prevFilteredGroups.map((groupItems) =>
-            groupItems.id === group.id
-              ? {
-                  ...groupItems,
-                  views: siteViews,
-                }
-              : groupItems
-          );
+  // const _getPageViews = (filteredGroups: any): void => {
+  //   filteredGroups.map((group: any) => {
+  //     GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
+  //       setFilteredGroups((prevFilteredGroups) => {
+  //         const updatedFiltered = prevFilteredGroups.map((groupItems) =>
+  //           groupItems.id === group.id
+  //             ? {
+  //                 ...groupItems,
+  //                 views: siteViews,
+  //               }
+  //             : groupItems
+  //         );
 
-          return updatedFiltered;
-        });
-        setIsLoading(false);
+  //         return updatedFiltered;
+  //       });
+  //       setIsLoading(false);
+  //     });
+  //   });
+  // };
+
+  
+  const _getPageViews = (filteredGroups: any): void => {
+    console.log("filter", filteredGroups)
+    const promises = filteredGroups.map((group: any) => {
+      return GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
+        console.log("SiteViews", siteViews)
+        if( siteViews === undefined) {
+          console.log("view Undefiend")
+        }
+        return {
+          ...group,
+          views: siteViews,
+        };
       });
+    });
+  
+    Promise.all(promises).then((updatedFilteredGroups) => {
+      setFilteredGroups(updatedFilteredGroups);
+      setIsLoading(false);
     });
   };
 
-  const removeGroupsWithoutURL = (updatedGroups: any): void => {
-    const filterGroup = updatedGroups.filter((group: any) => group.url);
-    setFilteredGroups(filterGroup);
-    setIsLoading(true);
-    _getPageViews(filterGroup);
-    return filterGroup;
-  };
 
+  // const removeGroupsWithoutURL = (updatedGroups: any): any[] => {
+  //   console.log("remove", updatedGroups);
+  //   // const filterGroup = updatedGroups.filter((group: any) => group.url);
+  //   setFilteredGroups(updatedGroups);
+  //   // _getPageViews(filterGroup);
+  //   return updatedGroups;
+  // };
+
+  
   const _getGroupDetailsData = (groups: any): void => {
-    console.log("G", groups);
-    groups.map((groupData: any) => {
-      GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
+    console.log("Getting Details", groups);
+    const promises = groups.map((groupData: any) => {
+      console.log("loader", isLoading);
+      return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
-          if ( groupDetails[1] !== undefined) 
-          {
-            setIsLoading(true);
-            setGroups((prevGroups) => {
-              const updatedGroups = prevGroups.map((groupItems) =>
-                groupItems.id === groupData.id
-                  ? {
-                      ...groupItems,
-                      url: groupDetails[1].webUrl,
-                      siteId: groupDetails[1].id,
-                      modified: new Date( groupDetails[1].lastModifiedDateTime ).toLocaleDateString("en-CA"),
-                      members: groupDetails[2],
-                      thumbnail: "data:image/jpeg;base64," + groupDetails[3],
-                    }
-                  : groupItems
-              );
-
-              removeGroupsWithoutURL(updatedGroups);
-              return updatedGroups;
-
-            });
+          if (groupDetails[1] !== undefined) {
+            console.log("thumbnail", groupDetails[3]);
+            return {
+              ...groupData,
+              url: groupDetails[1].webUrl,
+              siteId: groupDetails[1].id,
+              modified: new Date(groupDetails[1].lastModifiedDateTime).toLocaleDateString("en-CA"),
+              members: groupDetails[2],
+              thumbnail: "data:image/jpeg;base64," + groupDetails[3],
+            };
           } else {
             console.log(`Group details not found for ${groupData.id}`);
             return null;
           }
         } catch (error) {
           console.log("ERROR", error);
+          return null;
         }
       });
     });
+    
+    
+    Promise.all(promises).then((updatedGroups) => {
+      const filteredGroups = updatedGroups.filter((group) => group !== null);
+      _getPageViews(filteredGroups);
+    });
   };
+
+
+
+  // const _getGroupDetailsData = (groups: any): void => {
+  //   console.log("Getting Details");
+  //   let groupCount = 0;
+  //   groups.map((groupData: any) => {
+  //     GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
+  //       try {
+  //         if ( groupDetails[1] !== undefined) 
+  //         {
+  //           setIsLoading(true);
+  //           setGroups((prevGroups) => {
+  //             const updatedGroups = prevGroups.map((groupItems) =>
+  //               groupItems.id === groupData.id
+  //                 ? {
+  //                     ...groupItems,
+  //                     url: groupDetails[1].webUrl,
+  //                     siteId: groupDetails[1].id,
+  //                     modified: new Date( groupDetails[1].lastModifiedDateTime ).toLocaleDateString("en-CA"),
+  //                     members: groupDetails[2],
+  //                     thumbnail: "data:image/jpeg;base64," + groupDetails[3],
+  //                   }
+  //                 : groupItems
+  //             );
+  //             console.log("GC", groupCount);
+  //             removeGroupsWithoutURL(updatedGroups);
+  //             return updatedGroups;
+
+  //           });
+  //         } else {
+  //           console.log(`Group details not found for ${groupData.id}`);
+  //           return null;
+  //         }
+  //       } catch (error) {
+  //         console.log("ERROR", error);
+  //       }
+  //     });
+  //   });
+  // };
+
 
   const _getUserGroups = (): void => {
     GraphService.getUserGroups().then((data) => {
@@ -105,20 +168,24 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const _getAllGroups = (selectedLetter: string): void => {
+    console.log("Lo", isLoading);
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
+      console.log("GroupData", allGroupData);
       if (allGroupData.responseResults !== undefined) {
         setGroups(allGroupData.responseResults);
         _getGroupDetailsData(allGroupData.responseResults);
       } else {
-        return null;
+        setGroups(allGroupData.responseResults)
+        // return null;
       }
 
     });
   };
 
+
   const getSelectedLetter = (letter: string): void => {
     setSelectedLetter(letter);
-    //setIsLoading(true);
+    setIsLoading(true);
   };
 
   const openPropertyPane = (): void => {
@@ -148,6 +215,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     if (targetAudience === "1") {
       clearState();
       _getAllGroups(selectedLetter);
+      setIsLoading(true);
     }
   }, [selectedLetter]);
   
