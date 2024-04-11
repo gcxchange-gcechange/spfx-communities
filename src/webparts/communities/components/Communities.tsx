@@ -91,9 +91,13 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
           if (groupDetails[1] !== undefined) {
+            let thumbnail: string = '';
             if (groupDetails[3] === undefined ) {
               console.log("thumbnail", groupDetails[3]);
               console.log("data:image/jpeg;base64," + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=")
+              thumbnail = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+            } else {
+              thumbnail = groupDetails[3]
             }
             return {
               ...groupData,
@@ -101,7 +105,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
               siteId: groupDetails[1].id,
               modified: new Date(groupDetails[1].lastModifiedDateTime).toLocaleDateString("en-CA"),
               members: groupDetails[2],
-              thumbnail: "data:image/jpeg;base64," + groupDetails[3],
+              thumbnail: "data:image/jpeg;base64," + thumbnail,
             };
           } else {
             console.log(`Group details not found for ${groupData.id}`);
@@ -269,10 +273,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             <Spinner size={SpinnerSize.large} />
           ) : (
             <>
-            {
-
-
-            }
               <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
               {layout === "Compact" && (
                 <CompactLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups} prefLang={props.prefLang}/>
