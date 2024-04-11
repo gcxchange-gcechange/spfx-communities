@@ -91,7 +91,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
           if (groupDetails[1] !== undefined) {
-            console.log("thumbnail", groupDetails[3]);
+            if (groupDetails[3] === undefined ) {
+              console.log("thumbnail", groupDetails[3]);
+              console.log("data:image/jpeg;base64," + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=")
+            }
             return {
               ...groupData,
               url: groupDetails[1].webUrl,
@@ -248,7 +251,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   
  
   
-  return (
+  return ( 
     <>
       <div>
         {!props.targetAudience && !props.layout && (
