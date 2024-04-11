@@ -22,7 +22,8 @@
     "description": { "default": "Communities description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "Communities"
+      "description": "Communities",
+      "numberPerPage": "3"
     }
   }]
 }

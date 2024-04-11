@@ -243,7 +243,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
                   max: 50,
                   step: 1,
                   showValue: true,
-                  value: 1
+                  value: 3
                 }),
 
                 PropertyPaneTextField('seeAllLink', {
