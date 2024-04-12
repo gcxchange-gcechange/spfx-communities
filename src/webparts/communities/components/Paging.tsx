@@ -83,7 +83,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
     
     
     return (
-        <Stack horizontal  horizontalAlign="center" verticalAlign="center">
+        <Stack horizontal  horizontalAlign="center" verticalAlign="center" style={{marginBottom: '20px', marginTop: '20px'}}>
 
         <ActionButton
           onRenderIcon={(_props: IButtonProps) => {
