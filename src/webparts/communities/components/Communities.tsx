@@ -14,6 +14,7 @@ import { Spinner, SpinnerSize, Stack } from "@fluentui/react";
 import Paging from "./Paging";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
+import SearchFilter from "./Search";
 
 const Communities: React.FC<ICommunitiesProps> = (props) => {
   const { targetAudience, layout } = props;
@@ -94,7 +95,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             let thumbnail: string = '';
             if (groupDetails[3] === undefined ) {
               console.log("thumbnail", groupDetails[3]);
-              console.log("data:image/jpeg;base64," + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=")
+              console.log("data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=")
               thumbnail = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
             } else {
               thumbnail = groupDetails[3]
@@ -283,10 +284,14 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
               {layout === "Grid" && (
                 <Stack horizontalAlign="center">
                   {targetAudience === "1" && (
+                    <> 
+                      <SearchFilter groups={filteredGroups} prefLang={props.prefLang}/> 
                       <AlphabeticalFilter
                         selectedLetter={selectedLetter}
                         onSelectLetter={getSelectedLetter}
                       />
+                    </>
+
                   )}
                   {  filteredGroups.length !== 0 && 
                     (
