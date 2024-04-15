@@ -24,7 +24,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
- 
+  
+
 
   const clearState = ():void => {
     setFilteredGroups([]);
@@ -91,12 +92,20 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
           if (groupDetails[1] !== undefined) {
+           const firstLetter: string[] = groupData.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase();
+           const firstTwoLetters: string = firstLetter.toString();
+
+           const encodeUri = encodeURI(firstTwoLetters);
+           //const firstTwoLetters: string[] = firstLetter.slice(0,2);
+           //const joinLetters: string = firstTwoLetters.join("").toUpperCase();
+           console.log("en", encodeUri);
             let thumbnail: string = '';
             if (groupDetails[3] === undefined ) {
               console.log("thumbnail", groupDetails[3]);
-              console.log("data:image/jpeg;base64," + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=")
-              thumbnail = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+              //console.log("data:image/jpeg;base64," + encodeUri)
+              thumbnail = `${encodeUri}`;
             } else {
+              console.log("data:image/jpeg;base64," + encodeUri)
               thumbnail = groupDetails[3]
             }
             return {
@@ -191,6 +200,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
 
   const getSelectedLetter = (letter: string): void => {
+    console.log("letter", letter);
     setSelectedLetter(letter);
     setIsLoading(true);
   };
@@ -207,8 +217,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   }
 
 
-  useEffect(() => {
-    
+  useEffect(() => {   
     if (targetAudience === "1") {
       setIsLoading(true);
       _getAllGroups(selectedLetter);
@@ -219,7 +228,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   }, [props.targetAudience]);
 
   useEffect(() => {
-    if (targetAudience === "1") {
+    console.log("sel", selectedLetter)
+    if (targetAudience === "1" ) {
       clearState();
       _getAllGroups(selectedLetter);
       setIsLoading(true);
