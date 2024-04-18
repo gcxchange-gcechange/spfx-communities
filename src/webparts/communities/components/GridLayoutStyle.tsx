@@ -20,6 +20,9 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
    };
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
+ 
+  
+
 
   return (
     <>
@@ -36,7 +39,18 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                 <div className={styles.cardContainer}>
                   <a href={item.url}>
                     <div className={styles.cardBanner}>
-                      <img className={styles.cardImg} src={item.thumbnail} />
+                      {
+                        item.thumbnail !== undefined ? (
+                          <img className={styles.cardImg} src={item.thumbnail} />
+                        ) : (
+                        <div className={styles.cardMissingLogo}>
+                          <p style={{margin:'0px', color:'white'}}>{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
+                         </div>)
+
+                      }
+
+                    
+
                     </div>
                     <div className={styles.cardBody}>
                       <h3 className={styles.cardTitle}>{item.displayName}</h3>

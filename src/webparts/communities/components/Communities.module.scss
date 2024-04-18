@@ -88,6 +88,17 @@
   top: 12px;
   left: 10px;
 }
+.cardMissingLogo {
+  position: relative;
+  height: 48px;
+  width: 48px;
+  top: 12px;
+  left: 10px;
+  background-color: fuchsia;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .cardBody {
   font-size: small;
