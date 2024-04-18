@@ -6,7 +6,7 @@ import * as React from "react";
 //import styles from './Communities.module.scss';
 import type { ICommunitiesProps } from "./ICommunitiesProps";
 import GraphService from "../../../services/GraphService";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import AlphabeticalFilter from "./AlphabeticalFilter";
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from "./GridLayoutStyle";
@@ -24,7 +24,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  
+  const previousLetterRef = useRef('');
 
 
   const clearState = ():void => {
@@ -200,9 +200,12 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
 
   const getSelectedLetter = (letter: string): void => {
-    console.log("letter", letter);
-    setSelectedLetter(letter);
-    setIsLoading(true);
+
+    if (letter !== selectedLetter) {
+      setSelectedLetter(letter);
+      setIsLoading(true);
+    }
+  
   };
 
   const openPropertyPane = (): void => {
@@ -228,11 +231,12 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   }, [props.targetAudience]);
 
   useEffect(() => {
-    console.log("sel", selectedLetter)
-    if (targetAudience === "1" ) {
+
+    if (targetAudience === "1" && previousLetterRef.current !== selectedLetter) {
       clearState();
       _getAllGroups(selectedLetter);
       setIsLoading(true);
+      previousLetterRef.current = selectedLetter;
     }
   }, [selectedLetter]);
   
