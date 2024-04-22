@@ -58,13 +58,18 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     console.log("filter", filteredGroups)
     const promises = filteredGroups.map((group: any) => {
       return GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
-        console.log("SiteViews", siteViews)
-        if( siteViews === undefined) {
+        console.log("SiteViews", siteViews);
+        let siteView: string = '';
+        if ( siteViews === undefined) {
           console.log("view Undefiend")
-        }
+          siteView = '0'
+      } else {
+        siteView = siteViews
+      }
+      
         return {
           ...group,
-          views: siteViews,
+          views: siteView,
         };
       });
     });
@@ -92,20 +97,19 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
           if (groupDetails[1] !== undefined) {
-           const firstLetter: string[] = groupData.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase();
-           const firstTwoLetters: string = firstLetter.toString();
+          //  const firstLetter: string[] = groupData.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase();
+          //  const firstTwoLetters: string = firstLetter.toString();
 
-           const encodeUri = encodeURI(firstTwoLetters);
-           //const firstTwoLetters: string[] = firstLetter.slice(0,2);
-           //const joinLetters: string = firstTwoLetters.join("").toUpperCase();
-           console.log("en", encodeUri);
+           //const encodeUri = encodeURI(firstTwoLetters);
+
+           //console.log("en", encodeUri);
             let thumbnail: string = '';
             if (groupDetails[3] === undefined ) {
               console.log("thumbnail", groupDetails[3]);
               //console.log("data:image/jpeg;base64," + encodeUri)
-              thumbnail = `${encodeUri}`;
+              thumbnail = '';
             } else {
-              console.log("data:image/jpeg;base64," + encodeUri)
+              // console.log("data:image/jpeg;base64," + encodeUri)
               thumbnail = groupDetails[3]
             }
             return {

@@ -44,7 +44,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                           <img className={styles.cardImg} src={item.thumbnail} />
                         ) : (
                         <div className={styles.cardMissingLogo}>
-                          <p style={{margin:'0px', color:'white'}}>{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
+                          <p style={{margin:'0px'}}>{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
                          </div>)
 
                       }
