@@ -22,7 +22,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
  
   
-
+   console.log("THUMBNAIL:",groups.map((item: any) => (item.thumbnail)))
 
   return (
     <>
@@ -48,8 +48,6 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                          </div>)
 
                       }
-
-                    
 
                     </div>
                     <div className={styles.cardBody}>

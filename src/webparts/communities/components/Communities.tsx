@@ -103,22 +103,22 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
            //const encodeUri = encodeURI(firstTwoLetters);
 
            //console.log("en", encodeUri);
-            // let thumbnail: string = '';
-            // if (groupDetails[3] === undefined ) {
-            //   console.log("thumbnail", groupDetails[3]);
-            //   //console.log("data:image/jpeg;base64," + encodeUri)
-            //   thumbnail = '';
-            // } else {
-            //   // console.log("data:image/jpeg;base64," + encodeUri)
-            //   thumbnail = groupDetails[3]
-            // }
+            let thumbnail: string | undefined = undefined;
+            if (groupDetails[3] === undefined ) {
+              console.log("thumbnail", groupDetails[3]);
+              //console.log("data:image/jpeg;base64," + encodeUri)
+              thumbnail = undefined;
+            } else {
+              // console.log("data:image/jpeg;base64," + encodeUri)
+              thumbnail = groupDetails[3]
+            }
             return {
               ...groupData,
               url: groupDetails[1].webUrl,
               siteId: groupDetails[1].id,
               modified: new Date(groupDetails[1].lastModifiedDateTime).toLocaleDateString("en-CA"),
               members: groupDetails[2],
-              thumbnail: "data:image/jpeg;base64," + groupDetails[3],
+              thumbnail: thumbnail !== undefined ? `data:image/jpeg;base64,${thumbnail}` : undefined,
             };
           } else {
             console.log(`Group details not found for ${groupData.id}`);
