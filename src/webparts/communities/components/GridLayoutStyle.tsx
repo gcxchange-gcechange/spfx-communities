@@ -26,7 +26,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
   return (
     <>
-
+      <ul style={{listStyleType: 'none'}} data-is-focusable>
         {groups.length >= 1 && (
           <Stack
             horizontal
@@ -34,17 +34,18 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
             wrap={true}
             tokens={sectionStackTokens}
           >
-            {groups.map((item: any) => (
+            {groups.map((item: any, index: any) => (
               <>
+              <li role="listitem" key={index}>
                 <div className={styles.cardContainer}>
-                  <a href={item.url}>
+                  <a href={item.url}  target="_blank" rel="noreferrer">
                     <div className={styles.cardBanner}>
                       {
                         item.thumbnail !== undefined ? (
-                          <img className={styles.cardImg} src={item.thumbnail} />
+                          <img className={styles.cardImg} src={item.thumbnail} alt={`${strings.altImgLogo}${item.displayName}`}/>
                         ) : (
                         <div className={styles.cardMissingLogo}>
-                          <p style={{margin:'0px'}}>{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
+                          <p style={{margin:'0px'}} aria-label={`${strings.altImgLogo}${item.displayName}`}>{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
                          </div>)
 
                       }
@@ -82,11 +83,13 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                     </div>
                   </a>
                 </div>
+                </li>
               </>
             ))}
           </Stack>
         ) }
-        
+        </ul>
+
         {groups.length === 0 && (
           <Stack horizontal verticalAlign="center">
             <div

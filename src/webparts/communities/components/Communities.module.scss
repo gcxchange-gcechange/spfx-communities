@@ -81,6 +81,10 @@
   background-color: $ms-color-themePrimary;
 }
 
+.cardBanner .cardBody:focus-visible{
+  outline: none;
+}
+
 .cardImg {
   position: relative;
   height: 48px;
@@ -134,6 +138,7 @@
   margin-top: 80px;
   padding: 8px 20px;
 }
+
 
 //List Layout
 
