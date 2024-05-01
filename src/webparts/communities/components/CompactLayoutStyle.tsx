@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import styles from './Communities.module.scss';
-import { IStackTokens, Stack, StackItem } from '@fluentui/react';
+import { IStackTokens, Icon, Stack, StackItem } from '@fluentui/react';
 import { SelectLanguage } from './SelectLanguage';
 
 interface IGridLayoutProps {
@@ -11,10 +11,11 @@ interface IGridLayoutProps {
     groupsPerPage: number;
     totalGroups: any[];
     prefLang: string;
+    createCommLink: string;
 }
 
 
-const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, seeAllLink, groupsPerPage, totalGroups, prefLang}) => {
+const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, seeAllLink, groupsPerPage, totalGroups, prefLang, createCommLink}) => {
 
 
   const strings = SelectLanguage(prefLang);
@@ -32,6 +33,7 @@ const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, 
     
     <Stack tokens={themedSmallStackTokens}>
       <Stack>
+        <div className={styles.createComm}><Icon iconName="Add" className={styles.addIcon} /><a href={createCommLink}>{strings.createComm}</a></div>
         <StackItem align="end" >
           { seeAllLink !== undefined && (
           <div>{totalGroups.length > groupsPerPage && (<a aria-label={strings.seeAllLabel} href={seeAllLink}>{strings.seeAll}</a> ) }</div>

@@ -36,6 +36,8 @@ declare interface ICommunitiesWebPartStrings {
   Does_not_exist: string;
   Try_searching: string;
   seeAll: string;
+  createComm: string;
+  createCommLink: string;
 
 }
 

@@ -293,10 +293,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             <>
               <h3>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
               {layout === "Compact" && (
-                <CompactLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups} prefLang={props.prefLang}/>
+                <CompactLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups} prefLang={props.prefLang}  createCommLink={props.createCommLink}/>
               )}
               {layout === "List" && ( 
-                <ListLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups} prefLang={props.prefLang}/>
+                <ListLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups} prefLang={props.prefLang} createCommLink={props.createCommLink}/>
               )} 
               {layout === "Grid" && (
                 <Stack horizontalAlign="center">

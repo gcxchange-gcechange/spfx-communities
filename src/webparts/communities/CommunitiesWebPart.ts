@@ -30,6 +30,7 @@ export interface ICommunitiesWebPartProps {
   numberPerPage: number;
   sort: string;
   seeAllLink: string;
+  createCommLink: string;
 }
 
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
@@ -59,8 +60,8 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         titleFr: this.properties.titleFR,
         numberPerPage : this.properties.numberPerPage,
         sort: this.properties.sort,
-        seeAllLink: this.properties.seeAllLink
-
+        seeAllLink: this.properties.seeAllLink,
+        createCommLink: this.properties.createCommLink
 
        
       }
@@ -244,6 +245,10 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
                   step: 1,
                   showValue: true,
                   value: 3
+                }),
+
+                PropertyPaneTextField('createCommLink', {
+                  label: this.strings.createCommLink
                 }),
 
                 PropertyPaneTextField('seeAllLink', {

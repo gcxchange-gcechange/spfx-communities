@@ -14,5 +14,6 @@ export interface ICommunitiesProps {
   numberPerPage: number;
   sort: string;
   seeAllLink: string;
+  createCommLink: string;
 
 }
