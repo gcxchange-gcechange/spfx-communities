@@ -33,31 +33,37 @@ const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, 
     
     <Stack tokens={themedSmallStackTokens}>
       <Stack>
-        <div className={styles.createComm}><Icon iconName="Add" className={styles.addIcon} /><a href={createCommLink}>{strings.createComm}</a></div>
+        { createCommLink !== undefined && (
+          <div className={styles.createComm}><Icon iconName="Add" className={styles.addIcon} /><a aria-label={strings.createComm} href={createCommLink}>{strings.createComm}</a></div>
+        )}
         <StackItem align="end" >
           { seeAllLink !== undefined && (
           <div>{totalGroups.length > groupsPerPage && (<a aria-label={strings.seeAllLabel} href={seeAllLink}>{strings.seeAll}</a> ) }</div>
           )}
-        </StackItem>
+        </StackItem> 
       </Stack>
-      {groups.map((item:any) => (
+      <ul style={{listStyleType: 'none'}} data-is-focusable>
+        {groups.map((item:any, index: any) => (
           <>
-          <div className={styles.compactCardContainer } >
-            <a href={item.url}>
-              <div >
-                  <Stack horizontal verticalAlign='stretch' tokens={stackTokens}>
-                    <div>
-                      <img aria-label={`${strings.altImgLogo}${item.displayName}`} className={styles.compactCardImg} src={item.thumbnail} alt={`${strings.altImgLogo}${item.displayName}`}/>
-                    </div>
-                    <div>
-                      <h3 className={styles.compactCardTitle}>{item.displayName}</h3>
-                    </div>
-                  </Stack>
-              </div>
-              </a>
-          </div>
+          <li role="listitem" key={index}>
+            <div className={styles.compactCardContainer } >
+              <a href={item.url}>
+                <div >
+                    <Stack horizontal verticalAlign='stretch' tokens={stackTokens}>
+                      <div>
+                        <img className={styles.compactCardImg} src={item.thumbnail} alt={`${item.displayName}`}/>
+                      </div>
+                      <div>
+                        <h3 className={styles.compactCardTitle}>{item.displayName}</h3>
+                      </div>
+                    </Stack>
+                </div>
+                </a>
+            </div>
+          </li>
           </>
         ))}
+      </ul>
       </Stack>
       </>
       );
