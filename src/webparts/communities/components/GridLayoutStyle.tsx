@@ -21,12 +21,10 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
  
-  
-   console.log("THUMBNAIL:",groups.map((item: any) => (item.thumbnail)))
 
   return (
     <>
-      <ul style={{listStyleType: 'none'}} data-is-focusable>
+      <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} data-is-focusable>
         {groups.length >= 1 && (
           <Stack
             horizontal

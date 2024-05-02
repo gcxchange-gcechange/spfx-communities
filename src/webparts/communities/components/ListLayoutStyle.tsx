@@ -41,7 +41,7 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
           )}
         </StackItem>
       </Stack>
-      <ul style={{listStyleType: 'none'}} data-is-focusable>
+      <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} data-is-focusable>
         {groups.map((group: any, index: number) => (
           <>
            <li role="listitem" key={index}>
