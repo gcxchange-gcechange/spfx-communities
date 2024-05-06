@@ -28,6 +28,8 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
   const stackTokens: IStackTokens = { childrenGap: 20 };
   console.log("SeeAll", seeAllLink);
 
+  
+
   return (
     <>
       <Stack tokens={themedSmallStackTokens}> 
@@ -44,22 +46,23 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
       <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} data-is-focusable>
         {groups.map((group: any, index: number) => (
           <>
-           <li role="listitem" key={index}>
-            <div className={styles.listCardContainer}>
-              <a href={group.url}>
-                <div>
-                  <Stack
+            <Stack
                     horizontal
                     verticalAlign="stretch"
                     tokens={stackTokens}
                   >
-                    <div className={styles.listCardContainerImg}>
+           <li role="listitem" key={index}>
+            <div className={styles.listCardContainer}>
+              <a href={group.url}>
+                <div style={{display: 'flex'}}>
+                
+                    <Stack.Item disableShrink  className={styles.listCardContainerImg}>
                       <img
                         className={styles.listCardImg}
                         src={group.thumbnail}
                       />
-                    </div>
-                    <div>
+                    </Stack.Item>
+                    <Stack.Item >
                       <h3 className={styles.listCardTitle}>
                         {group.displayName}
                       </h3>
@@ -69,12 +72,13 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
                       <p className={styles.listCardFooter}>
                         Members {group.members}
                       </p>
-                    </div>
-                  </Stack>
+                    </Stack.Item>
+                 
                 </div>
               </a>
             </div>
             </li>
+            </Stack>
           </>
         ))}
         </ul>

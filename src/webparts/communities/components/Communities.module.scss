@@ -144,7 +144,7 @@
 
 .listCardContainer {
   padding:10px;
-  width:380px;
+  width:320px;
   height: 77px;
   a {
     color: black;
@@ -159,12 +159,9 @@
 }
 
 @media (min-width: 1024px) and (max-width: 1236px) {
-  .CanvasComponent.LCS .CanvasSection-xl4 {
-    width: 33.3333333333%;
-  }
 
   .listCardContainer {
-    width: 250px;
+    width: 320px;
   }
   .listCardImg{
     width: auto;
@@ -176,10 +173,11 @@
 }
 
 .listCardContainerImg {
-  width:40%
+  width:auto;
+  margin-right: 20px;
 }
 .listCardImg {
-  width: 100%;
+  width: auto
 }
 
 .listCardTitle {
@@ -199,7 +197,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  width:300px;
+  width:auto;
   margin:0px;
   padding-bottom: 2px;
 }
