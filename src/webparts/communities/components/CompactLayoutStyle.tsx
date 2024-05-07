@@ -42,7 +42,7 @@ const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, 
           )}
         </StackItem> 
       </Stack>
-      <ul style={{listStyleType: 'none'}} data-is-focusable>
+      <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} data-is-focusable>
         {groups.map((item:any, index: any) => (
           <>
           <li role="listitem" key={index}>
