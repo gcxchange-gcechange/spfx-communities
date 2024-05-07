@@ -171,10 +171,9 @@
 .listCardContainer:hover .compactCardContainer:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
-
 .listCardContainerImg {
   width:auto;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 .listCardImg {
   width: auto
@@ -187,8 +186,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin:0px;
-
-  padding-bottom:6px;
+  width: 265px;
+  padding-bottom:3px;
 }
 
 .listCardDescription{
@@ -197,7 +196,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  width:auto;
+  width: 265px;
   margin:0px;
   padding-bottom: 2px;
 }
@@ -235,6 +234,8 @@
   font-size: 14px;
   margin-top:0px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  width: 265px;
 }
 
 //Paging Styles
