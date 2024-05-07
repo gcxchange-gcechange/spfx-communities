@@ -59,22 +59,21 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                       <Stack horizontal horizontalAlign="space-between">
                         <div>
                           <p style={{ margin: "0" }}>
-                            <strong>Members </strong>
-                            {item.members}
+                            <strong>{strings.members}</strong>{item.members}
                           </p>
                           <p>
-                            <strong>Views</strong> {item.views}
+                            <strong>{strings.siteViews}</strong>{item.views}
                           </p>
                         </div>
                         <div>
                           <p style={{ margin: "0" }}>
-                            <strong>Created</strong>{" "}
+                            <strong>{strings.created}</strong>
                             {new Date(item.createdDateTime).toLocaleDateString(
                               "en-CA"
                             )}
                           </p>
                           <p>
-                            <strong>Last modified</strong> {item.modified}
+                            <strong>{strings.lastModified}</strong> {item.modified}
                           </p>
                         </div>
                       </Stack>

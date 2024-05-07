@@ -70,7 +70,7 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
                         {group.description}
                       </p>
                       <p className={styles.listCardFooter}>
-                        Members {group.members}
+                        {strings.members} {group.members}
                       </p>
                     </Stack.Item>
                  
