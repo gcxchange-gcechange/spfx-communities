@@ -50,12 +50,12 @@ const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, 
               <a href={item.url}>
                 <div >
                     <Stack horizontal verticalAlign='stretch' tokens={stackTokens}>
-                      <div>
+                      <StackItem>
                         <img className={styles.compactCardImg} src={item.thumbnail} alt={`${item.displayName}`}/>
-                      </div>
-                      <div>
+                      </StackItem>
+                      <StackItem>
                         <h3 className={styles.compactCardTitle}>{item.displayName}</h3>
-                      </div>
+                      </StackItem>
                     </Stack>
                 </div>
                 </a>
