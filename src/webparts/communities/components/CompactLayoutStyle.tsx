@@ -32,11 +32,13 @@ const CompactLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({groups, 
     <>
     
     <Stack tokens={themedSmallStackTokens}>
-      <Stack>
+      <Stack horizontal style={{width:'336px', marginBottom: '5%'}}>
+        <StackItem grow>
         { createCommLink !== undefined && (
           <div className={styles.createComm}><Icon iconName="Add" className={styles.addIcon} /><a aria-label={strings.createComm} href={createCommLink}>{strings.createComm}</a></div>
         )}
-        <StackItem align="end" >
+        </StackItem>
+        <StackItem >
           { seeAllLink !== undefined && (
           <div>{totalGroups.length > groupsPerPage && (<a aria-label={strings.seeAllLabel} href={seeAllLink}>{strings.seeAll}</a> ) }</div>
           )}
