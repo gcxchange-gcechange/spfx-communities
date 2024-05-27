@@ -24,7 +24,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
   return (
     <>
-      <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} data-is-focusable>
+      <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}}>
         {groups.length >= 1 && (
           <Stack
             horizontal
@@ -34,9 +34,9 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
           >
             {groups.map((item: any, index: any) => (
               <>
-              <li role="listitem" key={index}>
-                <div className={styles.cardContainer}>
+              <li role="listitem" key={index} data-is-focusable>
                   <a href={item.url}  target="_blank" rel="noreferrer">
+                <div className={styles.cardContainer}>
                     <div className={styles.cardBanner}>
                       {
                         item.thumbnail !== undefined ? (
@@ -78,8 +78,8 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                         </div>
                       </Stack>
                     </div>
-                  </a>
                 </div>
+                  </a>
                 </li>
               </>
             ))}
