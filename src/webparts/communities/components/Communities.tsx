@@ -32,6 +32,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     setCurrentPage(1);
     setIsLoading(false);
   };
+
   
   const _getPageViews = (filteredGroups: any): void => {
     const promises = filteredGroups.map((group: any) => {

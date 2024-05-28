@@ -1,3 +1,4 @@
+/* eslint-disable react/no-string-refs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as React from "react";
@@ -20,7 +21,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
    };
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
- 
+
 
   return (
     <>
@@ -35,15 +36,15 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
             {groups.map((item: any, index: any) => (
               <>
               <li role="listitem" key={index} data-is-focusable>
-                  <a href={item.url}  target="_blank" rel="noreferrer">
+                  <a href={item.url}  target="_blank" rel="noreferrer" style={{color: 'black', textDecoration: 'none'}}>
                 <div className={styles.cardContainer}>
                     <div className={styles.cardBanner}>
                       {
                         item.thumbnail !== undefined ? (
-                          <img className={styles.cardImg} src={item.thumbnail} alt={`${strings.altImgLogo}${item.displayName}`}/>
+                          <img className={styles.cardImg} src={item.thumbnail} />
                         ) : (
                         <div className={styles.cardMissingLogo}>
-                          <p style={{margin:'0px'}} aria-label={`${strings.altImgLogo}${item.displayName}`}>{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
+                          <p style={{margin:'0px'}} >{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
                          </div>)
 
                       }
@@ -59,7 +60,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                       <Stack horizontal horizontalAlign="space-between">
                         <div>
                           <p style={{ margin: "0" }}>
-                            <strong>{strings.members}</strong>{item.members}
+                            <strong aria-label={`${strings.members_ariaLabel} ${item.members}`}>{strings.members}</strong>{item.members}
                           </p>
                           <p>
                             <strong>{strings.siteViews}</strong>{item.views}

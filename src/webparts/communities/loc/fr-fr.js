@@ -44,6 +44,7 @@ define([], function() {
       "Try_searching":"Essayez de trouver cette collectivité en utilisant un autre caractère qui fait partie du titre ou créez votre propre collectivité.",
       "createComm": "Créez une collectivité",
       "createCommLink": "Lien pour créer une collectivité",
+      "members_ariaLabel": "nombre de membres",
   
     }
   });
