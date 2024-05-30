@@ -89,6 +89,13 @@
   outline: none;
 }
 
+.cardText {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  max-width: 50ch;
+}
+
 .cardImg {
   position: relative;
   height: 48px;

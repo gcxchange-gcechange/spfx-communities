@@ -25,7 +25,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
   return (
     <>
-      <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}}>
+      <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} role="list">
         {groups.length >= 1 && (
           <Stack
             horizontal
@@ -35,8 +35,33 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
           >
             {groups.map((item: any, index: any) => (
               <>
+              {/* <li role="listitem" key={index} data-is-focusable>
+                <div className={styles.cardContainer} >
+                  <div className={styles.cardBanner}>
+                        {
+                          item.thumbnail !== undefined ? (
+                            <img className={styles.cardImg} src={item.thumbnail} />
+                          ) : (
+                          <div className={styles.cardMissingLogo}>
+                            <p style={{margin:'0px'}} >{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
+                          </div>)
+
+                        }
+
+                  </div > 
+                  <div className={styles.cardBody}>   
+                  <h2 id="cardTitle" className="card-title" aria-hidden={true} aria-describedby="description">
+                    <a href={item.url}  target="_blank" rel="noreferrer" style={{color: 'black', textDecoration: 'none'}} >{item.displayName}</a>
+                  </h2>
+                    <p className="card-description" id="description">{item.description}</p>
+                  </div>
+                  <ul className={styles.cardFooter} role="list">
+                    <li className="card-footer" aria-details={item.members}>{item.members}</li>
+                    <li><strong>{strings.siteViews}</strong>{item.views}</li>
+                  </ul>
+                </div> */}
+              {/* </li> */}
               <li role="listitem" key={index} data-is-focusable>
-                  <a href={item.url}  target="_blank" rel="noreferrer" style={{color: 'black', textDecoration: 'none'}}>
                 <div className={styles.cardContainer}>
                     <div className={styles.cardBanner}>
                       {
@@ -51,16 +76,18 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
                     </div>
                     <div className={styles.cardBody}>
-                      <h3 className={styles.cardTitle}>{item.displayName}</h3>
-                      <p className={styles.cardDescription}>
+                      <h3 className={styles.cardTitle} aria-hidden={true}>
+                        <a href={item.url}  target="_blank" rel="noreferrer" aria-describedby={index}>{item.displayName}</a>
+                      </h3>
+                      <p id={index} className={styles.cardDescription}>
                         {item.description}
                       </p>
                     </div>
-                    <div className={styles.cardFooter}>
+                    <div className={styles.cardFooter} role="term">
                       <Stack horizontal horizontalAlign="space-between">
                         <div>
                           <p style={{ margin: "0" }}>
-                            <strong aria-label={`${strings.members_ariaLabel} ${item.members}`}>{strings.members}</strong>{item.members}
+                            <strong aria-details={`${strings.members_ariaLabel} ${item.members}`}>{strings.members}</strong>{item.members}
                           </p>
                           <p>
                             <strong>{strings.siteViews}</strong>{item.views}
@@ -80,7 +107,6 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                       </Stack>
                     </div>
                 </div>
-                  </a>
                 </li>
               </>
             ))}
