@@ -23,6 +23,8 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
 
 
+
+
   return (
     <>
       <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} role="list">
@@ -80,34 +82,37 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                         <a href={item.url}  target="_blank" rel="noreferrer" aria-describedby={index}>{item.displayName}</a>
                       </h3>
                       <p id={index} className={styles.cardDescription}>
-                        {item.description}
+                        {item.description.length > 100 ? item.description.slice(0,100) + "..." : item.description}
                       </p>
                     </div>
-                    <div className={styles.cardFooter} role="term">
+                    <ul className={styles.cardFooter} role="list">
                       <Stack horizontal horizontalAlign="space-between">
                         <div>
-                          <p style={{ margin: "0" }}>
+                          <li style={{listStyle:'none'}}>
+                            <p style={{ margin: "0" }}>
                             <strong aria-details={`${strings.members_ariaLabel} ${item.members}`}>{strings.members}</strong>{item.members}
-                          </p>
-                          <p>
-                            <strong>{strings.siteViews}</strong>{item.views}
-                          </p>
+                            </p>
+                          </li>
+                          <li style={{listStyle:'none'}}>
+                            <p><strong>{strings.siteViews}</strong>{item.views}</p>
+                          </li>
                         </div>
                         <div>
-                          <p style={{ margin: "0" }}>
-                            <strong>{strings.created}</strong>
-                            {new Date(item.createdDateTime).toLocaleDateString(
-                              "en-CA"
-                            )}
-                          </p>
-                          <p>
-                            <strong>{strings.lastModified}</strong> {item.modified}
-                          </p>
+                          <li style={{listStyle:'none'}}><p style={{ margin: "0" }}>
+                              <strong>{strings.created}</strong>
+                              {new Date(item.createdDateTime).toLocaleDateString("en-CA")}
+                            </p>
+                          </li>
+                          <li style={{listStyle:'none'}}>
+                            <p>
+                              <strong>{strings.lastModified}</strong> {item.modified}
+                            </p>
+                          </li>
                         </div>
                       </Stack>
-                    </div>
+                    </ul>
                 </div>
-                </li>
+              </li>
               </>
             ))}
           </Stack>
