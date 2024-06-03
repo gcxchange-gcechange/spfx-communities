@@ -27,6 +27,16 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
 
   const stackTokens: IStackTokens = { childrenGap: 20 };
 
+  const getTruncatedDescription = (description: string): string  => {
+    console.log("desc",description)
+    return description.length > 33 ? description.slice(0, 33) + "..." : description;
+  }
+
+  const getTruncatedTitle = (groupTitle: string): string  => {
+    console.log("groupTitle", groupTitle);
+    return groupTitle.length > 30 ? groupTitle.slice(0, 30) + "..." : groupTitle;
+  }
+
 
   return (
     <>
@@ -64,10 +74,10 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
                     </Stack.Item>
                     <Stack.Item >
                       <h3 className={styles.listCardTitle}>
-                        {group.displayName}
+                        {getTruncatedTitle(group.displayName)}
                       </h3>
                       <p className={styles.listCardDescription}>
-                        {group.description}
+                        {getTruncatedDescription(group.description)}
                       </p>
                       <p className={styles.listCardFooter} aria-label={`${strings.members_ariaLabel} ${group.members}`}>
                         {strings.members} {group.members}
