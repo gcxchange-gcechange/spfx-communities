@@ -22,6 +22,10 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
 
+ const getTruncatedDescription = (description: string): string  => {
+  console.log("desc",description)
+  return description.length > 100 ? description.slice(0, 100) + "..." : description;
+ }
 
 
 
@@ -82,7 +86,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                         <a href={item.url}  target="_blank" rel="noreferrer" aria-describedby={index}>{item.displayName}</a>
                       </h3>
                       <p id={index} className={styles.cardDescription}>
-                        {item.description.length > 100 ? item.description.slice(0,100) + "..." : item.description}
+                        {getTruncatedDescription(item.description)}
                       </p>
                     </div>
                     <ul className={styles.cardFooter} role="list">
@@ -90,7 +94,8 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                         <div>
                           <li style={{listStyle:'none'}}>
                             <p style={{ margin: "0" }}>
-                            <strong aria-details={`${strings.members_ariaLabel} ${item.members}`}>{strings.members}</strong>{item.members}
+                            <strong aria-label={`${strings.members_ariaLabel} ${item.members}`}>{strings.members}</strong>
+                            {item.members}
                             </p>
                           </li>
                           <li style={{listStyle:'none'}}>

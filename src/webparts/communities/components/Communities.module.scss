@@ -85,9 +85,9 @@
   background-color: $ms-color-themePrimary;
 }
 
-.cardBanner .cardBody:focus-visible{
-  outline: none;
-}
+// .cardBanner .cardBody:focus-visible{
+//   outline: none;
+// }
 
 .cardText {
   display: flex;
@@ -122,9 +122,9 @@
   color: black;
 }
 
-.cardBody:focus-visible{
-  outline: none;
-}
+// .cardBody:focus-visible{
+//   outline: none;
+// }
 
 
 .cardTitle {
@@ -139,9 +139,9 @@
   text-overflow: ellipsis;
 }
 
-.cardTitle:focus-visible {
-  outline: none;
-}
+// .cardTitle:focus-visible {
+//   outline: none;
+// }
 
 .cardDescription{
   display: -webkit-box;
@@ -163,9 +163,9 @@
   padding: 8px 20px;
 }
 
-.cardFooter:focus-visible {
-  outline: none;
-}
+// .cardFooter:focus-visible {
+//   outline: none;
+// }
 
 
 //List Layout
