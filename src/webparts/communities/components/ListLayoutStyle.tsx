@@ -32,10 +32,10 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
     return description.length > 33 ? description.slice(0, 33) + "..." : description;
   }
 
-  const getTruncatedTitle = (groupTitle: string): string  => {
-    console.log("groupTitle", groupTitle);
-    return groupTitle.length > 30 ? groupTitle.slice(0, 30) + "..." : groupTitle;
-  }
+  // const getTruncatedTitle = (groupTitle: string): string  => {
+  //   console.log("groupTitle", groupTitle);
+  //   return groupTitle.length > 30 ? groupTitle.slice(0, 30) + "..." : groupTitle;
+  // }
 
 
   return (
@@ -74,7 +74,7 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
                     </Stack.Item>
                     <Stack.Item >
                       <h3 className={styles.listCardTitle}>
-                        {getTruncatedTitle(group.displayName)}
+                        {group.displayName}
                       </h3>
                       <p className={styles.listCardDescription}>
                         {getTruncatedDescription(group.description)}

@@ -41,32 +41,6 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
           >
             {groups.map((item: any, index: any) => (
               <>
-              {/* <li role="listitem" key={index} data-is-focusable>
-                <div className={styles.cardContainer} >
-                  <div className={styles.cardBanner}>
-                        {
-                          item.thumbnail !== undefined ? (
-                            <img className={styles.cardImg} src={item.thumbnail} />
-                          ) : (
-                          <div className={styles.cardMissingLogo}>
-                            <p style={{margin:'0px'}} >{ item.displayName.match(/\b\w/g).slice(0, 2).join("").toUpperCase().toString()}</p>
-                          </div>)
-
-                        }
-
-                  </div > 
-                  <div className={styles.cardBody}>   
-                  <h2 id="cardTitle" className="card-title" aria-hidden={true} aria-describedby="description">
-                    <a href={item.url}  target="_blank" rel="noreferrer" style={{color: 'black', textDecoration: 'none'}} >{item.displayName}</a>
-                  </h2>
-                    <p className="card-description" id="description">{item.description}</p>
-                  </div>
-                  <ul className={styles.cardFooter} role="list">
-                    <li className="card-footer" aria-details={item.members}>{item.members}</li>
-                    <li><strong>{strings.siteViews}</strong>{item.views}</li>
-                  </ul>
-                </div> */}
-              {/* </li> */}
               <li role="listitem" key={index} data-is-focusable>
                 <div className={styles.cardContainer}>
                     <div className={styles.cardBanner}>
