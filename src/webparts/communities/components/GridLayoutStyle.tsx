@@ -68,7 +68,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                         <div>
                           <li style={{listStyle:'none'}}>
                             <p style={{ margin: "0" }}>
-                            <strong aria-label={`${strings.members_ariaLabel} ${item.members}`}>{strings.members}</strong>
+                            <span aria-label={strings.members_ariaLabel}><strong>{strings.members}</strong></span>
                             {item.members}
                             </p>
                           </li>
