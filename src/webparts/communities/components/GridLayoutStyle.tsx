@@ -27,7 +27,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
   return description.length > 100 ? description.slice(0, 100) + "..." : description;
  }
 
-
+console.log("number of members", strings.members_ariaLabel)
 
   return (
     <>
@@ -66,10 +66,11 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                     <ul className={styles.cardFooter} role="list">
                       <Stack horizontal horizontalAlign="space-between">
                         <div>
-                          <li style={{listStyle:'none'}}>
-                            <p style={{ margin: "0" }}>
-                            <span aria-label={strings.members_ariaLabel}><strong>{strings.members}</strong></span>
-                            {item.members}
+                          <li style={{listStyle:'none'}} >
+                            <p style={{ margin: "0" }} >
+                              <span style={{display: 'none'}}>{strings.members_ariaLabel}</span>
+                              <strong>{strings.members}</strong>
+                              {item.members}
                             </p>
                           </li>
                           <li style={{listStyle:'none'}}>
