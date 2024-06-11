@@ -68,7 +68,7 @@ console.log("number of members", strings.members_ariaLabel)
                         <div>
                           <li style={{listStyle:'none'}} >
                             <p style={{ margin: "0" }} >
-                              <span style={{display: 'none'}}>{strings.members_ariaLabel}</span>
+                              <span className={styles.visually_hidden}>{strings.members_ariaLabel}</span>
                               <strong>{strings.members}</strong>
                               {item.members}
                             </p>
