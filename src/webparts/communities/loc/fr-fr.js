@@ -41,6 +41,7 @@ define([], function() {
       "createComm": "Créez une collectivité",
       "createCommLink": "Lien pour créer une collectivité",
       "members_ariaLabel": "nombre de",
+      "member": "membre ",
   
     }
   });

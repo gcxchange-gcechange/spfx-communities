@@ -41,6 +41,7 @@ define([], function() {
     "createComm": "Create a community",
     "createCommLink": "Link for create a community",
     "members_ariaLabel": "number of",
+    "member": "member ",
 
     
   }

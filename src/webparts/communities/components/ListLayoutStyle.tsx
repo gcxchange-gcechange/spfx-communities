@@ -37,7 +37,6 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
   //   return groupTitle.length > 30 ? groupTitle.slice(0, 30) + "..." : groupTitle;
   // }
 
-
   return (
     <>
     <Stack tokens={themedSmallStackTokens}> 
@@ -79,9 +78,12 @@ const ListLayoutStyle: React.FunctionComponent<IListLayoutStyleProps> = ({groups
                       <p className={styles.listCardDescription}>
                         {getTruncatedDescription(group.description)}
                       </p>
-                      <p className={styles.listCardFooter} aria-label={`${strings.members_ariaLabel} ${group.members}`}>
-                        {strings.members} {group.members}
+                      <p className={styles.listCardFooter}>
+                        {group.members} {group.members !== 1 ? strings.members.toLowerCase() : strings.member}
                       </p>
+                      {/* <p className={styles.listCardFooter} aria-label={`${strings.members_ariaLabel} ${group.members}`}>
+                        {strings.members} {group.members}
+                      </p> */}
                     </Stack.Item>
                  
                 </div>

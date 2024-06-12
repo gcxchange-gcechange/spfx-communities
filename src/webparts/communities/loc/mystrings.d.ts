@@ -39,6 +39,7 @@ declare interface ICommunitiesWebPartStrings {
   createComm: string;
   createCommLink: string;
   members_ariaLabel: string;
+  member: string;
 
 }
 
