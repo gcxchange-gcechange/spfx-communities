@@ -56,9 +56,9 @@ console.log("number of members", strings.members_ariaLabel)
 
                     </div>
                     <div className={styles.cardBody}>
-                      <h3 className={styles.cardTitle} aria-hidden={true}>
-                        <a href={item.url}  target="_blank" rel="noreferrer" aria-describedby={index}>{item.displayName}</a>
-                      </h3>
+                      <a  href={item.url}  target="_blank"  rel="noreferrer">
+                        <h3>{item.displayName}</h3>
+                      </a>
                       <p id={index} className={styles.cardDescription}>
                         {getTruncatedDescription(item.description)}
                       </p>
