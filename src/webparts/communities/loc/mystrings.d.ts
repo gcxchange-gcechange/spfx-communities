@@ -38,6 +38,8 @@ declare interface ICommunitiesWebPartStrings {
   seeAll: string;
   createComm: string;
   createCommLink: string;
+  members_ariaLabel: string;
+  member: string;
 
 }
 

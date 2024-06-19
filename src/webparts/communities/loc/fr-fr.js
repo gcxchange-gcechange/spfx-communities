@@ -4,10 +4,6 @@ define([], function() {
       "PropertyPaneDescription": "Description",
       "BasicGroupName": "Group Name",
       "DescriptionFieldLabel": "Description Field",
-      "userLang": "fr-fr",
-      "PropertyPaneDescription": "Description",
-      "BasicGroupName": "Group Name",
-      "DescriptionFieldLabel": "Description Field",
       "altImgLogo": "Logo de",
       "pagPrev": "Précédant",
       "pagNext": "Suivant",
@@ -44,6 +40,8 @@ define([], function() {
       "Try_searching":"Essayez de trouver cette collectivité en utilisant un autre caractère qui fait partie du titre ou créez votre propre collectivité.",
       "createComm": "Créez une collectivité",
       "createCommLink": "Lien pour créer une collectivité",
+      "members_ariaLabel": "nombre de",
+      "member": "membre ",
   
     }
   });

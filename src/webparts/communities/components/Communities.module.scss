@@ -56,7 +56,7 @@
   width:376px;
   box-sizing: border-box;
   //margin-bottom: 20px;
-  outline: transparent;
+  //outline: transparent;
   position: relative;
   background-color: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.133) 0px 1.6px 3.6px 0px, rgba(0, 0, 0, 0.11) 0px 0.3px 0.9px 0px;
@@ -70,7 +70,11 @@
     color: black;
     text-decoration: none;
    }
+
+
+
 }
+
 .cardContainer:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
@@ -81,8 +85,15 @@
   background-color: $ms-color-themePrimary;
 }
 
-.cardBanner .cardBody:focus-visible{
-  outline: none;
+// .cardBanner .cardBody:focus-visible{
+//   outline: none;
+// }
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  max-width: 50ch;
 }
 
 .cardImg {
@@ -111,6 +122,11 @@
   color: black;
 }
 
+// .cardBody:focus-visible{
+//   outline: none;
+// }
+
+
 .cardTitle {
   font-size: 16px;
   font-weight: 600;
@@ -123,6 +139,10 @@
   text-overflow: ellipsis;
 }
 
+// .cardTitle:focus-visible {
+//   outline: none;
+// }
+
 .cardDescription{
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -132,12 +152,20 @@
  
 }
 
+// .cardDescription:focus-visible {
+//   outline: none;
+// }
+
 .cardFooter {
   font-size:12px;
   border-top: 2px solid #e5e3e2;
   margin-top: 80px;
   padding: 8px 20px;
 }
+
+// .cardFooter:focus-visible {
+//   outline: none;
+// }
 
 
 //List Layout
@@ -269,4 +297,15 @@
   font-weight: bold;
   font-size:12px;
   padding-right: 1%;
+}
+
+.visually_hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
