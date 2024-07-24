@@ -112,7 +112,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
         )}
 
         { groups.length === 0 && targetAudience === '2' && (
-          <div>
+          <div className={styles.startText}>
             <p>{strings.user_not_in_communities}</p>
           </div>
         )}
