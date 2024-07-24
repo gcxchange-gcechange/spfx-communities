@@ -8,9 +8,10 @@ import { SelectLanguage } from './SelectLanguage';
 interface IGridLayoutProps {
   groups: any;
   prefLang: string;
+  targetAudience: string;
 }
 
-const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang }) => {
+const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience }) => {
 
   const imageProps: Partial<IImageProps> = {
     src: (require("../assets/YetiHiding.png")),
@@ -87,7 +88,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
         ) }
         </ul>
 
-        {groups.length === 0 && (
+        {groups.length === 0 && targetAudience === "1" && (
           <Stack horizontal verticalAlign="center">
             <div
               className={styles.noResultsText}
@@ -109,6 +110,14 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
             <img {...imageProps} alt={strings.hidingYeti}/>
           </Stack>
         )}
+
+        { groups.length === 0 && targetAudience === '2' && (
+          <div>
+            <p>{strings.user_not_in_communities}</p>
+          </div>
+        )}
+
+
 
     </>
   );

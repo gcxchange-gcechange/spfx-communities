@@ -40,6 +40,7 @@ define([], function() {
     "Try_searching":"Try searching for the community by another letter in the title or start your own community.",
     "createComm": "Create a community",
     "createCommLink": "Link for create a community",
+    "user_not_in_communities": "You haven't joined any communities yet. Start by browsing existing communities or create a new one.",
 
     
   }

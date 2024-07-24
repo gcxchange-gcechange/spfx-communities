@@ -178,7 +178,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const displayUserGroups = userGroupsSorted.slice(0, props.numberPerPage);
   
- console.log("groups", filteredGroups);
+ 
   
   return ( 
     <>
@@ -196,22 +196,16 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
         <div>
           { isLoading ? (
             <Spinner size={SpinnerSize.large} />
-          ) 
-          :
-          filteredGroups.length !== 0  ?         
-          (
+          ) : (
             <>
-            <h3 style={{paddingLeft: '8px'}}>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
-              
+              <h3 style={{paddingLeft: '8px'}}>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
               {layout === "Compact" && (
                 <CompactLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups} prefLang={props.prefLang}  createCommLink={props.createCommLink}/>
               )}
-
               {layout === "List" && ( 
                 <ListLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups} prefLang={props.prefLang} createCommLink={props.createCommLink}/>
               )} 
-              
-              { layout === "Grid" && filteredGroups.length !== 0 && (
+              {layout === "Grid" && (
                 <Stack horizontalAlign="center">
                   {targetAudience === "1" && (
                       <AlphabeticalFilter
@@ -231,7 +225,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       />
                     )
                   } 
-                  <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} />
+                  <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience}/>
                   { filteredGroups.length  !== 0 && 
                     (
                       <Paging
@@ -246,20 +240,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                   } 
                 </Stack>
               )}
-              {/* {filteredGroups.length === 0 && (
-                  <div>
-                    <p>You havent joined any communities yet. Start by browsing existing communities or create a new one.</p>
-                  </div>
-              )} */}
+              
             </>
-          )
-          : (
-            <div>
-              <h3 style={{paddingLeft: '8px'}}>{(props.prefLang === "FR" ? props.titleFr : props.titleEn )}</h3>
-              <p>You havent joined any communities yet. Start by browsing existing communities or create a new one.</p>
-            </div>
-          )
-        }
+          )}
         </div>
       
     </>
