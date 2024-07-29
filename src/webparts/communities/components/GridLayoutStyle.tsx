@@ -4,14 +4,17 @@ import * as React from "react";
 import styles from "./Communities.module.scss";
 import { IImageProps, IStackTokens, Stack } from "@fluentui/react";
 import { SelectLanguage } from './SelectLanguage';
+import { PrimaryButton } from "@fluentui/react";
 
 interface IGridLayoutProps {
   groups: any;
   prefLang: string;
   targetAudience: string;
+  seeAllLink: string;
+  createCommLink: string;
 }
 
-const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience }) => {
+const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience, seeAllLink, createCommLink }) => {
 
   const imageProps: Partial<IImageProps> = {
     src: (require("../assets/YetiHiding.png")),
@@ -21,7 +24,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
    };
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
- 
+  console.log(createCommLink, seeAllLink)
 
   return (
     <>
@@ -112,9 +115,21 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
         )}
 
         { groups.length === 0 && targetAudience === '2' && (
-          <div className={styles.startText}>
+          <>
+          <div className={styles.startText}> 
             <p>{strings.user_not_in_communities}</p>
           </div>
+          <div style={{margin: '20px'}}>
+            <Stack horizontal tokens={sectionStackTokens} >  
+            {seeAllLink  && (
+              <PrimaryButton id="1" text={strings.see_All_Communities_button} target="_blank" href={seeAllLink}/>
+            )}
+              {createCommLink  && (
+                <PrimaryButton id="2" text={strings.createComm} target="_blank" href={createCommLink}/>
+              )}
+            </Stack>
+          </div>
+          </>
         )}
 
 

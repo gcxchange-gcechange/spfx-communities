@@ -225,7 +225,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       />
                     )
                   } 
-                  <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience}/>
+                  <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllLink={props.seeAllLink} createCommLink={props.createCommLink}/>
                   { filteredGroups.length  !== 0 && 
                     (
                       <Paging
