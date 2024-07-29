@@ -41,6 +41,8 @@ define([], function() {
       "createComm": "Créez une collectivité",
       "createCommLink": "Lien pour créer une collectivité",
       "user_not_in_communities": "Vous ne faites partie d’aucune collectivité. Nous vous invitons à parcourir celles qui existent ou à en créer une.",
+      "see_All_Communities_button":"Toutes les collectivités ",
+ 
   
     }
   });

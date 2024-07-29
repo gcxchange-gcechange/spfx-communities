@@ -38,7 +38,8 @@ declare interface ICommunitiesWebPartStrings {
   seeAll: string;
   createComm: string;
   createCommLink: string;
-  user_not_in_communities: string
+  user_not_in_communities: string;
+  see_All_Communities_button: string;
 
 }
 

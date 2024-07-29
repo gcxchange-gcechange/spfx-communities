@@ -41,6 +41,10 @@ define([], function() {
     "createComm": "Create a community",
     "createCommLink": "Link for create a community",
     "user_not_in_communities": "You haven't joined any communities yet. Start by browsing existing communities or create a new one.",
+    "see_All_Communities_button":"All communities",
+ 
+    
+
 
     
   }
