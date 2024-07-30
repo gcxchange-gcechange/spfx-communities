@@ -10,11 +10,11 @@ interface IGridLayoutProps {
   groups: any;
   prefLang: string;
   targetAudience: string;
-  seeAllLink: string;
+  seeAllCommunitiesLink: string;
   createCommLink: string;
 }
 
-const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience, seeAllLink, createCommLink }) => {
+const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience, seeAllCommunitiesLink, createCommLink }) => {
 
   const imageProps: Partial<IImageProps> = {
     src: (require("../assets/YetiHiding.png")),
@@ -24,7 +24,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
    };
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
-  console.log(createCommLink, seeAllLink)
+  console.log(createCommLink, seeAllCommunitiesLink)
 
   return (
     <>
@@ -121,8 +121,8 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
           </div>
           <div style={{margin: '20px'}}>
             <Stack horizontal tokens={sectionStackTokens} >  
-            {seeAllLink  && (
-              <PrimaryButton id="1" text={strings.see_All_Communities_button} target="_blank" href={seeAllLink}/>
+            {seeAllCommunitiesLink && (
+              <PrimaryButton id="1" text={strings.see_All_Communities_button} target="_blank" href={seeAllCommunitiesLink}/>
             )}
               {createCommLink  && (
                 <PrimaryButton id="2" text={strings.createComm} target="_blank" href={createCommLink}/>
