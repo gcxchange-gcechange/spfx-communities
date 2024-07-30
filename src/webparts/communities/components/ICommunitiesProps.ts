@@ -15,5 +15,6 @@ export interface ICommunitiesProps {
   sort: string;
   seeAllLink: string;
   createCommLink: string;
+  seeAllCommunitiesLink: string;
 
 }
