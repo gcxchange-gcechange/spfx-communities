@@ -24,6 +24,8 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
    };
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
+
+  const stackVerticalAlign = targetAudience === '1' ? 'center' : 'start';
   console.log(createCommLink, seeAllCommunitiesLink)
 
   return (
@@ -92,7 +94,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
         </ul>
 
         {groups.length === 0 && targetAudience === "1" && (
-          <Stack horizontal verticalAlign="center">
+          <Stack horizontal verticalAlign={stackVerticalAlign}>
             <div
               className={styles.noResultsText}
               aria-label={strings.noResults}
@@ -116,11 +118,12 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
         { groups.length === 0 && targetAudience === '2' && (
           <>
-          <div className={styles.startText}> 
-            <p>{strings.user_not_in_communities}</p>
+          <Stack tokens={sectionStackTokens} verticalAlign={stackVerticalAlign}>  
+          <div> 
+            <p style={{marginBottom: '20px'}}>{strings.user_not_in_communities}</p>
           </div>
-          <div style={{margin: '20px'}}>
-            <Stack horizontal tokens={sectionStackTokens} >  
+          <div>
+          <Stack horizontal tokens={sectionStackTokens}  >  
             {seeAllCommunitiesLink && (
               <PrimaryButton id="1" text={strings.see_All_Communities_button} target="_blank" href={seeAllCommunitiesLink}/>
             )}
@@ -129,6 +132,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
               )}
             </Stack>
           </div>
+            </Stack>
           </>
         )}
 
