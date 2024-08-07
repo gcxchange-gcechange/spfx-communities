@@ -30,8 +30,10 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
   return (
     <>
+      <section style={{clear:"both"}}>
       <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} data-is-focusable>
         {groups.length >= 1 && (
+       
           <Stack
             horizontal
             horizontalAlign="start"
@@ -92,9 +94,10 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
           </Stack>
         ) }
         </ul>
+        </section>
 
         {groups.length === 0 && targetAudience === "1" && (
-          <div style={{backgroundColor:'green'}}>
+          <section>
           <Stack horizontal verticalAlign={stackVerticalAlign}>
             <div
               className={styles.noResultsText}
@@ -115,12 +118,12 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
             <img {...imageProps} alt={strings.hidingYeti}/>
           </Stack>
-          </div>
+          </section>
         )}
 
         { groups.length === 0 && targetAudience === '2' && (
           <>
-          <div style={{position:"relative", right:"60px"}}>
+          <section style={{clear:"both"}}>
             <Stack tokens={sectionStackTokens} verticalAlign={stackVerticalAlign} horizontalAlign="start">  
             <div> 
               <p style={{marginBottom: '20px'}}>{strings.user_not_in_communities}</p>
@@ -136,7 +139,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
               </Stack>
             </div>
             </Stack>
-          </div>
+          </section>
           </>
         )}
 
