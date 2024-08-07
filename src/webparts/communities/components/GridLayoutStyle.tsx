@@ -94,6 +94,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
         </ul>
 
         {groups.length === 0 && targetAudience === "1" && (
+          <div style={{backgroundColor:'green'}}>
           <Stack horizontal verticalAlign={stackVerticalAlign}>
             <div
               className={styles.noResultsText}
@@ -114,25 +115,28 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
             <img {...imageProps} alt={strings.hidingYeti}/>
           </Stack>
+          </div>
         )}
 
         { groups.length === 0 && targetAudience === '2' && (
           <>
-          <Stack tokens={sectionStackTokens} verticalAlign={stackVerticalAlign}>  
-          <div> 
-            <p style={{marginBottom: '20px'}}>{strings.user_not_in_communities}</p>
-          </div>
-          <div>
-          <Stack horizontal tokens={sectionStackTokens}  >  
-            {seeAllCommunitiesLink && (
-              <PrimaryButton id="1" text={strings.see_All_Communities_button} target="_blank" href={seeAllCommunitiesLink}/>
-            )}
-              {createCommLink  && (
-                <PrimaryButton id="2" text={strings.createComm} target="_blank" href={createCommLink}/>
-              )}
+          <div style={{position:"relative", right:"60px"}}>
+            <Stack tokens={sectionStackTokens} verticalAlign={stackVerticalAlign} horizontalAlign="start">  
+            <div> 
+              <p style={{marginBottom: '20px'}}>{strings.user_not_in_communities}</p>
+            </div>
+            <div>
+              <Stack horizontal tokens={sectionStackTokens} horizontalAlign="start" >  
+                {seeAllCommunitiesLink && (
+                  <PrimaryButton id="1" text={strings.see_All_Communities_button} target="_blank" href={seeAllCommunitiesLink}/>
+                )}
+                  {createCommLink  && (
+                    <PrimaryButton id="2" text={strings.createComm} target="_blank" href={createCommLink}/>
+                  )}
+              </Stack>
+            </div>
             </Stack>
           </div>
-            </Stack>
           </>
         )}
 
