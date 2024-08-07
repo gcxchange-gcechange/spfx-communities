@@ -10,7 +10,7 @@ import { useEffect, useState, useRef } from "react";
 import AlphabeticalFilter from "./AlphabeticalFilter";
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from "./GridLayoutStyle";
-import { Spinner, SpinnerSize, Stack } from "@fluentui/react";
+import { Spinner, SpinnerSize} from "@fluentui/react";
 import Paging from "./Paging";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
@@ -205,8 +205,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
               {layout === "List" && ( 
                 <ListLayoutStyle groups={displayUserGroups} seeAllLink={props.seeAllLink} groupsPerPage={props.numberPerPage} totalGroups={filteredGroups} prefLang={props.prefLang} createCommLink={props.createCommLink}/>
               )} 
+              <div>
               {layout === "Grid" && (
-                <Stack horizontalAlign="center">
+                <>
+
                   {targetAudience === "1" && (
                       <AlphabeticalFilter
                         selectedLetter={selectedLetter}
@@ -238,8 +240,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       />
                     )
                   } 
-                </Stack>
+               
+                </>
               )}
+               </div>
               
             </>
           )}
