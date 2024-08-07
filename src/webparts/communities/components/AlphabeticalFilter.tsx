@@ -49,6 +49,7 @@ const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
 
 
     return (
+      <div style={{display:'grid', justifyItems:'center'}}>
         <Pivot styles={pivotStyles} className={styles.letter} onLinkClick={_handleSelectedLetter} selectedKey={selectedLetter} linkFormat='tabs'  linkSize='normal' >
         {combinedIndex.map((letter: string, index: number) => {
              return (
@@ -61,6 +62,7 @@ const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
              );
            })}
            </Pivot>
+      </div>
     )
 
 }
