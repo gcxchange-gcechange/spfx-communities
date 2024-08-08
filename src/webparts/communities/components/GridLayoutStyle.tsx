@@ -30,7 +30,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
   return (
     <>
-      <section style={{clear:"both"}}>
+      <section>
       <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} data-is-focusable>
         {groups.length >= 1 && (
        
