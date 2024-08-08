@@ -98,7 +98,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
         {groups.length === 0 && targetAudience === "1" && (
           <section>
-          <Stack horizontal verticalAlign={stackVerticalAlign}>
+          <Stack horizontal verticalAlign={stackVerticalAlign} horizontalAlign="center">
             <div
               className={styles.noResultsText}
               aria-label={strings.noResults}
