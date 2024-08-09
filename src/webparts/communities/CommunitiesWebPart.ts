@@ -31,6 +31,7 @@ export interface ICommunitiesWebPartProps {
   sort: string;
   seeAllLink: string;
   createCommLink: string;
+  seeAllCommunitiesLink: string;
 }
 
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
@@ -61,7 +62,8 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         numberPerPage : this.properties.numberPerPage,
         sort: this.properties.sort,
         seeAllLink: this.properties.seeAllLink,
-        createCommLink: this.properties.createCommLink
+        createCommLink: this.properties.createCommLink,
+        seeAllCommunitiesLink: this.properties.seeAllCommunitiesLink,
 
        
       }
@@ -253,6 +255,10 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
 
                 PropertyPaneTextField('seeAllLink', {
                   label: this.strings.seeAllLabel,
+                  onGetErrorMessage: this.validateURL.bind(this),
+                }),
+                PropertyPaneTextField('seeAllCommunitiesLink', {
+                  label: this.strings.see_All_Communities_link,
                   onGetErrorMessage: this.validateURL.bind(this),
                 }),
                  

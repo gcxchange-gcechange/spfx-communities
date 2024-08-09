@@ -4,13 +4,17 @@ import * as React from "react";
 import styles from "./Communities.module.scss";
 import { IImageProps, IStackTokens, Stack } from "@fluentui/react";
 import { SelectLanguage } from './SelectLanguage';
+import { PrimaryButton } from "@fluentui/react";
 
 interface IGridLayoutProps {
   groups: any;
   prefLang: string;
+  targetAudience: string;
+  seeAllCommunitiesLink: string;
+  createCommLink: string;
 }
 
-const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang }) => {
+const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience, seeAllCommunitiesLink, createCommLink }) => {
 
   const imageProps: Partial<IImageProps> = {
     src: (require("../assets/YetiHiding.png")),
@@ -20,12 +24,16 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
    };
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
- 
+
+  const stackVerticalAlign = targetAudience === '1' ? 'center' : 'start';
+  console.log(createCommLink, seeAllCommunitiesLink)
 
   return (
     <>
+      <section>
       <ul style={{listStyleType: 'none', paddingInlineStart: '0px'}} data-is-focusable>
         {groups.length >= 1 && (
+       
           <Stack
             horizontal
             horizontalAlign="start"
@@ -86,9 +94,11 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
           </Stack>
         ) }
         </ul>
+        </section>
 
-        {groups.length === 0 && (
-          <Stack horizontal verticalAlign="center">
+        {groups.length === 0 && targetAudience === "1" && (
+          <section>
+          <Stack horizontal verticalAlign={stackVerticalAlign} horizontalAlign="center">
             <div
               className={styles.noResultsText}
               aria-label={strings.noResults}
@@ -108,7 +118,32 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
             <img {...imageProps} alt={strings.hidingYeti}/>
           </Stack>
+          </section>
         )}
+
+        { groups.length === 0 && targetAudience === '2' && (
+          <>
+          <section style={{clear:"both"}}>
+            <Stack tokens={sectionStackTokens} verticalAlign={stackVerticalAlign} horizontalAlign="start">  
+            <div> 
+              <p style={{marginBottom: '20px'}}>{strings.user_not_in_communities}</p>
+            </div>
+            <div>
+              <Stack horizontal tokens={sectionStackTokens} horizontalAlign="start" >  
+                {seeAllCommunitiesLink && (
+                  <PrimaryButton id="1" text={strings.see_All_Communities_button} target="_blank" href={seeAllCommunitiesLink}/>
+                )}
+                  {createCommLink  && (
+                    <PrimaryButton id="2" text={strings.createComm} target="_blank" href={createCommLink}/>
+                  )}
+              </Stack>
+            </div>
+            </Stack>
+          </section>
+          </>
+        )}
+
+
 
     </>
   );

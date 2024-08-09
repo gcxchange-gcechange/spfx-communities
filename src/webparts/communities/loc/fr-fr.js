@@ -4,10 +4,6 @@ define([], function() {
       "PropertyPaneDescription": "Description",
       "BasicGroupName": "Group Name",
       "DescriptionFieldLabel": "Description Field",
-      "userLang": "fr-fr",
-      "PropertyPaneDescription": "Description",
-      "BasicGroupName": "Group Name",
-      "DescriptionFieldLabel": "Description Field",
       "altImgLogo": "Logo de",
       "pagPrev": "Précédant",
       "pagNext": "Suivant",
@@ -44,6 +40,10 @@ define([], function() {
       "Try_searching":"Essayez de trouver cette collectivité en utilisant un autre caractère qui fait partie du titre ou créez votre propre collectivité.",
       "createComm": "Créez une collectivité",
       "createCommLink": "Lien pour créer une collectivité",
+      "user_not_in_communities": "Vous ne faites partie d’aucune collectivité. Nous vous invitons à parcourir celles qui existent ou à en créer une.",
+      "see_All_Communities_button":"Toutes les collectivités ",
+      "see_All_Communities_link": "Afficher toutes mes collectivités"
+ 
   
     }
   });
