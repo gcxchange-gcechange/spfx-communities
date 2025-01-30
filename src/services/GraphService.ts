@@ -123,6 +123,43 @@ export class GraphService {
 
     }
 
+    public static _proBTeamSite(teamId: any): Promise<any[]> {
+      return Promise.all(
+        teamId.map((id: any) => {
+          console.log("id", id)
+          return new Promise<any>((resolve, reject) => {
+            try {
+              this._context.msGraphClientFactory
+                .getClient("3")
+                .then((client: MSGraphClientV3) => {
+                  client
+                    .api(`/groups/${id}/sites/root`)
+                    .get((error: any, response: any, rawResponse: any) => {
+                      if (error) {
+                        console.error("ERROR", error);
+                        reject(error);
+                      } else {
+                        // console.log("RESPONSE", response.value);
+                        resolve(response.value); // Return the data
+                      }
+                    });
+                });
+            } catch (error) {
+              console.error("ERROR-" + error);
+              reject(error);
+            }
+          });
+        })
+      );
+    }    
+
+
+    // public static async getGroupSite(groupId: any): Promise<any> {
+    //   return new Promise((resolve, reject) => {
+
+    //   })
+    // }
+
 
 
     public static async getGroupDetailsBatch(groupId: any): Promise<any> {

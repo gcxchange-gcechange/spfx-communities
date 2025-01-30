@@ -58,6 +58,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   
   const _getGroupDetailsData = (groups: any): void => {
+    const proBTeams: any []= [];
     const promises = groups.map((groupData: any) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
@@ -77,8 +78,23 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
               thumbnail: thumbnail !== undefined ? `data:image/jpeg;base64,${thumbnail}` : undefined,
             };
           } else {
+            console.log("groupData", groupData) // check what type of data we get if we can get the mailNickname
             console.log(`Group details not found for ${groupData.id}`);
-            return null;
+            // proBTeams.push(groupData.id)
+
+            // GraphService._proBTeamSite(proBTeams).then((details) => {
+            //   console.log(details)
+            //   return details;
+            // })
+
+            return {
+              ...groupData,
+              url: `https://devgcx.sharepoint.com/teams/`, // add the mailNickname  to the end od tems
+              siteId: groupData.id,
+              modified: undefined,
+              members: undefined,
+              thumbnail: undefined,
+            };
           }
         } catch (error) {
           console.log("ERROR", error);
@@ -87,11 +103,12 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       });
     });
     
-    
+    console.log(proBTeams)
     Promise.all(promises).then((updatedGroups) => {
       const filteredGroups = updatedGroups.filter((group) => group !== null);
       _getPageViews(filteredGroups);
     });
+
   };
 
 
