@@ -56,23 +56,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     });
   };
 
-  // const _getProBteams =(id: any):void => {
-  //   GraphService._proBTeamSiteAccess(id).then((members) => {
-  //     try { 
-  //       members.map((memberIds) => memberIds.userPrincipalName === props.userDisplayName ? 
-  //       GraphService.getGroupDetailsBatch(id).then((groups) => {
-  //         console.log("G",groups)
-  //       }) : null
-  //     )
-
-  //     }catch(error) {
-  //       console.log(error)
-  //     }
-  //   })
-  // }
 
   const _getProBGroupDetails = (groups: any): void => {
-    //const proBTeams: any[] = [];
     const promises = groups.map((groupData: any) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         console.log(groupDetails)
