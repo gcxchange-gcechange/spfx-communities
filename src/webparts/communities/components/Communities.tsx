@@ -56,14 +56,29 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     });
   };
 
-  
-  const _getGroupDetailsData = (groups: any): void => {
-    const proBTeams: any []= [];
+  // const _getProBteams =(id: any):void => {
+  //   GraphService._proBTeamSiteAccess(id).then((members) => {
+  //     try { 
+  //       members.map((memberIds) => memberIds.userPrincipalName === props.userDisplayName ? 
+  //       GraphService.getGroupDetailsBatch(id).then((groups) => {
+  //         console.log("G",groups)
+  //       }) : null
+  //     )
+
+  //     }catch(error) {
+  //       console.log(error)
+  //     }
+  //   })
+  // }
+
+  const _getProBGroupDetails = (groups: any): void => {
+    //const proBTeams: any[] = [];
     const promises = groups.map((groupData: any) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
+        console.log(groupDetails)
         try {
+          let thumbnail: string | undefined = undefined;
           if (groupDetails[1] !== undefined) {
-            let thumbnail: string | undefined = undefined;
             if (groupDetails[3] === undefined ) {
               thumbnail = undefined;
             } else {
@@ -77,24 +92,19 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
               members: groupDetails[2],
               thumbnail: thumbnail !== undefined ? `data:image/jpeg;base64,${thumbnail}` : undefined,
             };
+
+            
           } else {
-            console.log("groupData", groupData) // check what type of data we get if we can get the mailNickname
-            console.log(`Group details not found for ${groupData.id}`);
-            // proBTeams.push(groupData.id)
-
-            // GraphService._proBTeamSite(proBTeams).then((details) => {
-            //   console.log(details)
-            //   return details;
-            // })
-
+     
             return {
               ...groupData,
-              url: `https://devgcx.sharepoint.com/teams/`, // add the mailNickname  to the end od tems
+              url: `https://devgcx.sharepoint.com/teams/${groupData.mailNickname}`, // add the mailNickname  to the end od tems
               siteId: groupData.id,
               modified: undefined,
-              members: undefined,
-              thumbnail: undefined,
+              members: groupDetails[2],
+              thumbnail: thumbnail !== undefined ? `data:image/jpeg;base64,${thumbnail}` : undefined,
             };
+           
           }
         } catch (error) {
           console.log("ERROR", error);
@@ -102,21 +112,74 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
         }
       });
     });
-    
-    console.log(proBTeams)
+
     Promise.all(promises).then((updatedGroups) => {
-      const filteredGroups = updatedGroups.filter((group) => group !== null);
+    
+      try {
+        const filteredGroups = updatedGroups.filter((group) => group !== null );
       _getPageViews(filteredGroups);
+
+      } catch(error){
+        console.error("ERROR",error)
+      }    
+    });
+  };
+
+
+  
+  const _getGroupDetailsData = (groups: any): void => {
+    const promises = groups.map((groupData: any) => {
+      return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
+        try {
+          let thumbnail: string | undefined = undefined;
+          if (groupDetails[1] !== undefined) {
+            if (groupDetails[3] === undefined ) {
+              thumbnail = undefined;
+            } else {
+              thumbnail = groupDetails[3]
+            }
+            return {
+              ...groupData,
+              url: groupDetails[1].webUrl,
+              siteId: groupDetails[1].id,
+              modified: new Date(groupDetails[1].lastModifiedDateTime).toLocaleDateString("en-CA"),
+              members: groupDetails[2],
+              thumbnail: thumbnail !== undefined ? `data:image/jpeg;base64,${thumbnail}` : undefined,
+            };
+
+            
+          } else {
+
+            return null;
+           
+          }
+        } catch (error) {
+          console.log("ERROR", error);
+          return null;
+        }
+      });
     });
 
+    Promise.all(promises).then((updatedGroups) => {
+    
+      try {
+        const filteredGroups = updatedGroups.filter((group) => group !== null );
+      _getPageViews(filteredGroups);
+
+      } catch(error){
+        console.error("ERROR",error)
+      }    
+    });
   };
+
+ 
 
 
   const _getUserGroups = (): void => {
     GraphService.getUserGroups().then((data) => {
       setGroups(data);
       setIsLoading(true);
-      _getGroupDetailsData(data);
+      _getProBGroupDetails(data);
     });
   };
 
