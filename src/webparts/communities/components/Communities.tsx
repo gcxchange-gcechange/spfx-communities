@@ -14,6 +14,7 @@ import { Spinner, SpinnerSize} from "@fluentui/react";
 import Paging from "./Paging";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
+import SearchBar from "./SearchBar";
 
 const Communities: React.FC<ICommunitiesProps> = (props) => {
   const { targetAudience, layout } = props;
@@ -25,6 +26,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const previousLetterRef = useRef('');
+  const [searchText, setSearchText] = useState<string>("");
 
 
   const clearState = ():void => {
@@ -115,6 +117,18 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     });
   };
 
+  const _getSearchedGroup = (searchText: string): void => {
+      GraphService.getAllGroups(searchText).then((allGroupData) => {
+      if (allGroupData.responseResults !== undefined) {
+        setGroups(allGroupData.responseResults);
+        _getGroupDetailsData(allGroupData.responseResults);
+      } else {
+        setGroups(allGroupData.responseResults)
+      }
+
+    });
+  }
+
 
   const getSelectedLetter = (letter: string): void => {
     if (letter !== selectedLetter) {
@@ -131,6 +145,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     setCurrentPage( pageNumber);
   };
 
+  const getSearchText = (value: string):void => {
+      console.log("Value", value)
+      setSearchText(value)
+  }
+
 
   useEffect(() => {   
     if (targetAudience === "1") {
@@ -143,6 +162,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   }, [props.targetAudience]);
 
   useEffect(() => {
+
     if (targetAudience === "1" && previousLetterRef.current !== selectedLetter) {
       clearState();
       _getAllGroups(selectedLetter);
@@ -150,6 +170,15 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       previousLetterRef.current = selectedLetter;
     }
   }, [selectedLetter]);
+
+  useEffect(() => {
+    
+    if (searchText !== undefined) {
+      clearState();
+      _getSearchedGroup(searchText)
+       setIsLoading(true);
+    }
+  }, [searchText])
   
 
 
@@ -208,7 +237,13 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
               <div>
               {layout === "Grid" && (
                 <>
-
+                   <SearchBar 
+                      prefLang={props.prefLang}
+                      items={filteredGroups.length}
+                      itemsPerPage={props.numberPerPage}
+                      currentPage={currentPage}
+                      onSearchText={getSearchText}
+                    />
                   {targetAudience === "1" && (
                       <AlphabeticalFilter
                         selectedLetter={selectedLetter}
