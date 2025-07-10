@@ -4,6 +4,7 @@ import  styles from './Communities.module.scss'
  
 
 interface IAlphabeticalFilterProps {
+    searchText:string;
     selectedLetter: string;
     onSelectLetter: (letter: string) => void;
  
@@ -11,7 +12,7 @@ interface IAlphabeticalFilterProps {
 
 const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
 
-    const { selectedLetter } = props;
+    const { selectedLetter, searchText } = props;
 
     const arrayAtoZ = (): string[] => {
         const navitems: string[] = [];
@@ -47,10 +48,29 @@ const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
         }
     }
 
+    
+    const searchTextStyles: Partial<IPivotStyles> = {
+        link:{
+            backgroundColor:'#e3e1e1',
+        },
 
+        root:{
+            color:'black',
+            marginTop:'20px',
+            marginBottom: '20px',
+        },
+
+        linkIsSelected:{
+            color: 'white',
+            backgroundColor:'#e3e1e1!important'
+        }
+    }
+
+
+console.log("TXT:",searchText)
     return (
       <div style={{display:'grid', justifyItems:'center'}}>
-        <Pivot styles={pivotStyles} className={styles.letter} onLinkClick={_handleSelectedLetter} selectedKey={selectedLetter} linkFormat='tabs'  linkSize='normal' >
+        <Pivot styles={searchText === '' ? pivotStyles : searchTextStyles } className={styles.letter} onLinkClick={_handleSelectedLetter} selectedKey={selectedLetter} linkFormat='tabs'  linkSize='normal' >
         {combinedIndex.map((letter: string, index: number) => {
              return (
                <PivotItem

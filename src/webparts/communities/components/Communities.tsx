@@ -27,6 +27,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const previousLetterRef = useRef('');
   const [searchText, setSearchText] = useState<string>("");
+ // const [nextLink, setNextLink] = useState<any[]>([])
 
 
   const clearState = ():void => {
@@ -118,13 +119,14 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const _getSearchedGroup = (searchText: string): void => {
-      GraphService.getAllGroups(searchText).then((allGroupData) => {
-      if (allGroupData.responseResults !== undefined) {
-        setGroups(allGroupData.responseResults);
-        _getGroupDetailsData(allGroupData.responseResults);
-      } else {
-        setGroups(allGroupData.responseResults)
-      }
+      GraphService.getSearchedGroup(searchText).then((allGroupData) => {
+        console.log("groupData",allGroupData)
+      //  if (allGroupData.responseResults !== undefined) {
+      //     setGroups(allGroupData.responseResults);
+      //    _getGroupDetailsData(allGroupData.responseResults);
+      // } else {
+      //   setGroups(allGroupData.responseResults)
+      // }
 
     });
   }
@@ -164,22 +166,20 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   useEffect(() => {
 
     if (targetAudience === "1" && previousLetterRef.current !== selectedLetter) {
-      clearState();
-      _getAllGroups(selectedLetter);
-      setIsLoading(true);
-      previousLetterRef.current = selectedLetter;
+        clearState();
+        _getAllGroups(selectedLetter);
+        setIsLoading(true);
+        previousLetterRef.current = selectedLetter;
     }
   }, [selectedLetter]);
 
-  useEffect(() => {
-    
-    if (searchText !== undefined) {
+ useEffect(() => {
+    if (searchText) {
       clearState();
-      _getSearchedGroup(searchText)
-       setIsLoading(true);
+      _getSearchedGroup(searchText) 
+      setIsLoading(true);
     }
-  }, [searchText])
-  
+ }, [searchText] )
 
 
   //calculate the item index to render per page
@@ -248,6 +248,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       <AlphabeticalFilter
                         selectedLetter={selectedLetter}
                         onSelectLetter={getSelectedLetter}
+                        searchText={searchText}
                       />
                   )}
                   {  filteredGroups.length !== 0 && 

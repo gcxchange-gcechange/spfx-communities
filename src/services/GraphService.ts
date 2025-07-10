@@ -50,15 +50,43 @@ export class GraphService {
         })
     }
 
+    // public static  async getSearchedGroup(searchedText: string): Promise<void> {
+    //     console.log("searchedText", searchedText);
+    //     return new Promise<void>((resolve, reject) => {
+    //         try {
+    //             this._context.msGraphClientFactory
+    //                 .getClient('3')
+    //                 .then((client: MSGraphClientV3):void => {
+    //                     client
+    //                     .api(`/groups?$search="displayName:${searchedText}"&$count=true&$select=id,displayName,createdDateTime,description&$top=100`)
+    //                     .headers({
+    //                         "ConsistencyLevel": "eventual"
+    //                     })
+    //                     .get((error, response: any, rawResponse?: any) => {
+    //                         console.log("RESPONSE",response)
+    //                             //const responseResults: any[] = response.value;
+    //                             resolve(response );
+                            
+    //                     })
+    //                 });
+
+    //         } catch(error) {
+    //             console.log("ERROR", error);
+    //             reject(error);
+    //         }
+    //     })
+
+    // }
+
     public static async getSearchedGroup(searchedText: string): Promise<{ responseResults: any[] }> {
 
-
+        console.log("searchedText", searchedText);
         const requestBody = {
             requests: [
                 {
                 id: "1",
                 method: "GET",
-                url: `/groups?$search='displayName:${searchedText}'&$count=true;`,
+                url: `/groups?$search="displayName:${searchedText}"&$count=true&$select=id,displayName,createdDateTime,description&$top=1000`,
                   headers: {
                       "ConsistencyLevel": "eventual"
                   }
@@ -84,6 +112,7 @@ export class GraphService {
                                 let totalPages:number = 0;
 
                                 if (link) {
+                                    console.log("link", link);
                                     const handleNextPage = (url: string ):any => {
                                         client.api(url).get((error:any, response2: any) => {
                                             const nextLink = response2["@odata.nextLink"];
@@ -118,7 +147,7 @@ export class GraphService {
         });
     }
 
-      public static async getAllGroups(selectedLetter: string ):Promise<any> {
+      public static async getAllGroups(selectedLetter: string):Promise<any> {
 
         let apiTxt: string;
 
@@ -126,7 +155,7 @@ export class GraphService {
             apiTxt =
               "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=10";
           } else {
-            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=5`;
+            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=500`;
           }
         
         const requestBody = {
