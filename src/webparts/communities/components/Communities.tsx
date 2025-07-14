@@ -10,7 +10,7 @@ import { useEffect, useState, useRef } from "react";
 import AlphabeticalFilter from "./AlphabeticalFilter";
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from "./GridLayoutStyle";
-import { Spinner, SpinnerSize} from "@fluentui/react";
+import { PrimaryButton, Spinner, SpinnerSize, Stack} from "@fluentui/react";
 import Paging from "./Paging";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
@@ -20,7 +20,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const { targetAudience, layout } = props;
 
 
-  const [_groups, setGroups] = useState<any[]>([]);
+  const [groups, setGroups] = useState<any[]>([]);
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -37,6 +37,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
   
   const _getPageViews = (filteredGroups: any): void => {
+    console.log("filteredGroups", filteredGroups)
     const promises = filteredGroups.map((group: any) => {
       return GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
         let siteView: string = '';
@@ -54,14 +55,25 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     });
   
     Promise.all(promises).then((updatedFilteredGroups) => {
-      setFilteredGroups((prevGroups) => [...prevGroups, ...updatedFilteredGroups]);
+
+       
+      if (nextLink) { 
+        
+        setFilteredGroups((prevGroups) => {
+        const appendResults = [...prevGroups, ... filteredGroups]
+        return appendResults
+      });
+      } else  {
+        setFilteredGroups(updatedFilteredGroups)
+      }
       setIsLoading(false);
     });
   };
 
   
-  const _getGroupDetailsData = (groups: any): void => {
-    const promises = groups.map((groupData: any) => {
+  const _getGroupDetailsData = (allGroups: any): void => {
+    console.log("GROUPS",groups)
+    const promises = allGroups.map((groupData: any) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
           if (groupDetails[1] !== undefined) {
@@ -95,12 +107,20 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       const filteredGroups = updatedGroups.filter((group) => group !== null);
       //need to append the load more here
       if (nextLink) {
-        setFilteredGroups((prevGroups) => [...prevGroups, ...filteredGroups]);
+      setFilteredGroups((prevGroups) => {
+        const appendResults = [...prevGroups, ... filteredGroups]
+
+
+        _getPageViews(appendResults);
+        return appendResults
+      });
+
 
       } else {
         setFilteredGroups(filteredGroups)
+         _getPageViews(filteredGroups);
       }
-      _getPageViews(filteredGroups);
+     
     });
   };
 
@@ -139,10 +159,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
           setGroups(searchedGroupData[0])
         }
         
-      //     _getGroupDetailsData(searchedGroupData.responseResults[0].body.value);
-       //else {
-      //   setGroups(allGroupData.responseResults)
-      // }
 
     });
   }
@@ -302,9 +318,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     )
                   } 
                   <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
-                  {nextLink && (
-                    <button onClick={() => _loadMoreGroups()}>Load More</button>
-                  )}
+                  <div>
+                    <Stack verticalAlign="center">
                   { filteredGroups.length  !== 0 && 
                     (
                       <Paging
@@ -317,6 +332,16 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       />
                     )
                   } 
+                  {nextLink && (
+                    <PrimaryButton onClick={() => _loadMoreGroups()}>
+                      Load More
+                    </PrimaryButton>
+                  )}
+
+                    </Stack>
+
+                  </div>
+                   
                
                 </>
               )}
