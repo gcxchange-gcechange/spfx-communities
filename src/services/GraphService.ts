@@ -50,102 +50,79 @@ export class GraphService {
         })
     }
 
-    // public static  async getSearchedGroup(searchedText: string): Promise<void> {
+    public static async getSearchedGroup(searchedText: string, nextLink: string): Promise<any[]> {
+            console.log("searchedText", searchedText);
+
+            let apiUrl = "";
+            if (nextLink) {
+                apiUrl = nextLink;
+            } else {
+                apiUrl = `/groups?$search="displayName:${searchedText}"&$count=true&$select=id,displayName,createdDateTime,description&$top=100`;
+            }
+            return new Promise<any[]>((resolve, reject) => {
+                try {
+                    this._context.msGraphClientFactory
+                        .getClient('3')
+                        .then((client: MSGraphClientV3): void => {
+                            client
+                                .api(apiUrl)
+                                .headers({
+                                    "ConsistencyLevel": "eventual"
+                                })
+                                .get((error, response: any, rawResponse?: any) => {
+                                    console.log("RESPONSE", response);
+                                    const responseResults: any[] = [];
+                                    responseResults.push(response);
+                                    console.log ("RESPONSE RESULTS", responseResults);
+                                    
+                                    resolve(responseResults);
+                                });
+                        });
+    
+                } catch (error) {
+                    console.log("ERROR", error);
+                    reject(error);
+                }
+            });
+        }
+
+    // public static async getSearchedGroup(searchedText: string): Promise<{ responseResults: any[] }> {
+
     //     console.log("searchedText", searchedText);
-    //     return new Promise<void>((resolve, reject) => {
+    //     const requestBody = {
+    //         requests: [
+    //             {
+    //             id: "1",
+    //             method: "GET",
+    //             url: `/groups?$search="displayName:${searchedText}"&$count=true&$select=id,displayName,createdDateTime,description&$top=100`,
+    //               headers: {
+    //                   "ConsistencyLevel": "eventual"
+    //               }
+    //             }
+    //         ]
+    //     };
+
+    //     return  new Promise((resolve, reject) => {
+
     //         try {
     //             this._context.msGraphClientFactory
     //                 .getClient('3')
-    //                 .then((client: MSGraphClientV3):void => {
+    //                 .then((client: MSGraphClientV3) => {
     //                     client
-    //                     .api(`/groups?$search="displayName:${searchedText}"&$count=true&$select=id,displayName,createdDateTime,description&$top=100`)
-    //                     .headers({
-    //                         "ConsistencyLevel": "eventual"
-    //                     })
-    //                     .get((error, response: any, rawResponse?: any) => {
-    //                         console.log("RESPONSE",response)
-    //                             //const responseResults: any[] = response.value;
-    //                             resolve(response );
-                            
-    //                     })
+    //                         .api(`/$batch`)
+    //                         .post(requestBody, (error: any, responseObject: any) => {
+    //                             console.log("RESPONSE:", responseObject);
+                               
+    //                             resolve(responseObject);
+    //                         });
     //                 });
-
-    //         } catch(error) {
-    //             console.log("ERROR", error);
+    //         }
+    //         catch(error){
+    //             console.log(error)
     //             reject(error);
     //         }
-    //     })
-
+    //     });
     // }
-
-    public static async getSearchedGroup(searchedText: string): Promise<{ responseResults: any[] }> {
-
-        console.log("searchedText", searchedText);
-        const requestBody = {
-            requests: [
-                {
-                id: "1",
-                method: "GET",
-                url: `/groups?$search="displayName:${searchedText}"&$count=true&$select=id,displayName,createdDateTime,description&$top=1000`,
-                  headers: {
-                      "ConsistencyLevel": "eventual"
-                  }
-                }
-            ]
-        };
-
-        return  new Promise((resolve, reject) => {
-
-            try {
-                this._context.msGraphClientFactory
-                    .getClient('3')
-                    .then((client: MSGraphClientV3) => {
-                        client
-                            .api(`/$batch`)
-                            .post(requestBody, (error: any, responseObject: any) => {
-                                console.log("batch", responseObject);
-                                const responseResults: any[] = [];
-                                responseResults.push(...responseObject.responses[0].body.value);
- 
-                                const link = responseObject.responses[0].body["@odata.nextLink"];
-
-                                let totalPages:number = 0;
-
-                                if (link) {
-                                    console.log("link", link);
-                                    const handleNextPage = (url: string ):any => {
-                                        client.api(url).get((error:any, response2: any) => {
-                                            const nextLink = response2["@odata.nextLink"];
-                                            totalPages++;
-                                            responseResults.push(...response2.value);
-
-                                            if (nextLink) {
-                                                handleNextPage(nextLink);
-                                            }
-                                            else {
-                                                resolve({responseResults});
-                                                console.log("SearchedTextTP1",totalPages);
-                                            }
-                                        });
-                                        
-                                    }
-                                    handleNextPage(link);
-                                 
-                                } else  {
-                                  resolve({responseResults});
-                                  console.log("TP2",totalPages);
-                                }
-                                
-
-                            });
-                    });
-            }
-            catch(error){
-                console.log(error)
-                reject(error);
-            }
-        });
-    }
 
       public static async getAllGroups(selectedLetter: string):Promise<any> {
 

@@ -27,7 +27,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const previousLetterRef = useRef('');
   const [searchText, setSearchText] = useState<string>("");
- // const [nextLink, setNextLink] = useState<any[]>([])
+  const [nextLink, setNextLink] = useState<string>("");
 
 
   const clearState = ():void => {
@@ -54,7 +54,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     });
   
     Promise.all(promises).then((updatedFilteredGroups) => {
-      setFilteredGroups(updatedFilteredGroups);
+      setFilteredGroups((prevGroups) => [...prevGroups, ...updatedFilteredGroups]);
       setIsLoading(false);
     });
   };
@@ -93,6 +93,13 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     
     Promise.all(promises).then((updatedGroups) => {
       const filteredGroups = updatedGroups.filter((group) => group !== null);
+      //need to append the load more here
+      if (nextLink) {
+        setFilteredGroups((prevGroups) => [...prevGroups, ...filteredGroups]);
+
+      } else {
+        setFilteredGroups(filteredGroups)
+      }
       _getPageViews(filteredGroups);
     });
   };
@@ -108,8 +115,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
+      console.log("ALLGROUPDATA:",allGroupData)
       if (allGroupData.responseResults !== undefined) {
-        setGroups(allGroupData.responseResults);
+        setGroups(allGroupData);
         _getGroupDetailsData(allGroupData.responseResults);
       } else {
         setGroups(allGroupData.responseResults)
@@ -119,17 +127,47 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   };
 
   const _getSearchedGroup = (searchText: string): void => {
-      GraphService.getSearchedGroup(searchText).then((allGroupData) => {
-        console.log("groupData",allGroupData)
-      //  if (allGroupData.responseResults !== undefined) {
-      //     setGroups(allGroupData.responseResults);
-      //    _getGroupDetailsData(allGroupData.responseResults);
-      // } else {
+      GraphService.getSearchedGroup(searchText, nextLink).then((searchedGroupData) => {
+        console.log("SEARCHED_DATA",searchedGroupData)
+        if (searchedGroupData !== undefined) {
+          setGroups(searchedGroupData[0].value);
+          _getGroupDetailsData(searchedGroupData[0].value);
+          if(searchedGroupData[0]["@odata.nextLink"]) {
+            setNextLink(searchedGroupData[0]["@odata.nextLink"])
+          }
+        } else {
+          setGroups(searchedGroupData[0])
+        }
+        
+      //     _getGroupDetailsData(searchedGroupData.responseResults[0].body.value);
+       //else {
       //   setGroups(allGroupData.responseResults)
       // }
 
     });
   }
+
+  const _loadMoreGroups = (): void => {
+  if (!nextLink) return; // nothing to load
+
+  GraphService.getSearchedGroup(searchText, nextLink).then((nextPageData) => {
+    console.log("NEXT_PAGE_DATA", nextPageData);
+
+    // Append new groups to existing groups
+    setGroups((prevGroups) => [...prevGroups, ...nextPageData[0].value]);
+
+    _getGroupDetailsData(nextPageData[0].value);
+
+    // Update nextLink for next pagination call
+    if (nextPageData[0]["@odata.nextLink"]) {
+      setNextLink(nextPageData[0]["@odata.nextLink"]);
+      
+    } else {
+      setNextLink(''); // No more pages
+    }
+  });
+};
+
 
 
   const getSelectedLetter = (letter: string): void => {
@@ -264,6 +302,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     )
                   } 
                   <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
+                  {nextLink && (
+                    <button onClick={() => _loadMoreGroups()}>Load More</button>
+                  )}
                   { filteredGroups.length  !== 0 && 
                     (
                       <Paging
