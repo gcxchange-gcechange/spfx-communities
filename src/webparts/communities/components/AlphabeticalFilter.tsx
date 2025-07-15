@@ -61,13 +61,14 @@ const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
         },
 
         linkIsSelected:{
-            color: 'white',
+            color: 'black!important',
             backgroundColor:'#e3e1e1!important'
         }
     }
 
 
 console.log("TXT:",searchText)
+console.log("selected Letter:",selectedLetter);
     return (
       <div style={{display:'grid', justifyItems:'center'}}>
         <Pivot styles={searchText === '' ? pivotStyles : searchTextStyles } className={styles.letter} onLinkClick={_handleSelectedLetter} selectedKey={selectedLetter} linkFormat='tabs'  linkSize='normal' >

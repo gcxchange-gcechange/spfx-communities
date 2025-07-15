@@ -34,6 +34,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     setFilteredGroups([]);
     setCurrentPage(1);
     setIsLoading(false);
+    setSearchText("");
   };
   
   const _getPageViews = (filteredGroups: any): void => {
@@ -56,28 +57,18 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   
     Promise.all(promises).then((updatedFilteredGroups) => {
 
-       
-      if (nextLink) { 
-        
-        setFilteredGroups((prevGroups) => {
-        const appendResults = [...prevGroups, ... filteredGroups]
-        return appendResults
-      });
-      } else  {
-        setFilteredGroups(updatedFilteredGroups)
-      }
+      setFilteredGroups(updatedFilteredGroups)
       setIsLoading(false);
     });
   };
 
   
   const _getGroupDetailsData = (allGroups: any): void => {
-    console.log("GROUPS",groups)
     const promises = allGroups.map((groupData: any) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
           if (groupDetails[1] !== undefined) {
-            let thumbnail: string | undefined = undefined;
+            let thumbnail: string | undefined = groupDetails[3];
             if (groupDetails[3] === undefined ) {
               thumbnail = undefined;
             } else {
@@ -104,24 +95,22 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     
     
     Promise.all(promises).then((updatedGroups) => {
+      console.log("updatedGroups", updatedGroups)
       const filteredGroups = updatedGroups.filter((group) => group !== null);
       //need to append the load more here
+      let combinedResults : any[];
       if (nextLink) {
-      setFilteredGroups((prevGroups) => {
-        const appendResults = [...prevGroups, ... filteredGroups]
+     
+        combinedResults = [...groups, ... filteredGroups]
 
+      } else {     
+        combinedResults = filteredGroups
+      }
+      setGroups(combinedResults)
+      _getPageViews(combinedResults)
 
-        _getPageViews(appendResults);
-        return appendResults
       });
 
-
-      } else {
-        setFilteredGroups(filteredGroups)
-         _getPageViews(filteredGroups);
-      }
-     
-    });
   };
 
 
@@ -135,7 +124,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getAllGroups = (selectedLetter: string): void => {
     GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
-      console.log("ALLGROUPDATA:",allGroupData)
       if (allGroupData.responseResults !== undefined) {
         setGroups(allGroupData);
         _getGroupDetailsData(allGroupData.responseResults);
@@ -148,7 +136,6 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const _getSearchedGroup = (searchText: string): void => {
       GraphService.getSearchedGroup(searchText, nextLink).then((searchedGroupData) => {
-        console.log("SEARCHED_DATA",searchedGroupData)
         if (searchedGroupData !== undefined) {
           setGroups(searchedGroupData[0].value);
           _getGroupDetailsData(searchedGroupData[0].value);
@@ -227,6 +214,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     }
   }, [selectedLetter]);
 
+
+  //Need to clear the searchText after results are rendered
  useEffect(() => {
     if (searchText) {
       clearState();
@@ -234,6 +223,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       setIsLoading(true);
     }
  }, [searchText] )
+ 
+
 
 
   //calculate the item index to render per page
