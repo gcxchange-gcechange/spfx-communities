@@ -323,7 +323,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                   } 
                   <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
                   <div>
-                    <Stack verticalAlign="center">
+                    <Stack horizontalAlign="center">
                   { filteredGroups.length  !== 0 && 
                     (
                       <Paging
@@ -337,8 +337,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     )
                   } 
                   {nextLink && (
-                    <PrimaryButton onClick={() => _loadMoreGroups()}>
-                      Load More 
+                    <PrimaryButton onClick={() => _loadMoreGroups()} style={{width: '300px'}}>
+                      { props.prefLang === 'fr-fr' ? "Afficher plus" :"Load More"} 
                     </PrimaryButton>
                   )}
 
