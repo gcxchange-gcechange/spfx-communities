@@ -22,7 +22,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const [groups, setGroups] = useState<any[]>([]);
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
-  const [selectedLetter, setSelectedLetter] = useState<string>("A");
+  const [selectedLetter, setSelectedLetter] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const previousLetterRef = useRef('');
@@ -34,11 +34,9 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     setFilteredGroups([]);
     setCurrentPage(1);
     setIsLoading(false);
-    setSearchText("");
   };
   
   const _getPageViews = (filteredGroups: any): void => {
-    console.log("filteredGroups", filteredGroups)
     const promises = filteredGroups.map((group: any) => {
       return GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
         let siteView: string = '';
@@ -99,7 +97,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
       const filteredGroups = updatedGroups.filter((group) => group !== null);
       //need to append the load more here
       let combinedResults : any[];
-      if (nextLink) {
+      if (nextLink !== "") {
      
         combinedResults = [...groups, ... filteredGroups]
 
@@ -133,6 +131,17 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
     });
   };
+  const _getRecentGroups = ():void => {
+    GraphService.getRecentlyCreatedGroups().then((recentGroups) => {
+      console.log("recent",recentGroups)
+
+      if (recentGroups) {
+        setGroups(recentGroups)
+        _getGroupDetailsData(recentGroups)
+      }
+    })
+  }
+
 
   const _getSearchedGroup = (searchText: string): void => {
       GraphService.getSearchedGroup(searchText, nextLink).then((searchedGroupData) => {
@@ -155,6 +164,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   GraphService.getSearchedGroup(searchText, nextLink).then((nextPageData) => {
     console.log("NEXT_PAGE_DATA", nextPageData);
+    setIsLoading(true)
 
     // Append new groups to existing groups
     setGroups((prevGroups) => [...prevGroups, ...nextPageData[0].value]);
@@ -176,6 +186,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const getSelectedLetter = (letter: string): void => {
     if (letter !== selectedLetter) {
       setSelectedLetter(letter);
+      setNextLink("");
       setIsLoading(true);
     }
   };
@@ -197,7 +208,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   useEffect(() => {   
     if (targetAudience === "1") {
       setIsLoading(true);
-      _getAllGroups(selectedLetter);
+      _getRecentGroups();
+      //_getAllGroups(selectedLetter);
     } else if (targetAudience === "2") {
       setIsLoading(true);
       _getUserGroups();
@@ -210,12 +222,13 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
         clearState();
         _getAllGroups(selectedLetter);
         setIsLoading(true);
+        setSearchText("");
+        setNextLink("");
         previousLetterRef.current = selectedLetter;
     }
   }, [selectedLetter]);
 
 
-  //Need to clear the searchText after results are rendered
  useEffect(() => {
     if (searchText) {
       clearState();
@@ -325,7 +338,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                   } 
                   {nextLink && (
                     <PrimaryButton onClick={() => _loadMoreGroups()}>
-                      Load More
+                      Load More 
                     </PrimaryButton>
                   )}
 

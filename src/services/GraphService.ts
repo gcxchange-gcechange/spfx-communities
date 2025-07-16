@@ -124,6 +124,25 @@ export class GraphService {
     //     });
     // }
 
+    public static async getRecentlyCreatedGroups(): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            try {
+                this._context.msGraphClientFactory
+                    .getClient('3')
+                    .then((client: MSGraphClientV3): void => {
+                        client.api(`groups?$filter=groupTypes/any(c:c eq 'Unified')&$select=id,displayName,mail, createdDateTime&$top=10`)
+                            .get((error, response: any, rawResponse?: any) => {
+                                console.log("RESPONSE", response);
+                                resolve(response.value);
+                            });
+                    });
+            } catch (error) {
+                console.log("ERROR", error);
+                reject(error);
+            }
+        });
+    }
+
       public static async getAllGroups(selectedLetter: string):Promise<any> {
 
         let apiTxt: string;

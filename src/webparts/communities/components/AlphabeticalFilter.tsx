@@ -27,10 +27,11 @@ const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
     const combinedIndex = arrayAtoZ();
 
     const _handleSelectedLetter = (item: PivotItem):void => {
-        const letter: string = item.props.headerText || "A";
+        const letter: string = item.props.headerText || "";
 
         props.onSelectLetter(letter);
     }
+
 
     const pivotStyles: Partial<IPivotStyles> = {
         link:{
@@ -49,7 +50,7 @@ const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
     }
 
     
-    const searchTextStyles: Partial<IPivotStyles> = {
+    const grayStyle: Partial<IPivotStyles> = {
         link:{
             backgroundColor:'#e3e1e1',
         },
@@ -71,7 +72,20 @@ console.log("TXT:",searchText)
 console.log("selected Letter:",selectedLetter);
     return (
       <div style={{display:'grid', justifyItems:'center'}}>
-        <Pivot styles={searchText === '' ? pivotStyles : searchTextStyles } className={styles.letter} onLinkClick={_handleSelectedLetter} selectedKey={selectedLetter} linkFormat='tabs'  linkSize='normal' >
+        <Pivot  
+            styles={
+                searchText === '' && selectedLetter === ''
+                ? grayStyle // Initial state (all gray)
+                : searchText !== ''
+                ? grayStyle // User typed in search
+                : pivotStyles // User selected a letter
+            }
+            className={styles.letter} 
+            onLinkClick={_handleSelectedLetter} 
+            selectedKey={selectedLetter} 
+            linkFormat='tabs'  
+            linkSize='normal' 
+        >
         {combinedIndex.map((letter: string, index: number) => {
              return (
                <PivotItem
