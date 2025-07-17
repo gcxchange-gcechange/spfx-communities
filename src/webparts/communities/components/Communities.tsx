@@ -28,6 +28,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const previousLetterRef = useRef('');
   const [searchText, setSearchText] = useState<string>("");
   const [nextLink, setNextLink] = useState<string>("");
+  const [loadingMore, setLoadingMore] = useState(false);
+
 
 
   const clearState = ():void => {
@@ -56,6 +58,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     Promise.all(promises).then((updatedFilteredGroups) => {
 
       setFilteredGroups(updatedFilteredGroups)
+      setLoadingMore(false);
       setIsLoading(false);
     });
   };
@@ -162,10 +165,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const _loadMoreGroups = (): void => {
   if (!nextLink) return; // nothing to load
 
+  setLoadingMore(true);
   GraphService.getSearchedGroup(searchText, nextLink).then((nextPageData) => {
     console.log("NEXT_PAGE_DATA", nextPageData);
-    setIsLoading(true)
-
+   // setIsLoading(true)
+    
     // Append new groups to existing groups
     setGroups((prevGroups) => [...prevGroups, ...nextPageData[0].value]);
 
@@ -178,6 +182,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     } else {
       setNextLink(''); // No more pages
     }
+    
   });
 };
 
@@ -321,7 +326,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       />
                     )
                   } 
-                  <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
+                  <GridLayoutStyle loadingMore={loadingMore} groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
                   <div>
                     <Stack horizontalAlign="center">
                   { filteredGroups.length  !== 0 && 

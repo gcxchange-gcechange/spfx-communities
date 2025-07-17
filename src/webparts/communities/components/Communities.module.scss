@@ -271,3 +271,60 @@
   padding-right: 1%;
 }
 
+
+
+.skeleton {
+  background: #f0f0f0;
+  animation: pulse 1.5s infinite ease-in-out;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 376px;
+  height: 250px;
+}
+
+.skeletonBanner {
+  height: 40px;
+  width: 100%;
+  background: #ddd;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonThumbnail {
+  position: relative;
+  height: 48px;
+  width: 48px;
+  top: 12px;
+  left: 10px;
+  background: #ddd;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonLine {
+  height: 16px;
+  background: #ddd;
+  margin: 0.50rem 0;
+  border-radius: 4px;
+}
+
+.skeletonLine {
+  width: 100%;
+}
+
+.skeletonLineShort {
+  width: 40%;
+  height: 12px;
+  background: #ddd;
+  margin:5px;
+  border-radius: 4px;
+}
+
+
+@keyframes pulse {
+  0% { background-color: #f0f0f0; }
+  50% { background-color: #e0e0e0; }
+  100% { background-color: #f0f0f0; }
+}
+
+

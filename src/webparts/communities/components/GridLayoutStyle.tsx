@@ -12,9 +12,10 @@ interface IGridLayoutProps {
   targetAudience: string;
   seeAllCommunitiesLink: string;
   createCommLink: string;
+  loadingMore: boolean;
 }
 
-const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience, seeAllCommunitiesLink, createCommLink }) => {
+const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience, seeAllCommunitiesLink, createCommLink, loadingMore }) => {
 
   const imageProps: Partial<IImageProps> = {
     src: (require("../assets/YetiHiding.png")),
@@ -91,6 +92,28 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
                 </li>
               </>
             ))}
+
+            {loadingMore &&
+              Array.from({length: 3}).map((_, index) => (
+                <div key={`skeleton-${index}`} className={styles.skeleton}>
+                  <div className={styles.skeletonBanner}>
+                    <div className={styles.skeletonThumbnail}/>
+                  </div>
+                  <div className={styles.cardBody}>
+                    <div className={styles.skeletonLine}/> 
+                    <div className={styles.skeletonLine}/> 
+                  </div>
+                  <div className={styles.cardFooter}>
+                    <Stack  horizontal horizontalAlign="space-between" wrap>
+                      <div className={styles.skeletonLineShort}/> 
+                      <div className={styles.skeletonLineShort}/> 
+                      <div className={styles.skeletonLineShort}/> 
+                      <div className={styles.skeletonLineShort}/> 
+                    </Stack>
+                  </div>
+                </div>
+              ))
+            }
           </Stack>
         ) }
         </ul>
