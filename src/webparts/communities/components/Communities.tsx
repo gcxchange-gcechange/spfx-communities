@@ -314,18 +314,28 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                         searchText={searchText}
                       />
                   )}
-                  {  filteredGroups.length !== 0 && 
-                    (
-                      <Paging
-                        prefLang={props.prefLang}
-                        items={filteredGroups.length}
-                        itemsPerPage={props.numberPerPage}
-                        currentPage={currentPage}
-                        onPageUpdate={onPageUpdate}
- 
-                      />
-                    )
-                  } 
+                  <div>
+                    <Stack horizontalAlign="center">
+                      {  filteredGroups.length !== 0 && 
+                        (
+                          <Paging
+                            prefLang={props.prefLang}
+                            items={filteredGroups.length}
+                            itemsPerPage={props.numberPerPage}
+                            currentPage={currentPage}
+                            onPageUpdate={onPageUpdate}
+
+                          />
+                        )
+                      } 
+                        {nextLink && (
+                        <PrimaryButton onClick={() => _loadMoreGroups()} style={{width: '300px'}}>
+                          { props.prefLang === 'fr-fr' ? "Afficher plus" :"Load More"} 
+                        </PrimaryButton>
+                      )}
+
+                    </Stack>
+                  </div>
                   <GridLayoutStyle loadingMore={loadingMore} groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
                   <div>
                     <Stack horizontalAlign="center">
