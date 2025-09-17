@@ -8,7 +8,7 @@ Short summary on functionality and used technologies.
 
 ## Used SharePoint Framework Version
 
-![version](https://img.shields.io/badge/version-1.18.2-green.svg)
+![version](https://img.shields.io/badge/version-1.21.1-green.svg)
 
 ## Applies to
 
@@ -29,10 +29,11 @@ Short summary on functionality and used technologies.
 
 ## Version history
 
-| Version | Date             | Comments        |
-| ------- | ---------------- | --------------- |
-| 1.1     | March 10, 2021   | Update comment  |
-| 1.0     | January 29, 2021 | Initial release |
+| Version | Date                | Comments             |
+| ------- | --------------------| -------------------- |
+| 2.0     | September 10, 2025  | Update SPFX version  |
+| 1.1     | March 10, 2021      | Update comment       |
+| 1.0     | January 29, 2021    | Initial release      |
 
 ## Disclaimer
 
