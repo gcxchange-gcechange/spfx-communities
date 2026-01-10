@@ -32,6 +32,7 @@ export interface ICommunitiesWebPartProps {
   seeAllLink: string;
   createCommLink: string;
   seeAllCommunitiesLink: string;
+  userDisplayName: string;
 }
 
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
@@ -64,6 +65,7 @@ export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommuniti
         seeAllLink: this.properties.seeAllLink,
         createCommLink: this.properties.createCommLink,
         seeAllCommunitiesLink: this.properties.seeAllCommunitiesLink,
+        userDisplayName: this.context.pageContext.user.email,
 
        
       }

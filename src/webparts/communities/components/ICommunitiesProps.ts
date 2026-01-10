@@ -16,5 +16,6 @@ export interface ICommunitiesProps {
   seeAllLink: string;
   createCommLink: string;
   seeAllCommunitiesLink: string;
+  userDisplayName: string;
 
 }

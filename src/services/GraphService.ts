@@ -3,6 +3,7 @@
 
 import { MSGraphClientV3 } from "@microsoft/sp-http";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
+//import * as MicrosoftGraph from "@microsoft/microsoft-graph-types";
 
 
 
@@ -14,7 +15,6 @@ export class GraphService {
     public static async setup(context: WebPartContext): Promise<void> {
   
         this._context = context;
-        console.log("CONTECT",context);
     }
 
     public static async getUserGroups(): Promise<string[]> {
@@ -23,7 +23,7 @@ export class GraphService {
                 this._context.msGraphClientFactory
                     .getClient('3')
                     .then((client: MSGraphClientV3):void  => {
-                        client.api("/me/memberOf/$/microsoft.graph.group?$filter=groupTypes/any(a:a eq 'unified')&$select=id,displayName,description,createdDateTime, groupTypes")
+                        client.api("/me/memberOf/$/microsoft.graph.group?$filter=groupTypes/any(a:a eq 'unified')&$select=id,displayName,description,createdDateTime,mailNickname,mail,groupTypes")
                         .get(async (error, response: any, rawResponse?: any) => {
                         await this._context.msGraphClientFactory
                             .getClient('3')
@@ -56,9 +56,9 @@ export class GraphService {
 
         if (selectedLetter === "#") {
             apiTxt =
-              "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=10";
+              "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description,mailNickname,mail&$top=10";
           } else {
-            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=5`;
+            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description,mailNickname,mail&$top=5`;
           }
         
         const requestBody = {
@@ -123,15 +123,83 @@ export class GraphService {
 
     }
 
+    // public static _proBTeamSiteAccess(teamId: any): Promise<any[]> {
+    //   console.log("teamID:", teamId)
+    //       return new Promise<any>((resolve, reject) => {
+    //         try {
+    //           this._context.msGraphClientFactory
+    //             .getClient("3")
+    //             .then((client: MSGraphClientV3) => {
+    //               client
+    //                 .api(`/groups/${teamId}/members`)
+    //                 .get((error: any, response: any, rawResponse: any) => {
+    //                   if (error) {
+    //                     console.error("ERROR", error);
+    //                     reject(error);
+    //                   } else {
+    //                      console.log("RESPONSE1", response.value);
+    //                     resolve(response.value); // Return the data
+                      
+    //                   }
+    //                 });
+    //             });
+    //         } catch (error) {
+    //           console.error("ERROR-" + error);
+    //           reject(error);
+    //         }
+    //       });
+    // }  
 
+//     public static _proBTeamSite(teamId: any): Promise<any[]> {
+
+//         const requestHeaders: Headers = new Headers();
+//             requestHeaders.append("Content-type", "application/json");
+//             requestHeaders.append("Cache-Control", "no-cache");
+//             requestHeaders.append("Access-Control-Allow-Origin", "https://devgcx.sharepoint.com/")
+
+//       console.log("PROB_ID", teamId)
+//       return new Promise<any>((resolve, reject) => {
+//         try {
+//           this._context.msGraphClientFactory
+//             .getClient("3")
+//             .then((client: MSGraphClientV3) => {
+//               client
+//                 .api(`/groups/${teamId}/sites/root`)
+//                 .headers(requestHeaders)
+//                 .get((error: any, response: any, rawResponse: any) => {
+//                   if (error) {
+//                     console.error("ERROR", error);
+//                     reject(error);
+//                   } else {
+//                      console.log("RESPONSE", response);
+//                     resolve(response.value); // Return the data
+                  
+//                   }
+//                 });
+//             });
+//         } catch (error) {
+//           console.error("ERROR-" + error);
+//           reject(error);
+//         }
+//       });
+// }  
+    
+    
 
     public static async getGroupDetailsBatch(groupId: any): Promise<any> {
+
+        const requestHeaders: Headers = new Headers();
+            requestHeaders.append("Content-type", "application/json");
+            requestHeaders.append("Cache-Control", "no-cache");
+            requestHeaders.append("Access-Control-Allow-Origin", "https://devgcx.sharepoint.com/")
+
         const requestBody = {
           requests: [
             {
               id: "1",
               method: "GET",
               url: `/groups/${groupId}/sites/root?$select=id,lastModifiedDateTime,webUrl`,
+              headers: requestHeaders
             },
             {
               id: "2",
@@ -154,7 +222,7 @@ export class GraphService {
                 client
                   .api(`/$batch`)
                   .post(requestBody, (error: any, responseObject: any) => {
-                    
+                    console.log("Res", responseObject)
                     const responseContent = [{}];
     
                     responseObject.responses.forEach((response: any) => {
