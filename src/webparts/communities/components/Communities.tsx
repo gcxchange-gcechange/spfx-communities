@@ -10,8 +10,8 @@ import { useEffect, useState, useRef } from "react";
 import AlphabeticalFilter from "./AlphabeticalFilter";
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from "./GridLayoutStyle";
-import { Spinner, SpinnerSize} from "@fluentui/react";
-import Paging from "./Paging";
+import { PrimaryButton, Spinner, SpinnerSize, Stack} from "@fluentui/react";
+import Pagination from "./Pagination";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
 
@@ -19,21 +19,26 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const { targetAudience, layout } = props;
 
 
-  const [_groups, setGroups] = useState<any[]>([]);
+  const [groups, setGroups] = useState<any[]>([]);
   const [filteredGroups, setFilteredGroups] = useState<any[]>([]);
   const [selectedLetter, setSelectedLetter] = useState<string>("A");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const previousLetterRef = useRef('');
+  const [groupCount, setGroupCount] = useState<number>(0);
+  const [nextLink, setNextLink] = useState<string | null>(null);
+  const [totalNotAccessibleGroups, setTotalNotAccessibleGroups] = useState<any[]>([]);
 
 
   const clearState = ():void => {
+    setGroups([]);
     setFilteredGroups([]);
     setCurrentPage(1);
     setIsLoading(false);
   };
   
-  const _getPageViews = (filteredGroups: any): void => {
+  const _getPageViews = (filteredGroups: any, options: { append: boolean }): void => {
+    console.log("filteredGroups_PgeViews", filteredGroups)
     const promises = filteredGroups.map((group: any) => {
       return GraphService.pageViewsBatch(group.siteId).then((siteViews) => {
         let siteView: string = '';
@@ -51,13 +56,18 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     });
   
     Promise.all(promises).then((updatedFilteredGroups) => {
-      setFilteredGroups(updatedFilteredGroups);
+    if (options.append) {
+      setGroups(prev => [...prev, ...updatedFilteredGroups]); //append to groups
+    } else {
+      setGroups(updatedFilteredGroups); // replace the groups
+    }
       setIsLoading(false);
     });
   };
 
   
-  const _getGroupDetailsData = (groups: any): void => {
+  const _getGroupDetailsData = (groups: any, options: {append: boolean}): void => {
+    console.log("groups_DETAILS", groups)
     const promises = groups.map((groupData: any) => {
       return GraphService.getGroupDetailsBatch(groupData.id).then((groupDetails) => {
         try {
@@ -68,16 +78,17 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
             } else {
               thumbnail = groupDetails[3]
             }
-            return {
+            return  { 
               ...groupData,
               url: groupDetails[1].webUrl,
               siteId: groupDetails[1].id,
               modified: new Date(groupDetails[1].lastModifiedDateTime).toLocaleDateString("en-CA"),
               members: groupDetails[2],
-              thumbnail: thumbnail !== undefined ? `data:image/jpeg;base64,${thumbnail}` : undefined,
-            };
+              thumbnail: thumbnail !== undefined ? `data:image/jpeg;base64,${thumbnail}` : undefined,}
+          
           } else {
             console.log(`Group details not found for ${groupData.id}`);
+            setTotalNotAccessibleGroups(groupData.id);
             return null;
           }
         } catch (error) {
@@ -90,7 +101,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     
     Promise.all(promises).then((updatedGroups) => {
       const filteredGroups = updatedGroups.filter((group) => group !== null);
-      _getPageViews(filteredGroups);
+      _getPageViews(filteredGroups, options);
     });
   };
 
@@ -99,21 +110,62 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     GraphService.getUserGroups().then((data) => {
       setGroups(data);
       setIsLoading(true);
-      _getGroupDetailsData(data);
+      _getGroupDetailsData(data, { append: true } );
     });
   };
 
-  const _getAllGroups = (selectedLetter: string): void => {
-    GraphService.getAllGroups(selectedLetter).then((allGroupData) => {
-      if (allGroupData.responseResults !== undefined) {
-        setGroups(allGroupData.responseResults);
-        _getGroupDetailsData(allGroupData.responseResults);
+  const _getAllGroups = async (selectedLetter: string): Promise<void> => {
+   
+    try {
+      // 1. Get count first - need to adjust to exclude security groups
+      const count = await GraphService.getGroupCount(selectedLetter);
+      setGroupCount(count);
+      console.log("Count value", count);
+
+      // 2. get groups based on the number of cards per page
+      const allGroupData = await GraphService.getAllGroups(selectedLetter, props.numberPerPage);
+      console.log("all", allGroupData)
+      if (allGroupData.value) {
+        _getGroupDetailsData( allGroupData.value, { append: false }); // selects new letter we pass in false to not append to groups
+
+        //if dataLink exists store it
+        setNextLink(allGroupData['@odata.nextLink'] || null);
+
       } else {
-        setGroups(allGroupData.responseResults)
+        setGroups([]);
+        setNextLink(null)
       }
 
-    });
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+    }
   };
+
+  const _showMoreGroups = async (): Promise<void> => {
+    
+    if (!nextLink) return;
+
+      try {
+        const moreGroupData = await GraphService.getGroupsByUrl(nextLink) ;
+        console.log("MOREGROUPS", moreGroupData.value)
+        if (moreGroupData.value) {
+             _getGroupDetailsData(moreGroupData.value, { append: true });
+ 
+        
+          //if next Link then update the state
+          setNextLink(moreGroupData['@odata.nextLink']);
+        }
+          else {
+            setNextLink(null)
+            // setFilteredGroups([...groups, ...moreGroupData.value])
+          }
+        
+      } catch(error) {
+        console.log("ERROR:", error)
+      }
+        
+       
+  }
 
 
   const getSelectedLetter = (letter: string): void => {
@@ -131,6 +183,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     setCurrentPage( pageNumber);
   };
 
+  //targetAudience = 1  for all communities
 
   useEffect(() => {   
     if (targetAudience === "1") {
@@ -145,8 +198,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   useEffect(() => {
     if (targetAudience === "1" && previousLetterRef.current !== selectedLetter) {
       clearState();
-      _getAllGroups(selectedLetter);
       setIsLoading(true);
+     setTimeout(() => {
+       _getAllGroups(selectedLetter);
+     }, 5) 
       previousLetterRef.current = selectedLetter;
     }
   }, [selectedLetter]);
@@ -156,16 +211,18 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   //calculate the item index to render per page
 
 
-    const startIndex:number = (currentPage - 1) * props.numberPerPage;
-    const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
+   // const startIndex:number = (currentPage - 1) * props.numberPerPage;
+    //const endIndex: number = Math.min(startIndex + props.numberPerPage, groupCount.length);
+    //const endIndex: number = Math.min(startIndex + props.numberPerPage, filteredGroups.length);
   
-    const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
+    // const displayItemsPerPage = filteredGroups.slice(startIndex, endIndex);
+     
 
-    const pagedSortedItems =  props.sort === "Alphabetical" 
-    ? displayItemsPerPage.sort((a:any, b:any) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
-    : props.sort === "DateCreation" 
-      ?  displayItemsPerPage.sort((a:any , b:any) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
-      :  displayItemsPerPage
+    // const pagedSortedItems =  props.sort === "Alphabetical" 
+    // ? filteredGroups.sort((a:any, b:any) => (a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1: -1 )) 
+    // : props.sort === "DateCreation" 
+    //   ?  filteredGroups.sort((a:any , b:any) => (a.createdDateTime < b.createdDateTime ? 1 : -1 )) 
+    //   :  filteredGroups
 
 
   //sorting for user groups
@@ -177,6 +234,11 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
     : filteredGroups
 
   const displayUserGroups = userGroupsSorted.slice(0, props.numberPerPage);
+
+
+  
+  const totalGroups = groupCount - totalNotAccessibleGroups.length
+
   
  
   
@@ -215,22 +277,30 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                         onSelectLetter={getSelectedLetter}
                       />
                   )}
-                  {  filteredGroups.length !== 0 && 
+                  {  groups.length !== 0 && 
                     (
-                      <Paging
-                        prefLang={props.prefLang}
-                        items={filteredGroups.length}
-                        itemsPerPage={props.numberPerPage}
-                        currentPage={currentPage}
-                        onPageUpdate={onPageUpdate}
- 
-                      />
+                      <>
+                        <Stack horizontalAlign="center">
+                          <p>{totalNotAccessibleGroups}</p>
+                          <p>Showing {groups.length} of { totalGroups }</p>
+                          <PrimaryButton style={{width: '200px', borderRadius: '20px'}} onClick={() => _showMoreGroups()} >Show More</PrimaryButton>
+                        </Stack>
+
+                        {/* <Pagination
+                          prefLang={props.prefLang}
+                          items={groupCount}
+                          itemsPerPage={props.numberPerPage}
+                          currentPage={currentPage}
+                          onPageUpdate={onPageUpdate}
+  
+                        /> */}
+                      </>
                     )
                   } 
-                  <GridLayoutStyle groups={pagedSortedItems} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
+                  <GridLayoutStyle groups={groups} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
                   { filteredGroups.length  !== 0 && 
                     (
-                      <Paging
+                      <Pagination
                         prefLang={props.prefLang}
                         items={filteredGroups.length}
                         itemsPerPage={props.numberPerPage}

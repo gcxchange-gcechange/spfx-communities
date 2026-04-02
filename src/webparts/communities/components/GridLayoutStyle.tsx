@@ -25,6 +25,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
   const strings = SelectLanguage(prefLang);
   const sectionStackTokens: IStackTokens = { childrenGap: 20 };
 
+  //targetAudience 1 - All Communities
   const stackVerticalAlign = targetAudience === '1' ? 'center' : 'start';
   console.log(createCommLink, seeAllCommunitiesLink)
 
@@ -96,7 +97,7 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
         </ul>
         </section>
 
-        {groups.length === 0 && targetAudience === "1" && (
+        {groups.length === 0 && targetAudience === "1" && ( //targetAudience 1 - All Communities
           <section>
           <Stack horizontal verticalAlign={stackVerticalAlign} horizontalAlign="center">
             <div

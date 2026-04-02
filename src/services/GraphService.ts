@@ -14,7 +14,7 @@ export class GraphService {
     public static async setup(context: WebPartContext): Promise<void> {
   
         this._context = context;
-        console.log("CONTECT",context);
+        console.log("CONTEXT",context);
     }
 
     public static async getUserGroups(): Promise<string[]> {
@@ -50,7 +50,29 @@ export class GraphService {
         })
     }
 
-      public static async getAllGroups(selectedLetter: string ):Promise<any> {
+    public static async getGroupCount(selectedLetter: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            try {
+                this._context.msGraphClientFactory
+                    .getClient('3')
+                    .then((client: MSGraphClientV3):void => {
+                        client
+                        .api(`/groups?$count=true&$filter=groupTypes/any(c:c+eq+'Unified')and startsWith(displayName,'${selectedLetter}')`)
+                        .headers({ "ConsistencyLevel": "eventual" })
+                        .get((error: any, response: any) => {
+                            resolve(response["@odata.count"]);
+                        });
+                    });
+            }
+            catch(error) {
+                console.log("ERROR", error);
+                reject(error);
+            }
+        })
+    }
+
+
+      public static async getAllGroups(selectedLetter: string, count: number):Promise<any> {
 
         let apiTxt: string;
 
@@ -58,7 +80,8 @@ export class GraphService {
             apiTxt =
               "/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'1') or startswith(displayName,'2') or startswith(displayName,'3') or startswith(displayName,'4')or startswith(displayName,'5') or startswith(displayName,'6') or startswith(displayName,'7') or startswith(displayName,'8') or startswith(displayName,'9')&$select=id,displayName, createdDateTime,description&$top=10";
           } else {
-            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=5`;
+            apiTxt = `/groups?$filter=groupTypes/any(c:c+eq+'Unified') and startsWith(displayName,'${selectedLetter}')&$select=id,displayName,createdDateTime,description&$top=${count}`;
+           
           }
         
         const requestBody = {
@@ -68,7 +91,10 @@ export class GraphService {
                 method: "GET",
                 url: `${apiTxt}`
                 }
-            ]
+            ],
+            headers: {
+                "ConsistencyLevel": "eventual"
+            }
         };
 
         return  new Promise((resolve, reject) => {
@@ -80,36 +106,37 @@ export class GraphService {
                         client
                             .api(`/$batch`)
                             .post(requestBody, (error: any, responseObject: any) => {
-                                console.log("batch", responseObject);
-                                const responseResults: any[] = [];
-                                responseResults.push(...responseObject.responses[0].body.value);
- 
-                                const link = responseObject.responses[0].body["@odata.nextLink"];
-                                let totalPages = 0;
+                                console.log("ALLGROUP", responseObject);
+                                //const responseResults: any[] = [];
+                                // responseResults.push(...responseObject.responses[0].body.value);
+                               // responseResults.push(...responseObject.responses[0].body);
+                                resolve(responseObject.responses[0].body);
+                                // const link = responseObject.responses[0].body["@odata.nextLink"];
+                                // let totalPages = 0;
 
-                                if (link) {
-                                    const handleNextPage = (url: string ):any => {
-                                        client.api(url).get((error:any, response2: any) => {
-                                            const nextLink = response2["@odata.nextLink"];
-                                            totalPages++;
-                                            responseResults.push(...response2.value);
+                                // if (link) {
+                                //     const handleNextPage = (url: string ):any => {
+                                //         client.api(url).get((error:any, response2: any) => {
+                                //             const nextLink = response2["@odata.nextLink"];
+                                //             totalPages++;
+                                //             responseResults.push(...response2.value);
 
-                                            if (nextLink) {
-                                                handleNextPage(nextLink);
-                                            }
-                                            else {
-                                                resolve({responseResults, totalPages});
-                                                console.log("TP1",totalPages);
-                                            }
-                                        });
+                                //             if (nextLink) {
+                                //                 handleNextPage(nextLink);
+                                //             }
+                                //             else {
+                                //                 resolve({responseResults, totalPages});
+                                //                 console.log("TP1",totalPages);
+                                //             }
+                                //         });
                                         
-                                    }
-                                    handleNextPage(link);
+                                //     }
+                                //     handleNextPage(link);
                                  
-                                } else  {
-                                  resolve({responseResults});
-                                  console.log("TP2",totalPages);
-                                }
+                                // } else  {
+                                //   resolve({responseResults});
+                                //   console.log("TP2",totalPages);
+                                // }
                                 
 
                             });
@@ -121,6 +148,31 @@ export class GraphService {
             }
         });
 
+    }
+
+    public static async getGroupsByUrl(url: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            try { 
+                this._context.msGraphClientFactory
+                    .getClient('3')
+                    .then((client: MSGraphClientV3) => {
+                        client
+                            .api(url) //dataNextLink url from previous graph call
+                            .get((error: any, response: any) => {
+                                console.log("URL RESPONSE", response);
+                                if(error) {
+                                    reject(error);
+                                    console.error(error);
+                                } else {
+                                    resolve(response);
+                                }
+                            });
+                    });     
+            } catch (error) {
+                console.error(error);
+                reject(error);
+            }
+        });
     }
 
 
@@ -157,12 +209,12 @@ export class GraphService {
                     
                     const responseContent = [{}];
     
-                    responseObject.responses.forEach((response: any) => {
+                    responseObject.responses.forEach((response: any): void => {
     
                       if (response.status === 200) {
                         responseContent[response.id] = response.body;
                       } else if (response.status === 403 || response.status === 404) {
-                        return null;
+                        return;
                       }
                     });
     

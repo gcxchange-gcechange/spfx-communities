@@ -1,10 +1,10 @@
-import { IButtonProps, IButtonStyles, Icon, Stack, ActionButton, DefaultButton, } from '@fluentui/react';
+import {IButtonStyles, Icon, Stack, ActionButton, DefaultButton } from '@fluentui/react';
 import * as React from 'react';
 import styles from './Communities.module.scss';
 import { SelectLanguage } from './SelectLanguage';
  
 
-interface IPagingProps {
+interface IPaginationProps {
  items: number;
  itemsPerPage: number;
  prefLang: string;
@@ -12,7 +12,7 @@ interface IPagingProps {
  onPageUpdate: (pageNumber: number) => void;
 }
 
-const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, prefLang, currentPage, onPageUpdate}) => {
+const pagination : React.FunctionComponent<IPaginationProps> =  ({items, itemsPerPage, prefLang, currentPage, onPageUpdate}) => {
     
     const strings = SelectLanguage(prefLang);
 
@@ -80,32 +80,33 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
         }
 
       };
+
+      const customIcon = () :JSX.Element => {
+
+          return (
+                      <Icon iconName="DoubleChevronLeft" />
+                  );
+      }
     
+
+    
+      
     
     return (
+        <>
         <Stack horizontal  horizontalAlign="center" verticalAlign="center" style={{marginBottom: '20px', marginTop: '20px'}}>
 
         <ActionButton
-          onRenderIcon={(_props: IButtonProps) => {
-                  // we use the render custom icon method to render the icon consistently with the right icon
-                  return (
-                      <Icon iconName="DoubleChevronLeft" />
-                  );
-              }}
-              disabled={prevDisabled}
-              onClick={goToFirstPage}
-              ariaLabel={strings.firstPage}/>
+            onRenderIcon={customIcon}
+            disabled={prevDisabled}
+            onClick={goToFirstPage}
+            ariaLabel={strings.firstPage}/>
 
           <ActionButton
-              onRenderIcon={(_props: IButtonProps) => {
-                  // we use the render custom icon method to render the icon consistently with the right icon
-                  return (
-                      <Icon iconName="ChevronLeft" />
-                  );
-              }}
-              disabled={prevDisabled}
-              onClick={prevPage}
-              ariaLabel={strings.pagPrev}
+            onRenderIcon={customIcon}
+            disabled={prevDisabled}
+            onClick={prevPage}
+            ariaLabel={strings.pagPrev}
           >
               {strings.pagPrev}
           </ActionButton>
@@ -115,7 +116,7 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
 
            {getNumberOfPages().map( itemNumber =>
             <div key={itemNumber.toString()}  tabIndex={0}   onClick={() => goToPage(itemNumber) }>{
-              itemNumber === currentPage
+                itemNumber === currentPage
                  ? <DefaultButton styles={buttonStyles} className={styles.currentPage} aria-label={`${strings.currentPage}, ${currentPage}`} aria-current={true}>
                   {currentPage}
                   </DefaultButton>
@@ -124,32 +125,29 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
 
 
 
-          <ActionButton
-              disabled={nextDisabled}
-              onRenderMenuIcon={(_props: IButtonProps) => {
-                  // we use the render custom menu icon method to render the icon to the right of the text
-                  return (
-                      <Icon iconName="ChevronRight" />
-                  );
-              }}
-              onClick={nextPage}
-              ariaLabel={strings.pagNext}
-          >
+        <ActionButton
+            disabled={nextDisabled}
+            onRenderIcon={customIcon}
+            onClick={nextPage}
+            ariaLabel={strings.pagNext}
+        >
               {strings.pagNext}
-          </ActionButton>
+        </ActionButton>
 
-          <ActionButton
-          onRenderIcon={(_props: IButtonProps) => {
+        <ActionButton
+            onRenderIcon={( ) => {
                   // we use the render custom icon method to render the icon consistently with the right icon
                   return (
                       <Icon iconName="DoubleChevronRight" />
                   );
-              }}
-              disabled={nextDisabled}
-              onClick={goToLastPage}
-              ariaLabel={strings.lastPage} />
+            }}
+            disabled={nextDisabled}
+            onClick={goToLastPage}
+            ariaLabel={strings.lastPage} 
+        />
       </Stack>
+      </>
     );
 }
 
-export default Paging;
+export default pagination;
