@@ -10,10 +10,11 @@ import { useEffect, useState, useRef } from "react";
 import AlphabeticalFilter from "./AlphabeticalFilter";
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import GridLayoutStyle from "./GridLayoutStyle";
-import { PrimaryButton, Spinner, SpinnerSize, Stack} from "@fluentui/react";
+import { IStackTokens, PrimaryButton, Spinner, SpinnerSize, Stack} from "@fluentui/react";
 import Pagination from "./Pagination";
 import ListLayoutStyle from "./ListLayoutStyle";
 import CompactLayoutStyle from "./CompactLayoutStyle";
+import SkeletonCard from "./Skeleton";
 
 const Communities: React.FC<ICommunitiesProps> = (props) => {
   const { targetAudience, layout } = props;
@@ -33,6 +34,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const clearState = ():void => {
     setGroups([]);
     setFilteredGroups([]);
+    setTotalNotAccessibleGroups([]);
     setCurrentPage(1);
     setIsLoading(false);
   };
@@ -88,7 +90,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
           
           } else {
             console.log(`Group details not found for ${groupData.id}`);
-            setTotalNotAccessibleGroups(groupData.id);
+            setTotalNotAccessibleGroups(prev => [...prev, groupData.id]);
             return null;
           }
         } catch (error) {
@@ -144,6 +146,8 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
   const _showMoreGroups = async (): Promise<void> => {
     
     if (!nextLink) return;
+
+    setIsLoading(true)
 
       try {
         const moreGroupData = await GraphService.getGroupsByUrl(nextLink) ;
@@ -235,9 +239,12 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
 
   const displayUserGroups = userGroupsSorted.slice(0, props.numberPerPage);
 
-
+  const removeDuplicate = Array.from(new Set(totalNotAccessibleGroups));
   
-  const totalGroups = groupCount - totalNotAccessibleGroups.length
+  const totalGroups = (groupCount - removeDuplicate.length)
+  console.log("disable", !nextLink);
+
+  const sectionStackTokens: IStackTokens = { childrenGap: 20 };
 
   
  
@@ -256,7 +263,7 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
         )}
       </div>
         <div>
-          { isLoading ? (
+          { isLoading && !nextLink ? (
             <Spinner size={SpinnerSize.large} />
           ) : (
             <>
@@ -280,11 +287,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                   {  groups.length !== 0 && 
                     (
                       <>
-                        <Stack horizontalAlign="center">
-                          <p>{totalNotAccessibleGroups}</p>
+                        {/* <Stack horizontalAlign="center">
                           <p>Showing {groups.length} of { totalGroups }</p>
-                          <PrimaryButton style={{width: '200px', borderRadius: '20px'}} onClick={() => _showMoreGroups()} >Show More</PrimaryButton>
-                        </Stack>
+                          <PrimaryButton style={{width: '200px', borderRadius: '20px'}} onClick={() => _showMoreGroups()} disabled={!nextLink} >Show More</PrimaryButton>
+                        </Stack> */}
 
                         {/* <Pagination
                           prefLang={props.prefLang}
@@ -298,6 +304,23 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                     )
                   } 
                   <GridLayoutStyle groups={groups} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
+                  {isLoading && nextLink && ( 
+                    <>
+                      <Spinner size={SpinnerSize.large} />
+                      <Stack horizontal wrap={true} tokens={sectionStackTokens}>
+                        {[...Array(3)].map((_, i) => (  
+                          
+                          <SkeletonCard key={i} /> ))
+                          }
+
+                      </Stack>
+                    </>
+                    )}
+
+                    <Stack horizontalAlign="center">
+                      <p>Showing {groups.length} of { totalGroups }</p>
+                      <PrimaryButton style={{width: '200px', borderRadius: '20px'}} onClick={() => _showMoreGroups()} disabled={!nextLink} >Show More</PrimaryButton>
+                    </Stack>
                   { filteredGroups.length  !== 0 && 
                     (
                       <Pagination
