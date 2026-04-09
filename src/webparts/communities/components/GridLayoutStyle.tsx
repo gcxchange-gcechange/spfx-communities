@@ -12,9 +12,10 @@ interface IGridLayoutProps {
   targetAudience: string;
   seeAllCommunitiesLink: string;
   createCommLink: string;
+  isLoading: boolean;
 }
 
-const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience, seeAllCommunitiesLink, createCommLink }) => {
+const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, prefLang, targetAudience, seeAllCommunitiesLink, createCommLink, isLoading }) => {
 
   const imageProps: Partial<IImageProps> = {
     src: (require("../assets/YetiHiding.png")),
@@ -99,26 +100,31 @@ const GridLayoutStyle: React.FunctionComponent<IGridLayoutProps> = ({ groups, pr
 
         {groups.length === 0 && targetAudience === "1" && ( //targetAudience 1 - All Communities
           <section>
-          <Stack horizontal verticalAlign={stackVerticalAlign} horizontalAlign="center">
-            <div
-              className={styles.noResultsText}
-              aria-label={strings.noResults}
-              tabIndex={0}
-            >
-              <h4 className={styles.margin0}>
-                {strings.sorry}
-                <br />
-                {strings.We_couldnt_find}
-              </h4>
-              <p className={styles.margin0}>
-                {strings.Does_not_exist}
-                <br />
-                {strings.Try_searching}
-              </p>
-            </div>
+            {
+              !isLoading  && (
+            <Stack horizontal verticalAlign={stackVerticalAlign} horizontalAlign="center">
+              <div
+                className={styles.noResultsText}
+                aria-label={strings.noResults}
+                tabIndex={0}
+              >
+                <h4 className={styles.margin0}>
+                  {strings.sorry}
+                  <br />
+                  {strings.We_couldnt_find}
+                </h4>
+                <p className={styles.margin0}>
+                  {strings.Does_not_exist}
+                  <br />
+                  {strings.Try_searching}
+                </p>
+              </div>
 
-            <img {...imageProps} alt={strings.hidingYeti}/>
-          </Stack>
+              <img {...imageProps} alt={strings.hidingYeti}/>
+            </Stack>
+              )
+            }
+         
           </section>
         )}
 

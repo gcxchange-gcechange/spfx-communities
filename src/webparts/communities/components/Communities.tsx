@@ -303,10 +303,10 @@ const Communities: React.FC<ICommunitiesProps> = (props) => {
                       </>
                     )
                   } 
-                  <GridLayoutStyle groups={groups} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
-                  {isLoading && nextLink && ( 
+                  <GridLayoutStyle isLoading={isLoading} groups={groups} prefLang={props.prefLang} targetAudience={props.targetAudience} seeAllCommunitiesLink={props.seeAllCommunitiesLink} createCommLink={props.createCommLink}/>
+                  {isLoading  && ( 
                     <>
-                      <Spinner size={SpinnerSize.large} />
+                      <Spinner size={SpinnerSize.large}  style={{marginBottom:'20px'}}/>
                       <Stack horizontal wrap={true} tokens={sectionStackTokens}>
                         {[...Array(3)].map((_, i) => (  
                           
