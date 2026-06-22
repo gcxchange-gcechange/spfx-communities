@@ -1,4 +1,4 @@
-import { IButtonProps, IButtonStyles, Icon, Stack, ActionButton, DefaultButton, } from '@fluentui/react';
+import {  IButtonStyles,   Stack, ActionButton, DefaultButton, } from '@fluentui/react';
 import * as React from 'react';
 import styles from './Communities.module.scss';
 import { SelectLanguage } from './SelectLanguage';
@@ -86,23 +86,25 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
         <Stack horizontal  horizontalAlign="center" verticalAlign="center" style={{marginBottom: '20px', marginTop: '20px'}}>
 
         <ActionButton
-          onRenderIcon={(_props: IButtonProps) => {
-                  // we use the render custom icon method to render the icon consistently with the right icon
-                  return (
-                      <Icon iconName="DoubleChevronLeft" />
-                  );
-              }}
+        //   onRenderIcon={(_props: IButtonProps) => {
+        //           // we use the render custom icon method to render the icon consistently with the right icon
+        //           return (
+        //               <Icon iconName="DoubleChevronLeft" />
+        //           );
+        //       }}
+              iconProps={{ iconName: 'DoubleChevronLeft' }}
               disabled={prevDisabled}
               onClick={goToFirstPage}
               ariaLabel={strings.firstPage}/>
 
           <ActionButton
-              onRenderIcon={(_props: IButtonProps) => {
-                  // we use the render custom icon method to render the icon consistently with the right icon
-                  return (
-                      <Icon iconName="ChevronLeft" />
-                  );
-              }}
+            //   onRenderIcon={(_props: IButtonProps) => {
+            //       // we use the render custom icon method to render the icon consistently with the right icon
+            //       return (
+            //           <Icon iconName="ChevronLeft" />
+            //       );
+            //   }}
+              iconProps={{ iconName: 'ChevronLeft' }}
               disabled={prevDisabled}
               onClick={prevPage}
               ariaLabel={strings.pagPrev}
@@ -126,12 +128,13 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
 
           <ActionButton
               disabled={nextDisabled}
-              onRenderMenuIcon={(_props: IButtonProps) => {
-                  // we use the render custom menu icon method to render the icon to the right of the text
-                  return (
-                      <Icon iconName="ChevronRight" />
-                  );
-              }}
+            //   onRenderMenuIcon={(_props: IButtonProps) => {
+            //       // we use the render custom menu icon method to render the icon to the right of the text
+            //       return (
+            //           <Icon iconName="ChevronRight" />
+            //       );
+            //   }}
+              iconProps={{ iconName: 'ChevronRight' }}
               onClick={nextPage}
               ariaLabel={strings.pagNext}
           >
@@ -139,12 +142,13 @@ const Paging : React.FunctionComponent<IPagingProps> =  ({items, itemsPerPage, p
           </ActionButton>
 
           <ActionButton
-          onRenderIcon={(_props: IButtonProps) => {
-                  // we use the render custom icon method to render the icon consistently with the right icon
-                  return (
-                      <Icon iconName="DoubleChevronRight" />
-                  );
-              }}
+        //   onRenderIcon={(_props: IButtonProps) => {
+        //           // we use the render custom icon method to render the icon consistently with the right icon
+        //           return (
+        //               <Icon iconName="DoubleChevronRight" />
+        //           );
+        //       }}
+              iconProps={{ iconName: 'DoubleChevronRight' }}
               disabled={nextDisabled}
               onClick={goToLastPage}
               ariaLabel={strings.lastPage} />

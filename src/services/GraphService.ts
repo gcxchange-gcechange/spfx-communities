@@ -14,7 +14,6 @@ export class GraphService {
     public static async setup(context: WebPartContext): Promise<void> {
   
         this._context = context;
-        console.log("CONTECT",context);
     }
 
     public static async getUserGroups(): Promise<string[]> {
