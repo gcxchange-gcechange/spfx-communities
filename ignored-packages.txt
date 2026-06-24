@@ -1,0 +1,4 @@
+@microsoft/sp-adaptive-card-extension-base
+adaptivecards
+lodash
+swiper

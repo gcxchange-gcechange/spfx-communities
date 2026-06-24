@@ -25,7 +25,7 @@
     "@microsoft/sp-office-ui-fabric-core": "1.22.2",
     "@microsoft/sp-property-pane": "1.22.2",
     "@microsoft/sp-webpart-base": "1.22.2",
-    "@pnp/spfx-controls-react": "^3.17.0",
+    "@pnp/spfx-controls-react": "^3.24.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "tslib": "2.3.1"
@@ -49,7 +49,7 @@
     "eslint-plugin-react-hooks": "4.3.0",
     "typescript": "5.8.3"
   },
-    "overrides": {
+  "overrides": {
     "@rushstack/heft": "1.1.2"
   },
   "resolutions": {
