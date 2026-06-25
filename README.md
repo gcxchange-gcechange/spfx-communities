@@ -1,74 +1,56 @@
-# communities
+# Communities
 
 ## Summary
 
-Short summary on functionality and used technologies.
+### Community Directory Web Part
 
-[picture of the solution in action, if possible]
+Displays all SharePoint team sites and can be configured through the property pane. Users can filter groups by the selected letter or number, choose how many groups to display, sort results alphabetically or by creation date, switch between English and French, and hide specific groups by entering their group IDs.
+
+### My Communities Web Part
+
+Displays the SharePoint team sites that the current user belongs to, including links to each site's SharePoint page. Configuration options in the property pane allow administrators to change the language, select the number of groups to display, choose between three layouts, sort groups alphabetically or by creation date, and configure "See All" and "Create Community" links. When users belong to more groups than are displayed, a "See All" button provides access to additional results through pagination.
 
 ## Used SharePoint Framework Version
 
-![version](https://img.shields.io/badge/version-1.21.1-green.svg)
+![SPFX](https://img.shields.io/badge/version-1.22.2-green.svg)
+![Node.js](https://img.shields.io/badge/Node.js-v22+-green.svg)
 
-## Applies to
-
-- [SharePoint Framework](https://aka.ms/spfx)
-- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-
-> Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
 
 ## Prerequisites
 
-> Any special pre-requisites?
+none
 
-## Solution
-
-| Solution    | Author(s)                                               |
-| ----------- | ------------------------------------------------------- |
-| folder name | Author details (name, company, twitter alias with link) |
 
 ## Version history
 
 | Version | Date                | Comments             |
 | ------- | --------------------| -------------------- |
+| 2.1     | June 25, 2026       | Update SPFX version  |
 | 2.0     | September 10, 2025  | Update SPFX version  |
 | 1.1     | March 10, 2021      | Update comment       |
 | 1.0     | January 29, 2021    | Initial release      |
+
+
+## Minimal Path to Awesome
+
+- Clone this repository
+- Ensure that you are at the solution folder
+- To install the dependencies, in the command-line run:
+  - `npm install -g @rushstack/heft`
+  - `npm install`
+- To debug in the front end:
+  - go to the `serve.json` file and update `initialPage` to `https://your-domain-name.sharepoint.com/_layouts/15/workbench.aspx`
+  - In the command-line run:
+    - `heft start`
+    - You will need to add your client id and azure function to the clientId and url classs members in the SCW.tsx file.
+- To deploy:
+  - In the command-line run:
+    - `heft build --production`
+    - `heft package-solution --production`
+
 
 ## Disclaimer
 
 **THIS CODE IS PROVIDED _AS IS_ WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
 
 ---
-
-## Minimal Path to Awesome
-
-- Clone this repository
-- Ensure that you are at the solution folder
-- in the command-line run:
-  - **npm install**
-  - **gulp serve**
-
-> Include any additional steps as needed.
-
-## Features
-
-Description of the extension that expands upon high-level summary above.
-
-This extension illustrates the following concepts:
-
-- topic 1
-- topic 2
-- topic 3
-
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
-
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
-
-## References
-
-- [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-- [Building for Microsoft teams](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview)
-- [Use Microsoft Graph in your solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis)
-- [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
-- [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development

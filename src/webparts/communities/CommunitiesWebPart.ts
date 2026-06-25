@@ -37,7 +37,8 @@ export interface ICommunitiesWebPartProps {
 export default class CommunitiesWebPart extends BaseClientSideWebPart<ICommunitiesWebPartProps> {
 
   private _isDarkTheme: boolean = false;
-  private strings: ICommunitiesWebPartStrings;
+
+  private strings!: ICommunitiesWebPartStrings;
   
   public updateWebPart= async ():Promise<void> => {
     this.context.propertyPane.refresh();

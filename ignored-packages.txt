@@ -1,0 +1,5 @@
+@microsoft/sp-adaptive-card-extension-base
+@pnp/spfx-controls-react
+adaptivecards
+lodash
+swiper

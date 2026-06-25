@@ -1,11 +1,12 @@
 import { IPivotStyles, Pivot, PivotItem } from '@fluentui/react';
 import * as React from 'react';
-import  styles from './Communities.module.scss'
+import  styles from './Communities.module.scss';
+
  
 
 interface IAlphabeticalFilterProps {
     selectedLetter: string;
-    onSelectLetter: (letter: string) => void;
+    onSelectLetter: (letter: string) => void | undefined;
  
 }
 
@@ -25,8 +26,8 @@ const AlphabeticalFilter: React.FC<IAlphabeticalFilterProps> = (props) => {
 
     const combinedIndex = arrayAtoZ();
 
-    const _handleSelectedLetter = (item: PivotItem):void => {
-        const letter: string = item.props.headerText || "A";
+    const _handleSelectedLetter = (item?: PivotItem, ev?: React.MouseEvent<HTMLElement>): void => {
+        const letter: string = item?.props?.headerText || "A";
 
         props.onSelectLetter(letter);
     }
